@@ -9,6 +9,7 @@ var
 express = require('express'),
 routes = require('./routes'),
 editor = require('./routes/editor'),
+persona = require('./routes/persona'),
 http = require('http'),
 engine = require('ejs-locals'),
 path = require('path');
@@ -41,6 +42,7 @@ app.configure('development', function(){
 app.get('/', routes.index);
 app.get('/edit', editor.index);
 app.get('/designer', routes.designer);
+app.post('/login', persona.index);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
