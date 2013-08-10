@@ -11,6 +11,9 @@ body {
 	height: 100%;
 	background-color: #111;
 }
+html {
+	font-size: 62.5%;	/* so rem-based font sizes look right */
+}
 
 .clear {
 	clear: both;
@@ -388,8 +391,8 @@ button.btn-done {
 }
 
 .phone-canvas {
-	background-color: #FFF;
 	height: 400px;
+	background-color: #FFF;
 	width: 100%;
 }
 
@@ -448,10 +451,6 @@ button.btn-done {
 	display: none;
 }
 
-.component-customize {
-
-}
-
 .inner {
 	padding: 40px;
 }
@@ -473,7 +472,7 @@ button.btn-done {
 	display: none;
 }
 
-.component {
+.phone-canvas * {
 	display: block; /* so that the styling we do to component takes the space of its contents */
 	position: relative; /* so that box-shadow is always visible on selection */
 	-webkit-user-select: none;
