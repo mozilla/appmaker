@@ -106,12 +106,21 @@ define(function() {
     return subscriptions;
   }
 
+  function setChannelIndicator(element,type,channel){
+    if($(element).find(".b-channels").length == 0){
+      $(element).append("<div class='b-channels'><div class='channel'></div></div><div class='s-channels'><div class='channel'></div></div>");
+    }
+    if(type == "broadcast") { var sel = ".b-channels"} else { var sel = ".s-channels"}
+    $(element).find(sel + " .channel").attr("color",channel);
+  }
+
   function setupBroadcastLogic(element, original) {
     // get <broadcast> rules from the original declaration
     element.broadcastChannel = getBroadcastChannel(original);
     // set property on actual on-page element
     element.setBroadcastChannel = function(channel) {
       element.broadcastChannel = channel;
+      setChannelIndicator(element,'broadcast',channel);
     }
   }
 
@@ -120,6 +129,9 @@ define(function() {
     element.subscriptions = getSubscriptions(element, original);
     // set properties on actual on-page element
     element.setSubscription = function(channel, listener) {
+      
+      setChannelIndicator(element,'subscription',channel);
+      
       var append = true;
       element.subscriptions.forEach(function(s) {
         if(s.listener === listener) {
@@ -148,13 +160,14 @@ define(function() {
     // real content
     element._innerHTML = element.innerHTML;
     element._innerText = element.innerText;
+    
     if (def.template){
       element.innerHTML = def.template.innerHTML;
     }
-
+    
     def.contructor.call(element, def.initParams | {});
 
-    // channel logic
+    // Channel logic
     setupBroadcastLogic(element, original);
     setupSubscriptionLogic(element, original);
 

@@ -781,3 +781,70 @@ background: red;}
 	display: inline-block;
 	margin: 0px;
 }
+
+
+/*Component-level channel indicators*/
+
+.b-channels, .s-channels {
+	position: absolute;
+	height: 92%;
+	top: 4%;
+	overflow: hidden;
+	opacity: 1;
+  width: 10px;
+}
+
+.b-channels .channel ,.s-channels .channel {
+  width: 3px;
+  opacity: .65;
+  height: 100%;
+}
+
+.s-channels {
+  left: -10px;
+}
+
+.b-channels {
+  right: -10px;
+}
+
+.b-channels .channel {
+  float: left;
+  margin-left: 5px;
+}
+
+.s-channels .channel {
+  float: right;
+  margin-right: 5px;
+}
+
+
+/* Kinda dumb that we're storing the hex values in the JS */
+
+.channel[color=blue]{
+  background: #358CCE;
+}
+
+.channel[color=red]{
+  background: #e81e1e;
+}
+
+.channel[color=pink]{
+  background: #e3197b;
+}
+.channel[color=purple]{
+  background: #9f27cf;
+}
+
+.channel[color=green]{
+  background: #71b806;
+}
+
+.channel[color=yellow]{
+  background: #e8d71e;
+  opacity: 1;
+}
+
+.channel[color=orange]{
+  background: #ff7b00;
+}
