@@ -126,7 +126,7 @@ h6 {
 
 /*----------BUTTONS----------*/
 
-button.btn-std {
+button {
 	font-family: 'Source Sans Pro', arial;
 	-webkit-appearance: none;
 	border: none;
@@ -159,17 +159,6 @@ button.btn-secondary:active {
 	background-color: #4a4a4a;
 }
 
-button.btn-toggle {
-	background-color: #555;
-	display: block;
-	border-radius: 3px;
-	height: 30px;
-	width: 130px;
-	font-weight: 400;
-	float: left;
-	font-size: 14px;
-}
-
 button.btn-toggle:nth-child(1) {
 	border-radius: 3px 0px 0px 3px;
 }
@@ -178,29 +167,36 @@ button.btn-toggle:nth-last-child(1) {
 	border-radius: 0px 3px 3px 0px;
 }
 
+.cats {
+	margin-bottom: 10px;
+}
+
 .toggle button.off:active {
 	background-color: #333;
 }
 .toggle button.on:active {
-	background-color: #4db228;
-}
-
-button.btn-std.on {
-	outline: none;
-	background-color: #55b12e;
-}
-
-button.btn-std {
-	font-family: 'Source Sans Pro', arial;
-	-webkit-appearance: none;
-	border: none;
-	color: #FFF;
-	font-weight: 400;
-	padding: 0px;
+	background-color: #555;
 }
 
 
 button.btn-std:off {
+}
+
+button.btn-toggle {
+	background-color: #f8f8f8;
+	display: block;
+	border-radius: 3px;
+	height: 25px;
+	width: 90px;
+	float: left;
+	color: #222;
+	font-size: 13px;
+}
+
+button.btn-toggle.on {
+	outline: none;
+	background-color: #555;
+	color: #FFF;
 }
 
 button.btn-lg {
@@ -267,15 +263,16 @@ button.btn-img {
 }
 
 button.btn-add {
-	height: 20px;
-	width: 20px;
-	border-radius: 2px;
+	height: 40px;
+	width: 100%;
+	border-radius: 3px;
 	background-color: #ff7b00;
 	border: none;
-	float: right;
-	background-image: url(../images/add.png);
 	background-position: center;
 	background-repeat: no-repeat;
+	margin-bottom: 10px;
+	color: #FFF;
+	font-size: 14px;
 }
 
 button.btn-done {
@@ -787,6 +784,39 @@ button.btn-done {
 	padding: 0px;
 	display: inline-block;
 	margin: 0px;
+}
+
+.note {
+	position: absolute;
+	top: -50px;
+	left: 0px;
+	height: 30px;
+	line-height: 30px;
+	width: 100px;
+	font-weight: 400;
+	color: #888;
+	font-size: 16px;
+	background-image: url(../images/checked.png);
+	background-repeat: no-repeat;
+	background-position: 80px center;
+	width: 100px;
+}
+
+.saving {
+	color: #fff;
+	background-image: none;
+}
+
+.blue {
+	background-image: url(../images/bluemoon.png);
+	background-position: center;
+	background-repeat: no-repeat;
+}
+
+.pink {
+	background-image: url(../images/pinkheart.png);
+	background-position: center;
+	background-repeat: no-repeat;
 }
 
 /*Channel Visualisation*/
