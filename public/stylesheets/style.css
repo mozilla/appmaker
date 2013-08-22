@@ -276,6 +276,7 @@ button.btn-add {
 	background-image: url(../images/add.png);
 	background-position: center;
 	background-repeat: no-repeat;
+	cursor: pointer;
 }
 
 button.btn-done {
@@ -383,7 +384,7 @@ button.btn-done {
 	cursor: move;
 }
 
-.ui-state-highlight { 
+.ui-state-highlight {
   height: 1.5em; line-height: 1.2em;
   background: red;
   display: block;
@@ -515,6 +516,13 @@ button.btn-done {
 	height: 100px;
 	width: 100%;
 	background-color: #FFF;
+	color: #DDD;
+	font-size: 80px;
+	text-align: center;
+}
+
+.card + .card {
+	margin-top: 5px;
 }
 
 .console {
