@@ -126,7 +126,7 @@ h6 {
 
 /*----------BUTTONS----------*/
 
-button {
+button.btn-std {
 	font-family: 'Source Sans Pro', arial;
 	-webkit-appearance: none;
 	border: none;
@@ -206,7 +206,8 @@ button.btn-lg {
 }
 
 button.btn-start {
-	margin: 100px auto 0px auto;
+	margin: 50px auto 0px auto;
+	border-radius: 4px;
 	display: block;
 }
 
@@ -272,7 +273,7 @@ button.btn-add {
 	background-repeat: no-repeat;
 	margin-bottom: 10px;
 	color: #FFF;
-	font-size: 14px;
+	font-size: 13px;
 }
 
 button.btn-done {
@@ -286,19 +287,25 @@ button.btn-done {
 /*----------LAYOUT----------*/
 
 .banner {
- 	background-color: #2E4F7A;
+ 	background-color: #222;
 }
 
 .banner-inner {
  	margin: 0 auto;
  	max-width: 900px;
- 	padding: 0px 50px;
+ 	padding: 50px 50px;
 }
 
-.logo {
-	color: #FFF;
-	font-size: 28px;
-	padding: 40px 0px 100px 0px;
+input.app-name {
+	width: 70%;
+	margin: 0 auto;
+	height: 40px;
+	border-radius: 4px;
+	border: none;
+	margin-top: 100px;
+	display: block;
+	text-align: center;
+	font-size: 18px;
 }
 
 .info-box {
