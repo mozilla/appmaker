@@ -554,10 +554,15 @@ input.app-name {
 	font-size: 80px;
 	text-align: center;
 	cursor: pointer;
+	border: 1px solid transparent;
 }
 
 .card + .card {
 	margin-top: 5px;
+}
+
+.card.selected {
+	border: 1px solid green;
 }
 
 .console {
