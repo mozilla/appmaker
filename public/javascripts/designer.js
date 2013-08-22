@@ -469,13 +469,13 @@ define(["jquery", "angular", "ceci", "cards", "ceci-ui", "jquery-ui"], function(
         id = "flathead-card-thumb-" + no;
     $('.drophere', card).sortable(sortableOptions);
     $('.flathead-cards').append(card);
-    card.showCard();
     // create card thumbnail
     var newthumb = $('<div class="card" id="'+id+'">'+no+'</div>');
     newthumb.click(function() {
       card.showCard();
     })
     $(".cards").append(newthumb);
+    card.showCard();
   };
 
   $(".cards .btn-add").click(createCard);
