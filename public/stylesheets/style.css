@@ -519,6 +519,7 @@ button.btn-done {
 	color: #DDD;
 	font-size: 80px;
 	text-align: center;
+	cursor: pointer;
 }
 
 .card + .card {
