@@ -1048,10 +1048,8 @@ button.customize-btn.selected-button {
 .channel-visualisation .channel[color=blue]{
   background: #358CCE;
 }
-
 .channel-visualisation .channel[color=red]{
   background: #e81e1e;
-
 }
 .channel-visualisation .channel[color=pink]{
   background: #e3197b;
@@ -1064,8 +1062,12 @@ button.customize-btn.selected-button {
 }
 .channel-visualisation .channel[color=yellow]{
   background: #e8d71e;
-  opacity: 1;
 }
 .channel-visualisation .channel[color=orange]{
   background: #ff7b00;
+}
+.channel-visualisation .channel[color=false]{
+  background: transparent;
+  border: 1px solid rgba(0,0,0,0.4);
+  border-left: none;
 }
