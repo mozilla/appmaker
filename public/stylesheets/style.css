@@ -194,14 +194,14 @@ button.btn-std:off {
 }
 
 button.btn-toggle {
-	background-color: #f8f8f8;
-	display: block;
-	border-radius: 3px;
-	height: 36px;
-	width: 90px;
-	float: left;
-	color: #222;
-	font-size: 13px;
+  background-color: #f8f8f8;
+  display: block;
+  border-radius: 3px;
+  height: 36px;
+  width: 92px;
+  float: left;
+  color: #222;
+  font-size: 13px;
 }
 
 button.btn-toggle.on {
@@ -372,18 +372,33 @@ button.customize-btn {
   left: 0px;
   top: 0px;
   bottom: 0px;
-  width: 200px;
+  width: 201px;
   background-color: #ccc;
   padding: 20px 0px 20px 20px;
+  border-right: solid 1px #BBB;
 }
 
 .library-list {
-  width: 220px;
+  width: 179px;
   overflow-y: auto;
   position: absolute;
-  top: 76px;
-  bottom: 35px;
+  padding-right: 5px;
+  top: 70px;
+  bottom: 20px;
 }
+
+.thumb {
+  width: 160px;
+  width: 100%;
+  background-color: #eee;
+  margin-bottom: 5px;
+  border-radius: 3px;
+  line-height: 40px;
+  text-indent: 10px;
+}
+
+
+
 
 .library-list .draggable:last-child .thumb {
   margin-bottom: 0px;
@@ -479,18 +494,10 @@ button.customize-btn {
   visibility: visible !important;
 }
 
-.thumb {
-	width: 180px;
-  	background-color: #eee;
-  	margin-bottom: 5px;
-  	border-radius: 3px;
-	line-height: 40px;
-	text-indent: 10px;
-}
-
 .im-flying {
   box-shadow: 0px 3px 8px rgba(0,0,0,.3);
   background: #EEE !important;
+  width: 160px;
 }
 
 .draggable:hover .thumb{
@@ -858,6 +865,8 @@ button.return-btn {
 	border-radius: 2px;
 	z-index: 110;
   box-shadow: 0px 2px 2px rgba(0,0,0,.1);
+  
+
 }
 
 .channel-chooser .arrow {
@@ -1073,6 +1082,10 @@ button.customize-btn.selected-button {
   float: left;
 }
 
+.subscription-channels .color {
+  display: none;
+}
+
 .broadcast-channels .channel,
 .subscription-channels .channel {
   position: relative;
@@ -1085,15 +1098,13 @@ button.customize-btn.selected-button {
   width: 4px;
   position: absolute;
   top: 0px;
-  background: black;
   left: 100px;
-  height: 20px;
+  height: 100%;
   width: 20px;
-  border-radius: 20px;
   left: 0px;
   opacity: 0;
+  border-radius: 20px;
 }
-
 
 /*log stuff */
 
@@ -1103,12 +1114,11 @@ button.customize-btn.selected-button {
   padding: 8px 12px;
   font-size: 12px;
   z-index: 99999;
-  top: -26px;
+  bottom: 50%;
   text-overflow: ellipsis;
   max-width:155px;
   overflow: hidden;
   white-space: nowrap;
-  
 }
 
 .broadcast-channels .bubblepopup {
@@ -1131,13 +1141,14 @@ button.customize-btn.selected-button {
 /* Dot inside the channel line*/
 
 .channel-visualisation .color {
-	border-radius: 25px;
-	width: 20px;
   position: absolute;
-	height: 20px;
   z-index: 10;
   padding: 0px;
   margin:0;
+  height: 100%;
+  width: 20px;
+  border-radius: 20px;
+  
 }
 
 .broadcast-channels .color {
@@ -1154,7 +1165,13 @@ button.customize-btn.selected-button {
 
 .channel-visualisation .channel[color=blue] .color,
 .channel-visualisation .channel[color=blue] .indicator {
-  background:	rgba(53,140,206,1);
+  /* 
+  Keeping for reference
+  -webkit-transform-style: preserve-3d;
+  background-image: -webkit-radial-gradient(center center, circle contain, rgba(53,140,206,1) 0%, rgba(53,140,206,1)  99%, rgba(53,140,206,0)  100%);
+  background-image: -moz-radial-gradient(center center, circle contain, rgba(53,140,206,1) 0%, rgba(53,140,206,1)  99%, rgba(53,140,206,0)  100%);  
+  */
+  background:  rgba(53,140,206,1);
 }
 
 .channel-visualisation .channel[color=blue] .bubblepopup {
@@ -1262,6 +1279,6 @@ button.customize-btn.selected-button {
   display: none;
 }
 .channel-visualisation .channel[color=false]{
-  background: rgba(102, 102, 102, .2)
+  background: rgba(102, 102, 102, .1)
 }
 
