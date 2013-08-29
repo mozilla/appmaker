@@ -385,7 +385,7 @@ define(
         var bChannels = $(".broadcast-section");
         var t = $(this).position();
         $(this).parent().append(bChannels);
-        bChannels.css("top",t.top + 27);
+        bChannels.css("top",t.top + ($(this).height()/2) + 14);
         bChannels.show();
         displayBroadcastChannel();
       });
@@ -396,7 +396,8 @@ define(
         var lChannels = $(".listen-section");
         var t = $(this).position();
         $(this).parent().append(lChannels);
-        lChannels.css("top",t.top + 27).show();
+        lChannels.css("top",t.top + ($(this).height()/2) + 14);
+        lChannels.show();
 
         // find listener this is for:
         var target = evt.target;
@@ -580,13 +581,10 @@ define(
 
     //Show tooltips for channels
     $(document).on('mouseenter', '.channel', function (e) {
-      var yPos = e.pageY - 50;
-      var xPos = e.pageX;
       var tooltip = $('<div class="channel-tip"></div>');
+      $(this).append(tooltip);
       var tip = $(this).attr('title');
-      tooltip.css({top: yPos, left: xPos});
       tooltip.text(tip);
-      $(document.body).append(tooltip);
     }).on('mouseleave', '.channel', function () {
       $('.channel-tip').remove();
     });

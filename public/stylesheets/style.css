@@ -194,14 +194,14 @@ button.btn-std:off {
 }
 
 button.btn-toggle {
-	background-color: #f8f8f8;
-	display: block;
-	border-radius: 3px;
-	height: 36px;
-	width: 90px;
-	float: left;
-	color: #222;
-	font-size: 13px;
+  background-color: #f8f8f8;
+  display: block;
+  border-radius: 3px;
+  height: 36px;
+  width: 92px;
+  float: left;
+  color: #222;
+  font-size: 13px;
 }
 
 button.btn-toggle.on {
@@ -383,18 +383,33 @@ button.customize-btn {
   left: 0px;
   top: 0px;
   bottom: 0px;
-  width: 200px;
+  width: 201px;
   background-color: #ccc;
   padding: 20px 0px 20px 20px;
+  border-right: solid 1px #BBB;
 }
 
 .library-list {
-  width: 220px;
+  width: 179px;
   overflow-y: auto;
   position: absolute;
-  top: 76px;
-  bottom: 35px;
+  padding-right: 5px;
+  top: 70px;
+  bottom: 20px;
 }
+
+.thumb {
+  width: 160px;
+  width: 100%;
+  background-color: #eee;
+  margin-bottom: 5px;
+  border-radius: 3px;
+  line-height: 40px;
+  text-indent: 10px;
+}
+
+
+
 
 .library-list .draggable:last-child .thumb {
   margin-bottom: 0px;
@@ -490,18 +505,10 @@ button.customize-btn {
   visibility: visible !important;
 }
 
-.thumb {
-	width: 180px;
-  	background-color: #eee;
-  	margin-bottom: 5px;
-  	border-radius: 3px;
-	line-height: 40px;
-	text-indent: 10px;
-}
-
 .im-flying {
   box-shadow: 0px 3px 8px rgba(0,0,0,.3);
   background: #EEE !important;
+  width: 160px;
 }
 
 .draggable:hover .thumb{
@@ -520,13 +527,25 @@ button.customize-btn {
 
 .channel-tip {
 	position: absolute;
-	padding: 10px;
+	padding: 8px 10px;
 	max-width: 300px;
 	background-color: rgba(0,0,0,.8);
 	border-radius: 3px;
 	z-index: 999;
-	color: #FFF
+  font-size: 1.2rem;
+  top: -35px;
+  color: white;
 }
+
+.broadcast-channels .channel-tip {
+  left: 10px;
+  border-radius: 5px 5px 5px 0px;
+}
+.subscription-channels .channel-tip {
+  right: 10px;
+  border-radius: 5px 5px 0px 5px;
+}
+
 
 .component-std {
 	cursor: pointer;
@@ -869,6 +888,8 @@ button.return-btn {
 	border-radius: 2px;
 	z-index: 110;
   box-shadow: 0px 2px 2px rgba(0,0,0,.1);
+  
+
 }
 
 .channel-chooser .arrow {
@@ -1062,7 +1083,8 @@ button.customize-btn.selected-button {
 
 .channel-visualisation .channel {
   margin: 2px 0;
-}
+  cursor: pointer;
+} 
 
 .channel-visualisation {
   margin-bottom: 0px;
@@ -1083,6 +1105,10 @@ button.customize-btn.selected-button {
   float: left;
 }
 
+.subscription-channels .color {
+  display: none;
+}
+
 .broadcast-channels .channel,
 .subscription-channels .channel {
   position: relative;
@@ -1095,15 +1121,13 @@ button.customize-btn.selected-button {
   width: 4px;
   position: absolute;
   top: 0px;
-  background: black;
   left: 100px;
-  height: 20px;
+  height: 100%;
   width: 20px;
-  border-radius: 20px;
   left: 0px;
   opacity: 0;
+  border-radius: 20px;
 }
-
 
 /*log stuff */
 
@@ -1113,12 +1137,11 @@ button.customize-btn.selected-button {
   padding: 8px 12px;
   font-size: 12px;
   z-index: 99999;
-  top: -26px;
+  bottom: 50%;
   text-overflow: ellipsis;
   max-width:155px;
   overflow: hidden;
   white-space: nowrap;
-  
 }
 
 .broadcast-channels .bubblepopup {
@@ -1141,13 +1164,14 @@ button.customize-btn.selected-button {
 /* Dot inside the channel line*/
 
 .channel-visualisation .color {
-	border-radius: 25px;
-	width: 20px;
   position: absolute;
-	height: 20px;
   z-index: 10;
   padding: 0px;
   margin:0;
+  height: 100%;
+  width: 20px;
+  border-radius: 20px;
+  
 }
 
 .broadcast-channels .color {
@@ -1162,9 +1186,22 @@ button.customize-btn.selected-button {
   background:	rgba(53,140,206,.2);
 }
 
+.channel[color=blue] .channel-tip {
+  background:	rgba(53,140,206,.6);
+}
+
+.channel-visualisation .channel[color=blue]:hover {
+  background:	rgba(53,140,206,.3);
+}
 .channel-visualisation .channel[color=blue] .color,
 .channel-visualisation .channel[color=blue] .indicator {
-  background:	rgba(53,140,206,1);
+  /* 
+  Keeping for reference
+  -webkit-transform-style: preserve-3d;
+  background-image: -webkit-radial-gradient(center center, circle contain, rgba(53,140,206,1) 0%, rgba(53,140,206,1)  99%, rgba(53,140,206,0)  100%);
+  background-image: -moz-radial-gradient(center center, circle contain, rgba(53,140,206,1) 0%, rgba(53,140,206,1)  99%, rgba(53,140,206,0)  100%);  
+  */
+  background:  rgba(53,140,206,1);
 }
 
 .channel-visualisation .channel[color=blue] .bubblepopup {
@@ -1172,78 +1209,114 @@ button.customize-btn.selected-button {
   color: rgba(53,140,206,1);
 }
 
+
+/*RED*/
 .channel-visualisation .channel[color=red] {
   background:	rgba(232,30,20,.2);
 }
-
+.channel-visualisation .channel[color=red]:hover {
+  background:	rgba(232,30,20,.3);
+}
+.channel-visualisation .channel[color=red] .channel-tip {
+  background:	rgba(232,30,20,.6);
+}
 .channel-visualisation .channel[color=red] .color,
 .channel-visualisation .channel[color=red] .indicator {
   background:	rgba(232,30,20,1);
 }
-
 .channel-visualisation .channel[color=red] .bubblepopup {
   border: solid 2px rgba(232,30,20,1);
   color:	rgba(232,30,20,1);
 }
 
+
+/*PINK*/
 .channel-visualisation .channel[color=pink] {
   background:	rgba(227,25,123,.2);
 }
-
+.channel-visualisation .channel[color=pink]:pink {
+  background:	rgba(227,25,123,.3);
+}
+.channel-visualisation .channel[color=pink] .channel-tip {
+  background:	rgba(227,25,123,.6);
+}
 .channel-visualisation .channel[color=pink] .color,
 .channel-visualisation .channel[color=pink] .indicator {
   background:	rgba(227,25,123,1);
 }
-
 .channel-visualisation .channel[color=pink] .bubblepopup {
   border: solid 2px rgba(227,25,123,1);
   color:	rgba(227,25,123,1);
 }
 
+/*PURPLE*/
 .channel-visualisation .channel[color=purple] {
   background:	rgba(159,39,207,.2);
 }
-
+.channel-visualisation .channel[color=purple]:hover {
+  background:	rgba(159,39,207,.3);
+}
+.channel-visualisation .channel[color=purple] .channel-tip {
+  background:	rgba(159,39,207,.6);
+}
 .channel-visualisation .channel[color=purple] .color,
 .channel-visualisation .channel[color=purple] .indicator {
   background:	rgba(159,39,207,1);
 }
-
 .channel-visualisation .channel[color=purple] .bubblepopup {
   border: solid 2px rgba(159,39,207,1);
   color:	rgba(159,39,207,1);
 }
 
+/*GREEN*/
+
 .channel-visualisation .channel[color=green] {
   background:	rgba(113,184,6,.2);
 }
-
+.channel-visualisation .channel[color=green]:hover {
+  background:	rgba(113,184,6,.3);
+}
+.channel-visualisation .channel[color=green] .channel-tip {
+  background:	rgba(113,184,6,.6);
+}
 .channel-visualisation .channel[color=green] .color,
 .channel-visualisation .channel[color=green] .indicator {
   background:	rgba(113,184,6,1);
 }
-
 .channel-visualisation .channel[color=green] .bubblepopup {
   border: solid 2px rgba(113,184,6,1);
   color:	rgba(113,184,6,1);
 }
 
+/*ORANGE*/
 .channel-visualisation .channel[color=orange] {
   background:	rgba(255,123,0,.2);
 }
-
+.channel-visualisation .channel[color=orange]:hover {
+  background:	rgba(255,123,0,.3);
+}
+.channel-visualisation .channel[color=orange] .channel-tip {
+  background:	rgba(255,123,0,.6);
+}
 .channel-visualisation .channel[color=orange] .color,
 .channel-visualisation .channel[color=orange] .indicator {
   background:	rgba(255,123,0,1);
 }
-
 .channel-visualisation .channel[color=orange] .bubblepopup {
   border: solid 2px rgba(255,123,0,1);
   color:	rgba(255,123,0,1);
 }
 
+
+/*YELLOW*/
 .channel-visualisation .channel[color=yellow] {
   background:	rgba(229,210,0,.2);
+}
+.channel-visualisation .channel[color=yellow]:hover {
+  background:	rgba(229,210,0,.3);
+}
+.channel-visualisation .channel[color=yellow] .channel-tip {
+  background:	rgba(229,210,0,.7);
 }
 
 .channel-visualisation .channel[color=yellow] .color,
@@ -1257,13 +1330,18 @@ button.customize-btn.selected-button {
 }
 
 .channel-visualisation .channel[color=false] {
-  background:	rgba(0,0,0,.2);
+  background:	rgba(0,0,0,.1);
+}
+.channel-visualisation .channel[color=false]:hover {
+  background:	rgba(0,0,0,.15);
+}
+.channel-visualisation .channel[color=false] .channel-tip {
+  background:	rgba(0,0,0,.3);
 }
 
 .channel-visualisation .channel[color=false] .color,
 .channel-visualisation .channel[color=false] .indicator {
-  display: none;
-/*  background:  rgba(0,0,0,.3);*/
+  background:  rgba(0,0,0,.3);
 }
 
 .channel-visualisation .channel[color=false] .bubblepopup {
@@ -1271,7 +1349,3 @@ button.customize-btn.selected-button {
   color: rgba(53,140,206,1);
   display: none;
 }
-.channel-visualisation .channel[color=false]{
-  background: rgba(102, 102, 102, .2)
-}
-
