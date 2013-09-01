@@ -389,9 +389,9 @@ define(
         eltthum = $("<a class='speaker' elementid='" + event.detail.speaker.id + "'>" + event.detail.speaker.localName.replace('app-', '') + "</a>");
         eltthum.on('click', function(elt) {
           var eltid = elt.currentTarget.getAttribute('elementid');
-          var elt = $("#" + eltid)[0];
-          Ceci.elementWantsAttention(elt);
-          selectComponent($(elt));
+          var newelt = $("#" + eltid)[0];
+          Ceci.elementWantsAttention(newelt);
+          selectComponent($(newelt));
         });
       }
       var line = $('<li></li>');
@@ -405,7 +405,7 @@ define(
         channelthumb.css('backgroundColor', "rgba(102, 102, 102, .2)");
       }
       line.append(channelthumb);
-      var payload = $("<div class='payload new'/>")
+      var payload = $("<div class='payload new'/>");
       if (eltthum) payload.append(eltthum);
       payload.append(" <span class='message'>" + event.detail.message + "</span>");
       line.append(payload);
@@ -413,7 +413,7 @@ define(
       payload.focus(); // needed for bg animation
       payload.removeClass('new');
       if (event.detail.severity == Ceci.LOG_WTF) {
-        line.addClass('severity').addClass('wtf')
+        line.addClass('severity').addClass('wtf');
       }
       scroll[0].scrollTop = scroll[0].scrollHeight;
     } catch (e) {
