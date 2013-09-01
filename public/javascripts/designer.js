@@ -14,6 +14,20 @@ define(
       element.css('z-index', ++zIndex);
     }
 
+
+    function convertHex(hex,opacity){
+        hex = hex.replace('#','');
+        if (hex.length == 3) {
+          hex = hex[0]+hex[0] + hex[1]+hex[1]+hex[2]+hex[2];
+        }
+        var r = parseInt(hex.substring(0,2), 16);
+        var g = parseInt(hex.substring(2,4), 16);
+        var b = parseInt(hex.substring(4,6), 16);
+
+        var result = 'rgba('+r+','+g+','+b+','+opacity/100+')';
+        return result;
+    }
+
     Ceci.onCardChange(function (card) {
       var thumbId = "card-thumb-" + card.id.match(/(\d+)$/)[0];
       $(".card").removeClass('selected');
@@ -357,12 +371,55 @@ define(
     //Toggle the log
     $('.log-toggle').click(function () {
       if ($(this).hasClass('selected-button')) {
-        $('.log').hide();
+        $('.log').removeClass('expanded');
         $(this).removeClass('selected-button');
       } else {
+        $('.log').addClass('expanded');
         $('.log').show();
         $(this).addClass('selected-button');
       }
+    });
+
+
+    document.addEventListener('log', function(event) {
+    try {
+      var scroll = $('.log .scroll');
+      var eltthum;
+      if (event.detail.speaker) {
+        eltthum = $("<a class='speaker' elementid='" + event.detail.speaker.id + "'>" + event.detail.speaker.localName.replace('app-', '') + "</a>");
+        eltthum.on('click', function(elt) {
+          var eltid = elt.currentTarget.getAttribute('elementid');
+          var newelt = $("#" + eltid)[0];
+          Ceci.elementWantsAttention(newelt);
+          selectComponent($(newelt));
+        });
+      }
+      var line = $('<li></li>');
+      var channelthumb;
+      if (event.detail.channel) {
+        var channel = getChannelByChannelName(event.detail.channel);
+        channelthumb = $("<span class='channel'>" + channel.name + "</span>");
+        channelthumb.css('backgroundColor', convertHex(channel.hex, 70));
+      } else {
+        channelthumb = $("<span class='channel'>&nbsp;</span>");
+        channelthumb.css('backgroundColor', "rgba(102, 102, 102, .2)");
+      }
+      line.append(channelthumb);
+      var payload = $("<div class='payload new'/>");
+      if (eltthum) payload.append(eltthum);
+      payload.append(" <span class='message'>" + event.detail.message + "</span>");
+      line.append(payload);
+      scroll.append(line);
+      payload.focus(); // needed for bg animation
+      payload.removeClass('new');
+      if (event.detail.severity == Ceci.LOG_WTF) {
+        line.addClass('severity').addClass('wtf');
+      }
+      scroll[0].scrollTop = scroll[0].scrollHeight;
+    } catch (e) {
+      console.log(e);
+      console.log(e.message);
+    }
     });
 
     //Generate or remove the channel menu
@@ -442,6 +499,8 @@ define(
       $(this).parent().hide();
     });
 
+    Ceci.log("AppMaker designer is ready.", "");
+
     var selectComponent = function(comp) {
 
       if(comp.find(".channel-menu").length === 0){
@@ -517,13 +576,6 @@ define(
       $(".inspector").removeClass('hidden');
     };
 
-
-    // logs messages
-    $(document).on('broadcast', function (event, message) {
-      var log = $('.log .inner p').append('<div>' + message + '</div>');
-      var scroll = $(".scroll")[0];
-      scroll.scrollTop = scroll.scrollHeight;
-    });
 
     //shows component description
     var showComponentDescription = function (xPos, yPos, component, compDescription) {
