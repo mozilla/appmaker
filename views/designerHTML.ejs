@@ -55,7 +55,7 @@
       <div name="false"     color="false"   class="color"></div>
       <div name="blue"      color="blue"    class="color"></div>
       <div name="green"     color="green"   class="color"></div>
-      <div name="purple"    color="purple"  class="color"></div>
+      <div name="red"       color="red"  class="color"></div>
       <div name="pink"      color="pink"    class="color"></div>
       <div name="orange"    color="orange"  class="color"></div>
       <div name="yellow"    color="yellow"  class="color"></div>
@@ -68,10 +68,25 @@
 
 <div class="modal-wrapper hidden">
   <div class="modal">
-    <div class="modal-inner">
-      <h2>Success!</h2>
-      <div class="clearfix">
-        Your app has been published to <a class="modal-publish-link"></a>
+    <div class="publishdialog modal-inner">
+      <div class="spinner hidden">
+        <h2>Loading…</h2>
+        <div class="clearfix">
+          Publishing your app on the internets.
+        </div>
+      </div>
+      <div class="failure hidden">
+        <h2>Uh-oh…</h2>
+        <div class="clearfix">
+          Your app couldn't be published.  The server said:
+          <pre class="message"></pre>
+        </div>
+      </div>
+      <div class="success hidden">
+        <h2>Success!</h2>
+        <div class="clearfix">
+          Your app has been published to <a class="modal-publish-link"></a>
+        </div>
       </div>
       <button class="btn-std return-btn">
         Return to app
