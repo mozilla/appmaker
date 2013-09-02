@@ -37,7 +37,6 @@ define(
     var sortableOptions = {
       accept: '.draggable',
       distance : 10,
-      tolerance : "pointer",
       connectWith: ".drophere",
       placeholder: "ui-state-highlight",
       handle : ".handle",
@@ -247,7 +246,6 @@ define(
           clearSelection();
           elements.forEach(function(element) {
             element.removeSafely();
-            $(document).off("click", ".color-ui .color", element.onColorSelectFunction);
           });
           break;
 
@@ -264,7 +262,6 @@ define(
         clearSelection();
         elements.forEach(function(element) {
           element.removeSafely();
-          $(document).off("click", ".color-ui .color", element.onColorSelectFunction);
         });
     });
 
@@ -613,31 +610,21 @@ define(
         data: { manifest: app.toJSON() },
         type: 'post',
         success: function (data) {
-          $(".publishdialog .failure").hide();
-          $(".publishdialog .spinner").hide();
           $('.publish-url').html(data.install);
           $('.publish-url').attr('href', data.install);
           $('.modal-publish-link').html(data.install);
           $('.modal-publish-link').attr('href', data.install);
-          $(".publishdialog .success").show();
           console.log('From publisher: ', data);
         },
         error: function (data) {
-          $(".publishdialog .spinner").hide();
-          $(".publishdialog .success").hide();
-          $(".failure .message").html(data.responseJSON.error.message);
           console.error('Error while publishing content:');
           console.error(data);
-          $(".publishdialog .failure").show();
         }
       });
     });
 
     //Publish modal
     $('.publish').click(function () {
-      $(".publishdialog .failure").hide();
-      $(".publishdialog .success").hide();
-      $(".publishdialog .spinner").show();
       $('.modal-wrapper').addClass('flex');
     });
 
