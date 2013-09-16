@@ -72,9 +72,7 @@ define(
           selectComponent($(evt.currentTarget));
         });
 
-        component.append($('<div class="component-menu"><div class="customize-btn"></div><div class="delete-btn"></div></div>'));
         component.append($('<div class="handle"></div>'));
-        component.append($('<div class="editables-section"><div class="editable-attributes"></div></div>'));
 
         selectComponent(component);
       },
@@ -115,15 +113,15 @@ define(
     });
 
     function addThumb(component, name, list) {
-      var thumb = $('<div class="clearfix draggable" name="' + name + '" value="' + name + '"><div class="thumb" value="' + name + '">' + name.replace('app-', '') + '</div><div class="info-btn hidden"></div></div>');
+      var thumb = $('<div class="clearfix preview"><div class="preview-box"><div class="draggable" name="' + name + '" value="' + name + '"><div class="button-preview">Button</div></div></div><div class="thumb" value="' + name + '">' + name.replace('app-', '') + '</div><div class="info-btn hidden"></div></div>');
       list.append(thumb);
-      thumb.draggable({
+      $('.draggable').draggable({
         connectToSortable: ".drophere",
         helper: "clone",
         appendTo: document.body,
         start: function(event, ui){
           var clone = ui.helper;
-          $(clone).find(".thumb").addClass("im-flying");
+          $(clone).find(".draggable div").addClass("im-flying");
           clone.find('.info-btn').remove();
         },
         addClass: "clone"
@@ -264,7 +262,7 @@ define(
     // empty the list of currently selected elements on the page
     var clearSelection = function() {
       selection = [];
-      $(".editables-section").hide();
+      $(".editable-section").hide();
       $(".phone-container .selected").removeClass("selected");
       $(".inspector").addClass('hidden');
       var event = new Event('onselectionchanged');
@@ -418,7 +416,7 @@ define(
 
     var displayAttributes = function(element) {
 
-      var attributeList = $(element).find(".editable-attributes");
+      var attributeList = $(".editable-attributes");
 
       attributeList.html("");
 
@@ -430,8 +428,9 @@ define(
         attributeList.append(uiElement);
       });
 
-      var editables = $(element).find(".editable-section");
+      var editables = $(".editable-section");
       editables.append(attributeList);
+      editables.show();
     };
 
     //Toggle customize
@@ -643,8 +642,9 @@ define(
       element.onColorSelectFunction = onColorSelectFunction;
 
       var componentName = element.tagName.toLowerCase();
-      $(".editables-section .name").text(componentName);
-      $(".inspector").removeClass('hidden');
+      var componentDesc = element.description.innerHTML;
+      $(".editable-section .name").text(componentName);
+      $(".editable-section .description").text(componentDesc);
     };
 
     //shows component description

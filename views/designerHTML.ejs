@@ -1,27 +1,30 @@
-<div class="tabs clearfix">
+<nav class="top-nav clearfix">
+  <div class="logo"></div>
   <div class="cards clearfix"></div>
   <button id="add-card" class="btn-add"></button>
-</div>
-
-<div class="container clearfix">
-
   <a target="_blank" class="publish-url"></a>
-  <button class="btn-std btn-md publish btn-critical">Publish</button>
-  <button class="btn-std btn-md new">New App</button>
-
   <div class="customize-btn"></div>
   <div class="note">
     App auto-saved at <span id="time"></span>
   </div>
-
-  <div class="tray">
+  <button class="btn-std btn-md publish btn-critical">Publish</button>
+  <button class="btn-std btn-md new">New App</button>
+</nav>
+<div class="tray">
+	<input type="search">
     <div class="library-list library-loading clearfix">
     </div>
-  </div>
+</div>
+<div class="container">
+  <div class="inner-container clearfix">
   <div class="listen-column">
+  	<div class="column-header">
+  		Incoming
+  	</div>
   </div>
   <div class="phone-container">
     <div class="phone-top"></div>
+    <div class="phone-border">
     <div id="flathead-app">
       <div class="ceci-card">
         <div class="fixed-top"></div>
@@ -30,19 +33,30 @@
         <div class="fixed-bottom"></div>
       </div>
     </div>
+    </div>
     <div class="phone-shadow"></div>
     <div class="phone-bottom"></div>
   </div>
   <div class="broadcast-column">
+  	<div class="column-header">
+  		Outgoing
+  	</div>
   </div>
-
-  <div class="log-wrapper">
-    <div class="log">
-      <ul class="scroll"></ul>
-      <button class="small-btn log-toggle"></button>
-    </div>
-  </div>
-
+</div>
+</div>
+<div class="right-column">
+	<div class="editable-section">
+		<div class="name"></div>
+		<div class="description"></div>
+		<div class="editable-attributes"></div>
+		<div class="delete-btn"></div>
+	</div>
+</div>
+<div class="log-wrapper">
+	<div class="log">
+	  <ul class="scroll"></ul>
+	  <button class="small-btn log-toggle"></button>
+	</div>
 </div>
 
 <div class="channel-menu channel-menu-template">
