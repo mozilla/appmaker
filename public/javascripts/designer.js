@@ -133,7 +133,8 @@ define(
         },
         addClass: "clone"
       });
-      if (component.description) {
+      
+      if (component && component.description) {
         var componentDescription = component.description.innerHTML;
         thumb.attr('description', componentDescription);
       } else {
@@ -147,7 +148,7 @@ define(
       sortedComponentNames.sort();
       var fullList = $('.library-list');
       fullList.html('');
-      fullList.append("<div class='heading'>Suggested</div>");
+      fullList.append("<div class='suggested-components heading'>Suggested</div>");
       var suggestionCount = 0;
 
       var suggestions = [];
@@ -178,8 +179,8 @@ define(
         }
       }
       /* these are what we suggest with a blank app */
-      suggestions.push('app-fireworks');
-      suggestions.push('app-button');
+      // suggestions.push('app-fireworks');
+      // suggestions.push('app-button');
       var alreadyMadeSuggestions = {};
       var suggestion;
       for (i = 0; i < Math.min(10, suggestions.length); i++) {
