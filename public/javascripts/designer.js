@@ -251,7 +251,7 @@ define(
         var rdata = channels[i];
 
         strip.append(
-          $('<div class="colorChoice '+ rdata.name +'" value="'+ rdata.hex +'" name="'+ rdata.name +'" title="'+ rdata.title +'" style="background-color: '+ rdata.hex +'"></div>')
+          $('<div class="colorChoice '+ rdata.name +'" receiver="'+ forAttribute +'" name="'+ rdata.name +'" title="'+ rdata.title +'" style="background-color: '+ rdata.hex +'"></div>')
         );
       }
       return strip;
@@ -333,10 +333,11 @@ define(
     });
 
     var displayBroadcastChannel = function () {
-      var bo = $(".broadcast-options");
+      var bo = $("<div class='broadcast-options'></div>");
       bo.html("");
       var strip = getChannelStrip("broadcast");
       bo.append(strip);
+      return bo;
     };
 
     var getPotentialListeners = function(element) {
@@ -358,10 +359,11 @@ define(
     };
 
     var displayListenChannel = function (attribute) {
-      var lo = $(".listen-options");
+      var lo = $("<div class='listen-options'></div>");
       lo.html("");
       var strip = getChannelStrip(attribute);
       lo.append(strip);
+      return lo;
     };
 
     var getAttributeUIElement = function(element, attributeName, definition) {
@@ -460,13 +462,18 @@ define(
       }
     });
 
-    //Generate or remove the channel menu
+    //Mouseleave hide false channels
     $(document).on('mouseleave','.channel-visualisation',function(){
-      $(this).find(".channel-menu").remove();
+      $(this).find(".channel[color='false']").hide();
     });
 
+    //Mouseenter show false channels
+    $(document).on('mouseenter','.channel-visualisation',function(){
+      $(this).find(".channel[color='false']").show();
+    });
 
-    $(document).on('mouseover','.channel-visualisation',function(){
+    //Old menu visualization - probably delete
+   /* $(document).on('mouseover','.channel-visualisation',function(){
       var channelType;
 
       if($(this)[0].tagName == "LISTEN"){
@@ -500,8 +507,39 @@ define(
         menu.addClass("menu-in");
         menu.css("margin-top",-1 * menu.outerHeight()/2 -1);
       }
+    }); */
+
+    //Channel click
+    $(document).on("click", ".channel", function () {
+
+      //check if channel is broadcast or listen
+      if ($(this).attr("title") === "broadcast channel") {
+        $(this).append(displayBroadcastChannel("broadcast"));
+      } else {
+        var receiver = $(this).attr("title");
+        $(this).append(displayListenChannel(receiver));
+      }
     });
 
+    //Color click
+    $(document).on("click", ".colorChoice", function () {
+      var element = $(this).closest(".component")[0];
+      var color = $(this).attr("name");
+      var receiver = $(this).attr("receiver");
+
+      //check if channel is listen or broadcast
+      if (receiver === "broadcast") {
+        element.setBroadcastChannel(color);
+        $('.broadcast-options').remove();
+      } else {
+        element.setSubscription(color, receiver);
+        $('.listen-options').remove();
+      }
+      return false;
+    });
+
+    //old channel menu - probably delete
+    /*
     //Channel Menu Label Click
     $(document).on("click", ".channel-menu label", function(){
       var menu = $(this).closest(".channel-menu");
@@ -531,7 +569,7 @@ define(
       // $(this).closest(".channel-visualisation").find(".channel-menu-toggle").removeClass("open-toggle");
       // $(this).closest(".channel-menu").remove();
       $(this).parent().hide();
-    });
+    });*/
     function clearLog() {
       document.querySelector('.log .scroll').innerHTML = '';
       Ceci.log("New app, clean log.");
@@ -651,21 +689,6 @@ define(
       var componentName = element.tagName.toLowerCase();
       $(".editable-section .name").text(componentName);
 
-      //add mailbox info to right column
-      $('.mailboxes').html('');
-
-      for (var i=0; i < element.subscriptions.length; i++) {
-        var channelProperty = element.subscriptions[i].listener;
-        var mailboxColor = element.subscriptions[i].channel;
-        var mailbox = $('<div class="mail"></div>').html(channelProperty).addClass(mailboxColor);
-        $('.mailboxes').append(mailbox);
-      }
-
-      //add outgoing mail info to right column
-      $('.outgoing-mail').html('');
-      var mailColor = element.broadcastChannel;
-      var outgoingMail = $('<div class="mail">Mail</div>').addClass(mailColor);
-      $('.outgoing-mail').append(outgoingMail);
     };
 
     //shows component description
