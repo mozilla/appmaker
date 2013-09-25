@@ -1649,7 +1649,7 @@ listen.channel-visualisation  .channel-menu-toggle {
 }
 
 .channel-visualisation .channel[color=blue] {
-  background:	rgba(53,140,206,1);
+  background:	rgba(53,140,206,.5);
 }
 
 .channel-visualisation .channel[color=blue] .color,
@@ -1663,7 +1663,7 @@ listen.channel-visualisation  .channel-menu-toggle {
 }
 
 .channel-visualisation .channel[color=red] {
-  background:	rgba(232,30,20,1);
+  background:	rgba(232,30,20,.5);
 }
 
 .channel-visualisation .channel[color=red] .color,
@@ -1677,7 +1677,7 @@ listen.channel-visualisation  .channel-menu-toggle {
 }
 
 .channel-visualisation .channel[color=pink] {
-  background:  rgba(255,84,167,1);
+  background:  rgba(255,84,167,.5);
 }
 
 .channel-visualisation .channel[color=pink] .color,
@@ -1691,7 +1691,7 @@ listen.channel-visualisation  .channel-menu-toggle {
 }
 
 .channel-visualisation .channel[color=purple] {
-  background:	rgba(159,39,207,1);
+  background:	rgba(159,39,207,.5);
 }
 
 .channel-visualisation .channel[color=purple] .color,
@@ -1705,7 +1705,7 @@ listen.channel-visualisation  .channel-menu-toggle {
 }
 
 .channel-visualisation .channel[color=green] {
-  background:	rgba(113,184,6,1);
+  background:	rgba(113,184,6,.5);
 }
 
 .channel-visualisation .channel[color=green] .color,
@@ -1719,7 +1719,7 @@ listen.channel-visualisation  .channel-menu-toggle {
 }
 
 .channel-visualisation .channel[color=orange] {
-  background:	rgba(255,123,0,1);
+  background:	rgba(255,123,0,.5);
 }
 
 .channel-visualisation .channel[color=orange] .color,
@@ -1733,7 +1733,7 @@ listen.channel-visualisation  .channel-menu-toggle {
 }
 
 .channel-visualisation .channel[color=yellow] {
-  background:	rgba(229,210,0,1);
+  background:	rgba(229,210,0,.5);
 }
 
 .channel-visualisation .channel[color=yellow] .color,
