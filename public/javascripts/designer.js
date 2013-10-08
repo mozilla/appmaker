@@ -11,6 +11,8 @@ define(
 
     var app;
 
+    var remixUrl = document.querySelector('#appmaker-remix-url').value;
+
     function init () {
       app = new Ceci.App({
         container: $('#flathead-app')[0],
@@ -127,27 +129,51 @@ define(
       $(document).off("click", ".color-ui .color", element.onColorSelectFunction);
     });
 
-    if (window.location.search.length > 0) {
-      var match = window.location.search.match(/[?&]template=([\w-_\.]+)/);
-      if (match[1]) {
-        $.get('/templates/' + match[1] + '.html',
-          function (data) {
-            var tmpContainer = document.createElement('div');
-            tmpContainer.innerHTML = data;
-            $('#flathead-app').html(tmpContainer.querySelector('#flathead-app').innerHTML);
+    // Make sure there wasn't something planeted in the app container already (e.g. remix)
+    if ($('#flathead-app').find('.ceci-card > div').find('*').length === 0 ) {
+      if (window.location.search.length > 0) {
+          var match;
+
+          if ((match = window.location.search.match(/[?&]template=([\w-_\.]+)/)) && match[1]) {
+            $.get('/templates/' + match[1] + '.html',
+              function (data) {
+                var tmpContainer = document.createElement('div');
+                tmpContainer.innerHTML = data;
+                $('#flathead-app').html(tmpContainer.querySelector('#flathead-app').innerHTML);
+                init();
+              }).fail(function () {
+                init();
+              });
+          }
+          else if ((match = window.location.search.match(/[?&]remix=([\w-_\.]+)/)) && match[1]) {
+            $.get(remixUrl.replace('{remixName}', match[1]) + 'index.html',
+              function (data) {
+                var tmpContainer = document.createElement('div');
+                tmpContainer.innerHTML = data;
+                if (tmpContainer.querySelector('#flathead-app')) {
+                  $('#flathead-app').html(tmpContainer.querySelector('#flathead-app').innerHTML);
+                }
+                init();
+              }).fail(function () {
+                init();
+              });
+          }
+          else {
             init();
-          }).fail(function () {
-            init();
-          });
+          }
       }
-    }
-    else if (localStorage.draft){
-      $('#flathead-app').html(localStorage.draft);
-      init();
+      else if (localStorage.draft){
+        $('#flathead-app').html(localStorage.draft);
+        init();
+      }
+      else {
+        init();
+      }
     }
     else {
       init();
     }
+
     var saveTimer = null;
 
     function convertHex(hex,opacity){
