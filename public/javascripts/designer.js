@@ -820,11 +820,11 @@ define(
       var yPos = $(this).offset().top -50 + 'px';
       componentDescription.css({top: yPos});
       $('.library-container').append(componentDescription);
-    })
+    });
 
     $(document).on('mouseleave', '.info', function () {
       $('.component-description').remove();
-    })
+    });
 
     $('.new').click(function(){
       $('.card').remove();
