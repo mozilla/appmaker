@@ -94,7 +94,7 @@ define(
         sortedComponentNames.sort();
         var fullList = $('.library-list');
         fullList.html('');
-        fullList.append('<div class="suggested-components heading">Suggested</div>');
+        fullList.append('<div class="suggested-components heading" id="suggested">Suggested</div>');
         var suggestionCount = 0;
 
         var suggestions = [];
@@ -135,7 +135,7 @@ define(
           addThumb(components[suggestion], suggestion, fullList);
           alreadyMadeSuggestions[suggestion] = true;
         }
-        fullList.append('<div class="lb"></div>');
+        fullList.append('<div class=""></div>');
         sortedComponentNames.forEach(function (name) {
           addThumb(components[name], name, fullList);
         });
@@ -248,7 +248,7 @@ define(
       } else {
         previewContent = preview.innerHTML;
       }
-      var thumb = $('<div class="preview"><div class="flipper"><div class="front"><div class="preview-icon">'+ previewContent +'</div><div class="thumb" value="' + name + '">' + name.replace('app-', '') + '</div></div><div class="back"><div class="draggable" name="' + name + '" value="' + name + '"><div class="preview-icon">'+ previewContent +'</div><div class="thumb" value="' + name + '">' + name.replace('app-', '') + '</div><div class="component-instruction">Drag Me</div></div></div></div></div>');
+      var thumb = $('<div class="draggable" name="' + name + '" value="' + name + '">' + name.replace('app-', '') + '<div class="info"></div></div>');
       list.append(thumb);
       $('.draggable').draggable({
         connectToSortable: ".drophere",
@@ -256,7 +256,7 @@ define(
         appendTo: document.body,
         start: function(event, ui){
           var clone = ui.helper;
-          $(clone).removeClass("back");
+          $(clone).removeClass("info");
         },
         addClass: "clone"
       });
@@ -807,24 +807,24 @@ define(
       $('.outgoing-mail').append(outgoingMail);*/
     };
 
-    //shows component description
-    var showComponentDescription = function (xPos, yPos, component, compDescription) {
+    $(document).on('mouseenter', '.info', function () {
       var componentDescription = $('<div class="component-description"></div>');
-      componentDescription.css({top: yPos, left: xPos});
-      componentDescription.text(compDescription);
-      $(document.body).append(componentDescription);
-    };
-
-    $(document).on('mouseenter', '.info-btn', function () {
-      var yPos = $(this).offset().top - 9 + 'px';
-      var xPos = $(this).offset().left + 40 + 'px';
-      var component = $(this).parents('.draggable').attr('value');
+      var description = $('<div class="description"></div>');
+      var name = $('<div class="description-name"></div>');
+      var compName = $(this).parents('.draggable').attr('name');
       var compDescription = $(this).parents('.draggable').attr('description');
-      showComponentDescription(xPos, yPos, component, compDescription);
-    }).on('mouseleave', '.info-btn', function () {
-      $('.component-description').remove();
+      description.text(compDescription);
+      name.text(compName.replace('app-', ''));
+      componentDescription.append(name);
+      componentDescription.append(description);
+      var yPos = $(this).offset().top -50 + 'px';
+      componentDescription.css({top: yPos});
+      $('.library-container').append(componentDescription);
     });
 
+    $(document).on('mouseleave', '.info', function () {
+      $('.component-description').remove();
+    });
 
     $('.new').click(function(){
       $('.card').remove();
