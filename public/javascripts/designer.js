@@ -253,17 +253,9 @@ define(
 
     $(document).on('click', '.add-component', function () {
       var comp = $(this).attr('name');
-      $('.library-list').append($('<div class="draggable" name="' + comp + '" value="' + comp + '">'+comp+'</div>'));
-      $('.draggable').draggable({
-        connectToSortable: ".drophere",
-        helper: "clone",
-        appendTo: document.body,
-        start: function(event, ui){
-          var clone = ui.helper;
-          $(clone).removeClass("back");
-        },
-        addClass: "clone"
-      });
+      $('phone-canvas').append('<div name="'+comp+'" value="'+comp+'"></div>')
+      app.addComponent(comp);
+      $('.drophere').sortable('refresh');
     });
 
     function addComponentCard(component, name, list) {

@@ -245,19 +245,19 @@ button.add-component {
 button.find-components {
   border-radius: 3px;
   height: 30px;
-  padding: 0px 10px 0px 12px;
-  text-indent: 20px;
-  font-size: 12px;
+  padding: 0px 15px 0px 15px;
+  text-indent: 25px;
+  font-size: 13px;
   color: #FFF;
-  text-transform: uppercase;
-  font-weight: 600;
-  background-color: #358CCE;
+  font-weight: 400;
+  background-color: #31353C;
   text-align: left;
-  border: 1px solid #296ea3;
-  background-image: url(../images/add-component.png);
-  background-position: 10px center;
+  border: 1px solid #060708;
+  background-image: url(../images/bricks.png);
+  background-position: 15px center;
   background-repeat: no-repeat;
-  margin: 20px;
+  float: left;
+  margin: 10px 0px 0px 10px;
 }
 
 button.done {
@@ -725,8 +725,8 @@ input[type="search"] {
 
 .right-column {
   top: 50px;
-  right: 0 !important;
-  left: auto !important;
+  left: 0 !important;
+  right: auto !important;
   bottom: 0;
   position: fixed;
   background-color: #212429;
@@ -742,7 +742,7 @@ input[type="search"] {
 
 .expand-handle {
   border-radius: 6px 0 0 6px;
-  left: -30px;
+  right: -30px;
   background-color: #212429;
   position: absolute;
   color: #888;
