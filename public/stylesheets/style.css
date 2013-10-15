@@ -1340,7 +1340,7 @@ ul.component-actions {
 
 .component-description {
 	float: left;
-	width: 60%;
+	width: calc(100% - 310px);
 }
 
 .friends {
