@@ -92,9 +92,10 @@ define(
         var components = Ceci._components;
         var sortedComponentNames = Object.keys(components);
         sortedComponentNames.sort();
+        var componentList = $('#components');
+        componentList.html('');
         var fullList = $('.library-list');
         fullList.html('');
-        fullList.append('<div class="suggested-components heading">Suggested</div>');
         var suggestionCount = 0;
 
         var suggestions = [];
@@ -137,7 +138,8 @@ define(
         }
         fullList.append('<div class="lb"></div>');
         sortedComponentNames.forEach(function (name) {
-          addThumb(components[name], name, fullList);
+          //addThumb(components[name], name, fullList);
+          addComponentCard(components[name], name, componentList);
         });
       };
     }
@@ -239,6 +241,55 @@ define(
         }
       }
     };
+
+
+    $('.find-components').click(function () {
+      $('#component-discovery-modal').removeClass('hidden');
+    });
+
+    $('.done').click(function () {
+      $('#component-discovery-modal').addClass('hidden');
+    });
+
+    $(document).on('click', '.add-component', function () {
+      var comp = $(this).attr('name');
+      $('.library-list').append($('<div class="draggable" name="' + comp + '" value="' + comp + '">'+comp+'</div>'));
+      $('.draggable').draggable({
+        connectToSortable: ".drophere",
+        helper: "clone",
+        appendTo: document.body,
+        start: function(event, ui){
+          var clone = ui.helper;
+          $(clone).removeClass("back");
+        },
+        addClass: "clone"
+      });
+    });
+
+    function addComponentCard(component, name, list) {
+      if (component.description) {
+        var componentDescription = component.description.innerHTML;
+      } else {
+        componentDescription = "No description available";
+      }
+      var card = $('<div class="component-card clearfix"></div>');
+      var componentDescription = $('<div class="component-description"><div class="clearfix"><h1>' + name.replace('app-', '') + '</h1></div><h5>By: Joe Thomas | Last edited 8/12/13</h5><button class="add-component" name="'+ name +'">Add Component</button><h3 class="description">Description</h3><h6>'+ componentDescription +'</h6><h3 class="actions">Actions</h3><ul class="component-actions"><li>Shoot rocket</li></ul><h3 class="friend">Friends</h3></div>');
+      var preview = $('<div class="component-right"><div class="component-preview"></div></div>');
+      var friendList = $('<div class="friends"></div>');
+      if (component.friends.length > 0) {
+        for (var i = 0; i < component.friends.length; i++) {
+          friendList.append($('<a>'+ component.friends[i] +'</a>'))
+        }
+      } else {
+        friendList.append($('<div>No Friends<div>'))
+      }
+      var tags = $('<div class="tags clearfix"><div class="tag">Animation</div></div>');
+      componentDescription.append(friendList);
+      componentDescription.append(tags);
+      card.append(componentDescription);
+      card.append(preview);
+      list.append(card);
+    }
 
     function addThumb(component, name, list) {
       var previewContent;
