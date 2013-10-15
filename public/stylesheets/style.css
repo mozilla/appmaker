@@ -20,7 +20,6 @@ body {
   -ms-user-select: none;
   user-select: none;
   min-height: 100%;
-  background-color: #e8ebed;
 }
 
 input,
@@ -245,19 +244,33 @@ button.add-component {
 button.find-components {
   border-radius: 3px;
   height: 30px;
-  padding: 0px 15px 0px 15px;
-  text-indent: 25px;
+  width: 180px;
+  text-indent: 35px;
   font-size: 13px;
-  color: #FFF;
   font-weight: 400;
-  background-color: #31353C;
+  background-color: #FFF;
   text-align: left;
-  border: 1px solid #060708;
+  border: 1px solid #aeb1b5;
   background-image: url(../images/bricks.png);
   background-position: 15px center;
   background-repeat: no-repeat;
-  float: left;
-  margin: 10px 0px 0px 10px;
+  margin: 20px 0px 0px 20px;
+}
+
+button.create-component {
+  border-radius: 3px;
+  height: 30px;
+  width: 180px;
+  text-indent: 35px;
+  font-size: 13px;
+  font-weight: 400;
+  background-color: #FFF;
+  text-align: left;
+  border: 1px solid #aeb1b5;
+  background-image: url(../images/lightning.png);
+  background-position: 15px center;
+  background-repeat: no-repeat;
+  margin: 10px 0px 0px 20px;
 }
 
 button.done {
@@ -572,7 +585,7 @@ button.log-toggle {
   background-color: #358CCE;
   height: 50px;
   float: left;
-  width: 260px;
+  width: 220px;
   z-index: 99;
 }
 
@@ -585,7 +598,7 @@ button.log-toggle {
   z-index: 1;
   overflow-y: scroll;
   min-width: 700;
-  margin: 0 245px 0 260px;
+  margin: 0 245px 0 220px;
 }
 
 .container .garbage-bin {
@@ -630,9 +643,9 @@ button.log-toggle {
   left: 0px;
   top: 50px;
   bottom: 0px;
-  width: 260px;
-  background-color: #212429;
+  width: 220px;
   z-index: 2  ;
+  background-color: #e8ebed;
 }
 
 ul.tabs {
@@ -725,8 +738,8 @@ input[type="search"] {
 
 .right-column {
   top: 50px;
-  left: 0 !important;
-  right: auto !important;
+  right: 0 !important;
+  left: auto !important;
   bottom: 0;
   position: fixed;
   background-color: #212429;
@@ -742,7 +755,7 @@ input[type="search"] {
 
 .expand-handle {
   border-radius: 6px 0 0 6px;
-  right: -30px;
+  left: -30px;
   background-color: #212429;
   position: absolute;
   color: #888;

@@ -251,11 +251,31 @@ define(
       $('#component-discovery-modal').addClass('hidden');
     });
 
+    //Add components directly to phone
     $(document).on('click', '.add-component', function () {
+      $('#component-discovery-modal').addClass('hidden');
       var comp = $(this).attr('name');
-      //do i need to append element to .phone-canvas?
-      app.addComponent(comp);
-      $('.drophere').sortable('refresh');
+      var component = document.createElement(comp);
+      Ceci.convertElement(component, function () {
+        $('.phone-canvas').append(component);
+          component = $(component);
+
+          var dropTarget = $(".drophere").find(".draggable");
+          dropTarget.replaceWith(component);
+
+          component.addClass("component");
+          component.draggable({
+            handle: 'handle'
+          });
+
+          component.on('mousedown', function(evt) {
+            selectComponent($(evt.currentTarget));
+          });
+
+          component.append($('<div class="handle"></div>'));
+
+          selectComponent(component);
+      });
     });
 
     function addComponentCard(component, name, list) {
