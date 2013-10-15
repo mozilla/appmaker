@@ -253,7 +253,7 @@ define(
 
     $(document).on('click', '.add-component', function () {
       var comp = $(this).attr('name');
-      $('phone-canvas').append('<div name="'+comp+'" value="'+comp+'"></div>')
+      //do i need to append element to .phone-canvas?
       app.addComponent(comp);
       $('.drophere').sortable('refresh');
     });
