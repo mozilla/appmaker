@@ -242,7 +242,7 @@ define(
       }
     };
 
-
+    //Open components modal
     $('.find-components').click(function () {
       $('#component-discovery-modal').removeClass('hidden');
     });
@@ -251,7 +251,7 @@ define(
       $('#component-discovery-modal').addClass('hidden');
     });
 
-    //Add components directly to phone
+    //Add components to phone
     $(document).on('click', '.add-component', function () {
       $('#component-discovery-modal').addClass('hidden');
       var comp = $(this).attr('name');
@@ -280,6 +280,7 @@ define(
 
     function addComponentCard(component, name, list) {
       var componentDescription;
+      console.log(component.broadcastChannels)
       if (component.description) {
         componentDescription = component.description.innerHTML;
       } else {
@@ -287,7 +288,7 @@ define(
       }
       var card = $('<div class="component-card clearfix"></div>');
       var descriptionColumn = $('<div class="component-description"><div class="clearfix"><h1>' + name.replace('app-', '') + '</h1></div><h5>By: Joe Thomas | Last edited 8/12/13</h5><button class="add-component" name="'+ name +'">Add Component</button><h3 class="description">Description</h3><h6>'+ componentDescription +'</h6><h3 class="actions">Actions</h3><ul class="component-actions"><li>Shoot rocket</li></ul><h3 class="friend">Friends</h3></div>');
-      var preview = $('<div class="component-right"><div class="component-preview"></div></div>');
+      var preview = $('<div class="component-right"><div class="component-preview">'+ component.thumbnail.innerHTML +'</div></div>');
       var friendList = $('<div class="friends"></div>');
       if (component.friends.length > 0) {
         for (var i = 0; i < component.friends.length; i++) {

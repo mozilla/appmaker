@@ -1382,11 +1382,7 @@ ul.component-actions {
 	box-sizing:border-box;
   -moz-box-sizing:border-box; /* Firefox */
 	border-radius: 3px;
-	height: 400px;
   background-color: #e8ebed;
-	background-image: url(../images/fw.png);
-	background-repeat: no-repeat;
-	background-position: center;
 }
 
 .tags {
