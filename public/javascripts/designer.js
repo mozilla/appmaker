@@ -267,26 +267,27 @@ define(
     });
 
     function addComponentCard(component, name, list) {
+      var componentDescription;
       if (component.description) {
-        var componentDescription = component.description.innerHTML;
+        componentDescription = component.description.innerHTML;
       } else {
         componentDescription = "No description available";
       }
       var card = $('<div class="component-card clearfix"></div>');
-      var componentDescription = $('<div class="component-description"><div class="clearfix"><h1>' + name.replace('app-', '') + '</h1></div><h5>By: Joe Thomas | Last edited 8/12/13</h5><button class="add-component" name="'+ name +'">Add Component</button><h3 class="description">Description</h3><h6>'+ componentDescription +'</h6><h3 class="actions">Actions</h3><ul class="component-actions"><li>Shoot rocket</li></ul><h3 class="friend">Friends</h3></div>');
+      var descriptionColumn = $('<div class="component-description"><div class="clearfix"><h1>' + name.replace('app-', '') + '</h1></div><h5>By: Joe Thomas | Last edited 8/12/13</h5><button class="add-component" name="'+ name +'">Add Component</button><h3 class="description">Description</h3><h6>'+ componentDescription +'</h6><h3 class="actions">Actions</h3><ul class="component-actions"><li>Shoot rocket</li></ul><h3 class="friend">Friends</h3></div>');
       var preview = $('<div class="component-right"><div class="component-preview"></div></div>');
       var friendList = $('<div class="friends"></div>');
       if (component.friends.length > 0) {
         for (var i = 0; i < component.friends.length; i++) {
-          friendList.append($('<a>'+ component.friends[i] +'</a>'))
+          friendList.append($('<a>'+ component.friends[i] +'</a>'));
         }
       } else {
-        friendList.append($('<div>No Friends<div>'))
+        friendList.append($('<div>No Friends<div>'));
       }
       var tags = $('<div class="tags clearfix"><div class="tag">Animation</div></div>');
-      componentDescription.append(friendList);
-      componentDescription.append(tags);
-      card.append(componentDescription);
+      descriptionColumn.append(friendList);
+      descriptionColumn.append(tags);
+      card.append(descriptionColumn);
       card.append(preview);
       list.append(card);
     }
