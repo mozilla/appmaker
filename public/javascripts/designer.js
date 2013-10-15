@@ -280,7 +280,6 @@ define(
 
     function addComponentCard(component, name, list) {
       var componentDescription;
-      console.log(component.broadcastChannels)
       if (component.description) {
         componentDescription = component.description.innerHTML;
       } else {
