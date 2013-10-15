@@ -113,12 +113,12 @@ b {
 }
 
 h1 {
-  font-size: 80px;
-  color: #FFF;
-  text-align: center;
-  font-weight: 300;
-  margin: 0;
+  font-size: 22px;
+  font-weight: 400;
+  margin: 0px;
   padding: 0;
+  line-height: 28px;
+  float: left;
 }
 
 h2 {
@@ -130,9 +130,9 @@ h2 {
 }
 
 h3 {
-  font-weight: 400;
-  margin: 0px;
-  font-size: 18px;
+  font-weight: 600;
+  margin: 20px 0px 2px 0px;
+  font-size: 16px;
 }
 
 h4 {
@@ -148,16 +148,15 @@ h4 {
 }
 
 h5 {
-  font-size: 16px;
-  margin: 0px 0px 20px 0px;
+  font-size: 12px;
+  margin: 0px;
   text-transform: uppercase;
   font-weight: 600;
-  line-height: 16px;
   padding: 0px;
+  color: #aeb1b5;
 }
 
 h6 {
-  color: #FFF;
   font-size: 15px;
   font-weight: 400;
   margin: 0px;
@@ -222,6 +221,74 @@ button.btn-toggle:nth-child(1) {
 
 button.btn-toggle:nth-last-child(1) {
   border-radius: 0px 3px 3px 0px;
+}
+
+button.add-component {
+	border-radius: 3px;
+	height: 30px;
+  padding: 0px 10px 0px 12px;
+  text-indent: 20px;
+	font-size: 12px;
+  color: #FFF;
+  text-transform: uppercase;
+  font-weight: 600;
+  background-color: #358CCE;
+  text-align: left;
+  border: 1px solid #296ea3;
+  background-image: url(../images/add-component.png);
+  background-position: 10px center;
+  background-repeat: no-repeat;
+  margin-top: 20px;
+}
+
+button.find-components {
+  border-radius: 3px;
+  height: 30px;
+  width: 180px;
+  text-indent: 35px;
+  font-size: 13px;
+  font-weight: 400;
+  background-color: #FFF;
+  text-align: left;
+  border: 1px solid #aeb1b5;
+  background-image: url(../images/bricks.png);
+  background-position: 15px center;
+  background-repeat: no-repeat;
+  margin: 20px 0px 0px 20px;
+}
+
+button.create-component {
+  border-radius: 3px;
+  height: 30px;
+  width: 180px;
+  text-indent: 35px;
+  font-size: 13px;
+  font-weight: 400;
+  background-color: #FFF;
+  text-align: left;
+  border: 1px solid #aeb1b5;
+  background-image: url(../images/lightning.png);
+  background-position: 15px center;
+  background-repeat: no-repeat;
+  margin: 10px 0px 0px 20px;
+}
+
+button.done {
+  border-radius: 3px;
+  height: 26px;
+  padding: 0px 10px 0px 12px;
+  text-indent: 20px;
+  font-size: 11px;
+  text-transform: uppercase;
+  font-weight: 600;
+  background-color: #e9edf2;
+  text-align: left;
+  border: 1px solid #aeb1b5;
+  background-image: url(../images/accept.png);
+  background-position: 10px center;
+  background-repeat: no-repeat;
+  margin: 12px 20px 0px 0px;
+  float: right;
 }
 
 .cats {
@@ -518,7 +585,7 @@ button.log-toggle {
   background-color: #358CCE;
   height: 50px;
   float: left;
-  width: 260px;
+  width: 220px;
   z-index: 99;
 }
 
@@ -531,7 +598,7 @@ button.log-toggle {
   z-index: 1;
   overflow-y: scroll;
   min-width: 700;
-  margin: 0 245px 0 260px;
+  margin: 0 245px 0 220px;
 }
 
 .container .garbage-bin {
@@ -576,9 +643,9 @@ button.log-toggle {
   left: 0px;
   top: 50px;
   bottom: 0px;
-  width: 260px;
-  background-color: #212429;
+  width: 220px;
   z-index: 2  ;
+  background-color: #e8ebed;
 }
 
 ul.tabs {
@@ -1086,9 +1153,10 @@ input[type="search"] {
 .library-list {
   overflow-y: auto;
   position: absolute;
-  top: 0px;
+  top: 60px;
   bottom: 0px;
-  left: 5px;
+  left: 0px;
+  width: 260px;
 }
 
 .library-list .heading {
@@ -1119,11 +1187,6 @@ input[type="search"] {
   min-height: 400px;
   background: url(../images/loading-throbber.gif) center no-repeat;
   background-size: auto 75px;
-}
-
-.component-header {
-  margin: 40px 0px 0px 40px;
-  width: 160px;
 }
 
 .row {
@@ -1203,48 +1266,6 @@ input[type="search"] {
   -webkit-perspective: 1000;
 }
 
-/* flip the pane when hovered */
-.preview:hover .flipper {
-  transform: rotateY(180deg);
-    -webkit-transform: rotateY(180deg);
-}
-
-.preview, .front, .back, .draggable {
-  width: 70px;
-  height: 80px;
-}
-
-/* flip speed goes here */
-.flipper {
-  -webkit-transition: 0.3s;
-    transition: 0.3s;
-    -webkit-transform-style: preserve-3d;
-  transform-style: preserve-3d;
-  position: relative;
-}
-
-/* hide back of pane during swap */
-.front, .back {
-    -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-  position: absolute;
-  top: 0;
-  left: 0;
-}
-
-/* front pane, placed above back */
-.front {
-  z-index: 2;
-  background-color: #2f343b;
-}
-
-/* back, initially hidden pane */
-.back {
-    -webkit-transform: rotateY(180deg);
-  transform: rotateY(180deg);
-  cursor: move;
-}
-
 .missing-image {
   height: 40px;
   width: 100%;
@@ -1287,10 +1308,19 @@ input[type="search"] {
 
 .draggable {
   cursor: move;
-  background: #358CCE;
   z-index: 50;
-  text-align: center;
   color: #FFF;
+  height: 25px;
+  color: #aeb1b5;
+  text-indent: 20px;
+  background-color: #212429;
+  line-height: 25px;
+}
+
+.draggable:hover {
+  background-color: #31353d;
+  border-top: 1px solid #505866;
+  border-bottom: 1px solid #1a1d21;
 }
 
 .component-instruction {
@@ -1305,16 +1335,83 @@ input[type="search"] {
   box-shadow: 0px 3px 8px rgba(0,0,0,.3);
 }
 
+ul.component-actions {
+	list-style-image:url('../images/arrow_right.png');
+	font-size: 15px;
+	font-weight: 400;
+	padding-left: 20px;
+  margin: 0px;
+}
+
+.component-actions li{
+	padding-bottom: 10px;
+}
+
+.component-actions li:nth-last-child(1){
+  padding-bottom: 0px;
+}
+
 .component-description {
-  position: absolute;
-  margin-top: 4px;
-  padding: 8px 10px;
-  max-width: 300px;
-  background-color: rgba(0,0,0,.7);
+	float: left;
+	width: calc(100% - 310px);
+}
+
+.friends {
+  color: #aeb1b5;
+  font-size: 15px;
+}
+
+.friends a{
+  color: #358CCE;
+}
+
+.component-card {
+	padding: 30px 60px;
+	position: relative;
+  border-bottom: 1px solid #aeb1b5;
+}
+
+.component-right {
+	float: right;
+	width: 310px;
+}
+
+.component-preview {
+	border: 1px solid #aeb1b5;
+	width: 100%;
+	box-sizing:border-box;
+  -moz-box-sizing:border-box; /* Firefox */
+	border-radius: 3px;
+  background-color: #e8ebed;
+}
+
+.tags {
+  margin-top: 20px;
+}
+
+.tag {
+  background-color: #e9edf2;
   border-radius: 3px;
-  z-index: 999;
-  font-size: 1.3rem ;
-  color: #DDD;
+  font-weight: 600;
+  font-size: 12px;
+  display: inline-block;
+  height: 26px;
+  line-height: 26px;
+  padding: 0 15px 0 25px;
+  position: relative;
+  margin: 0 10px 10px 0;
+  text-decoration: none;
+}
+
+.tag::before {
+  background: #fff;
+  border-bottom: 13px solid transparent;
+  border-right: 10px solid #e9edf2;
+  border-top: 13px solid transparent;
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
 }
 
 .channel-tip {
@@ -1599,10 +1696,6 @@ span.channel {
   color: red;
 }
 
-.hidden {
-  display: none;
-}
-
 .inner {
   padding: 20px;
 }
@@ -1659,9 +1752,28 @@ span.channel {
 }
 
 .modal {
-  max-width: 585px;
-  background-color: #eee;
+  width: 90%;
+  height: 90%;
+  background-color: #FFF;
   position: relative;
+  overflow-y: hidden;
+}
+
+.modal-header {
+  height: 50px;
+  width: 100%;
+  background-color: #FFF;
+  border-bottom: 1px solid #aeb1b5;
+  position: absolute;
+  top: 0px;
+  z-index: 99;
+}
+
+#components {
+  position: relative;
+  height: 100%;
+  overflow-y: scroll;
+  margin-top: 50px;
 }
 
 .modal-inner {
@@ -2614,5 +2726,9 @@ input#remix-panel-email {
 }
 
 .game-status {
+  display: none;
+}
+
+.hidden {
   display: none;
 }
