@@ -3001,7 +3001,7 @@ input#remix-panel-email {
   position: fixed;
   bottom: 0em;
   right: 1em;
-  background: rgba(30,30,30,.8);
+  /*background: rgba(30,30,30,.8);*/
   z-index: 9999999;
 }
 

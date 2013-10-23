@@ -54,13 +54,14 @@ define(
         var link = document.createElement('link');
         link.setAttribute("rel", "component");
         link.setAttribute("type", "text/ceci");
-        link.setAttribute("href", hookUrl);
+        link.setAttribute("href", "/cors?url=" + hookUrl);
         links.push(link);
       });
       var linksLeft = links.length,
           fragments = document.createElement("div");
       Ceci.loadComponents(links, function() {
         console.log("DONE LOADING USER COMPONENTS");
+        app.sortComponents();
       });
     };
 
