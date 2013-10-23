@@ -31,6 +31,40 @@ define(
 
     var remixUrl = document.querySelector('#appmaker-remix-url').value;
 
+    function addInputAsHook() {
+      var url = $(".hook-input").val();
+      if (!url) {
+        $(".hook-input").focus();
+        return;
+      }
+      $(".hook-input").val("").focus();
+      var li = document.createElement("li");
+      li.classList.add("hook-url");
+      li.innerHTML = url;
+      document.querySelector(".devhook .hooks").appendChild(li);
+      document.querySelector(".devhook .ok").classList.remove("hidden");
+      // document.querySelector(".devhook .cancel").classList.add("hidden");
+    }
+
+    function loadUserComponents(hooks) {
+      console.log(hooks);
+      var componentFragments = [];
+      var links = [];
+      Array.prototype.forEach.call(hooks, function(hookUrl) {
+        var link = document.createElement('link');
+        link.setAttribute("rel", "component");
+        link.setAttribute("type", "text/ceci");
+        link.setAttribute("href", hookUrl);
+        links.push(link);
+      });
+      var linksLeft = links.length,
+          fragments = document.createElement("div");
+      Ceci.loadComponents(links, function() {
+        console.log("DONE LOADING USER COMPONENTS");
+      });
+    };
+
+
     function init () {
       app = new Ceci.App({
         defaultChannels: channels.map(function (c) { return c.name; }),
@@ -82,6 +116,30 @@ define(
                 element.removeSafely();
               });
             }
+          });
+          $(".gear").click(function() {
+            $(".devhook .ok").addClass("hidden");
+            // $(".devhook .cancel").removeClass("hidden");
+            $(".devhook").toggleClass("collapsed");
+            $(".hook-input").focus();
+           });
+          $(".devhook .cancel").click(function() {
+            $(".hook-input").val("");
+            $(".devhook").addClass("collapsed");
+          });
+          $(".devhook .ok").click(function() {
+            $(".hook-input").val("");
+            $(".devhook").addClass("collapsed");
+            var hooks = [];
+            Array.prototype.forEach.call(document.querySelectorAll(".hooks li"),
+              function(element) {
+                hooks.push(element.textContent);
+              });
+            loadUserComponents(hooks);
+          });
+          $(".devhook .hook-add").click(addInputAsHook);
+          $(".devhook .hook-input").on('keypress', function(e) {
+            if (e.keyCode == 13) addInputAsHook();
           });
         },
         onCardChange: function (card) {
