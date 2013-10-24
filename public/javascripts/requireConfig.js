@@ -17,6 +17,8 @@ requirejs.config({
 
     "jquery-ui": "jquery-ui/ui/minified/jquery-ui.min",
 
+    "persona": "https://login.persona.org/include",
+
     "designer-keyboard": "/javascripts/designer-keyboard",
     "designer-utils": "/javascripts/designer-utils",
 
