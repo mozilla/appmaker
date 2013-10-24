@@ -2997,12 +2997,33 @@ input#remix-panel-email {
   margin-bottom: 10px;
 }
 
-.gear {
+.controls {
   position: fixed;
+  display: inline-block;
   bottom: 0em;
   right: 1em;
-  /*background: rgba(30,30,30,.8);*/
   z-index: 9999999;
+}
+
+.sync,.gear {
+  display: block;
+  width: 16px;
+  height: 16px;
+  border: 1px solid red;
+  min-width: 16px;
+  min-height: 16px;
+}
+
+.sync {
+  background-image: url('/images/sync.png');
+}
+
+.gear {
+  background-image: url('/images/customize.png');
+}
+
+.gear:hover {
+  background-image: url('/images/customize-selected.png');
 }
 
 .devhook {
@@ -3034,21 +3055,37 @@ input#remix-panel-email {
   display: none;
 }
 
-li.hook-url {
-  color: white;
+.hooks li {
   list-style: none;
+}
+
+.hook-url {
+  color: white;
+  display: inline-block;
 }
 
 .hooks {
   padding: 0;
 }
 
-.hooks li {
+.hook-url {
   background-color: rgba(200,200,200,.3);
   width: 20em;
   margin: 0;
   margin-bottom: 0.5ex;
   padding: 0.5ex;
+  vertical-align: top;
+}
+
+.hook-delete {
+  margin-top: .5ex;
+  margin-left: 1em;
+  color: red;
+  cursor: pointer;
+}
+
+.hook-delete:hover {
+  text-decoration: underline;
 }
 
 a.tag:link {

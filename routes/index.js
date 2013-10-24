@@ -52,7 +52,15 @@ module.exports = function (store, viewsPath, urlManager, remixMailer, makeAPIPub
       var url = req.query.url;
 
       if (url) {
-        request.get(url).pipe(res)
+        try {
+          // res.setHeader('Content-Type', 'text/plain');
+          // res.send('');
+          request.get(url).pipe(res)
+        } catch (e) {
+          console.log("got exception doing the pipe", e);
+          res.json({message: 'No valid url.'}, 500);
+          return;
+        }
       }
       else {
         res.json({error: 'No valid url.'}, 500);

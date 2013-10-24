@@ -28,6 +28,7 @@ define(
     var selection = [];
 
     var app;
+    var config = {};
 
     var remixUrl = document.querySelector('#appmaker-remix-url').value;
 
@@ -38,16 +39,60 @@ define(
         return;
       }
       $(".hook-input").val("").focus();
+      addHook(url);
+      saveApp();
+    };
+
+    function addHook(url) {
       var li = document.createElement("li");
-      li.classList.add("hook-url");
-      li.innerHTML = url;
+      li.id = 'link-' + url;
+      var urlspan = document.createElement("span");
+      urlspan.innerHTML = url;
+      urlspan.classList.add("hook-url");
+      li.appendChild(urlspan);
+      var remove = document.createElement("a");
+      remove.innerHTML = "remove";
+      remove.setAttribute('url', url);
+      $(remove).click(function(e) {
+        removeHook(e.currentTarget.getAttribute('url'));
+      });
+      remove.classList.add("hook-delete");
+      li.appendChild(remove);
       document.querySelector(".devhook .hooks").appendChild(li);
-      document.querySelector(".devhook .ok").classList.remove("hidden");
-      // document.querySelector(".devhook .cancel").classList.add("hidden");
-    }
+      addHookToApp(url);
+    };
+
+    function removeHook(url) {
+      for (var i = config.hooks.length; i >=0; i--) {
+        if (config.hooks[i] == url) {
+          delete config.hooks[i];
+        }
+      }
+      var hookli = document.getElementById('link-' + url);
+      hookli.parentNode.removeChild(hookli);
+      var hooklink = document.getElementById(url);
+      hooklink.parentNode.removeChild(hooklink);
+      saveApp();
+    };
+
+    function addHookToApp(url) {
+      if (document.getElementById(url)) return;
+      var link = document.createElement('link');
+      link.id = url;
+      link.setAttribute("rel", "component");
+      link.setAttribute("type", "text/ceci");
+      link.setAttribute("href", "/cors?url=" + url);
+      document.getElementById('hooks').appendChild(link);
+      var links = [link];
+      Ceci.loadComponents(links, function() {
+        console.log("Loaded: " + url);
+        app.sortComponents();
+      });
+      config.hooks.push(url);
+
+    };
 
     function loadUserComponents(hooks) {
-      console.log(hooks);
       var componentFragments = [];
       var links = [];
       Array.prototype.forEach.call(hooks, function(hookUrl) {
@@ -56,17 +101,24 @@ define(
         link.setAttribute("type", "text/ceci");
         link.setAttribute("href", "/cors?url=" + hookUrl);
         links.push(link);
+        document.getElementById('hooks').appendChild(link);
       });
-      var linksLeft = links.length,
-          fragments = document.createElement("div");
       Ceci.loadComponents(links, function() {
-        console.log("DONE LOADING USER COMPONENTS");
         app.sortComponents();
       });
     };
 
+    function setupHooks() {
+      if (document.getElementById('hooks')) return;
+      var hookurls = document.createElement('div');
+      hookurls.id = 'hooks';
+      var body = document.querySelector('body');
+      body.insertBefore(hookurls, body.firstChild);
+    };
+
 
     function init () {
+      config.hooks = [];
       app = new Ceci.App({
         defaultChannels: channels.map(function (c) { return c.name; }),
         container: $('#flathead-app')[0],
@@ -119,24 +171,12 @@ define(
             }
           });
           $(".gear").click(function() {
-            $(".devhook .ok").addClass("hidden");
-            // $(".devhook .cancel").removeClass("hidden");
             $(".devhook").toggleClass("collapsed");
             $(".hook-input").focus();
            });
           $(".devhook .cancel").click(function() {
             $(".hook-input").val("");
             $(".devhook").addClass("collapsed");
-          });
-          $(".devhook .ok").click(function() {
-            $(".hook-input").val("");
-            $(".devhook").addClass("collapsed");
-            var hooks = [];
-            Array.prototype.forEach.call(document.querySelectorAll(".hooks li"),
-              function(element) {
-                hooks.push(element.textContent);
-              });
-            loadUserComponents(hooks);
           });
           $(".devhook .hook-add").click(addInputAsHook);
           $(".devhook .hook-input").on('keypress', function(e) {
@@ -212,6 +252,9 @@ define(
         for (i = 0; i < Math.min(10, suggestions.length); i++) {
           suggestion = suggestions[i];
           if (suggestion in alreadyMadeSuggestions) continue;
+          suggestion = $.trim(suggestion);
+          if (!suggestion) continue;
+          console.log("adding suggestion for ", suggestion, ":", components[suggestion]);
           addThumb(components[suggestion], suggestion, fullList);
           alreadyMadeSuggestions[suggestion] = true;
         }
@@ -226,6 +269,14 @@ define(
     Ceci.registerCeciPlugin('onElementRemoved', function(element){
       $(document).off("click", ".color-ui .color", element.onColorSelectFunction);
     });
+    setupHooks();
+    if (localStorage.config) {
+      config = JSON.parse(localStorage.config);
+      config.hooks.forEach(function (url) {
+        addHook(url);
+      });
+    }
+
 
     // Make sure there wasn't something planeted in the app container already (e.g. remix)
     if ($('#flathead-app').find('.ceci-card > div').find('*').length === 0 ) {
@@ -260,8 +311,15 @@ define(
             init();
           }
       }
-      else if (localStorage.draft){
+      else if (localStorage.draft) {
         $('#flathead-app').html(localStorage.draft);
+        var ceciLinks = document.querySelectorAll('link[rel=component][type="text/ceci"]');
+        Array.prototype.forEach.call(ceciLinks, function(link) {
+          var href = link.getAttribute('href');
+          if (href.indexOf('/cors?url=') === 0) {
+            addHook(href.slice('/cors?url='.length));
+          }
+        });
         init();
       }
       else {
@@ -494,6 +552,7 @@ define(
 
     var saveApp = function(){
       localStorage.draft = app.serialize();
+      localStorage.config = JSON.stringify(config);
       var now = new Date();
       var hours = now.getHours();
       var minutes = now.getMinutes();
@@ -1040,6 +1099,7 @@ define(
     $('.new').click(function(){
       $('.card').remove();
       clearSelection();
+      $(".hooks").innerHTML = '';
       app.clear();
       clearLog();
     });
@@ -1074,9 +1134,10 @@ define(
           document.addEventListener('keydown', escapeHandler, false);
         },
         error: function (data) {
-          $(".publishdialog").show();
-          $(".publishdialog .spinner").hide();
+          $(".publishdialog .failure").show();
           $(".publishdialog .success").hide();
+          $(".publishdialog").show();
+          $('.modal-wrapper').removeClass("hidden");
           if (data.responseJSON) {
             $(".failure .message").html(data.responseJSON.error.message);
           }
