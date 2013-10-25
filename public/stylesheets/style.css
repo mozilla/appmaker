@@ -2998,28 +2998,38 @@ input#remix-panel-email {
 }
 
 .controls {
-  position: fixed;
+  position: absolute;
   display: inline-block;
   bottom: 0em;
   right: 1em;
   z-index: 9999999;
 }
 
-.sync,.gear {
-  display: block;
+.gear {
+  position: relative;
+  float: right;
   width: 16px;
   height: 16px;
-  border: 1px solid red;
   min-width: 16px;
   min-height: 16px;
+  background-repeat: no-repeat;
+  margin-left: 1em;
+  margin-right: 1em;
 }
 
-.sync {
-  background-image: url('/images/sync.png');
+.refresh {
+  color: white;
+  cursor: pointer;
+}
+
+.refresh:hover {
+  color: yellow;
+  text-decoration: underline;
 }
 
 .gear {
   background-image: url('/images/customize.png');
+  min-width: 16px;
 }
 
 .gear:hover {

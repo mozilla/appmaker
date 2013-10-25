@@ -44,6 +44,8 @@ define(
     };
 
     function addHook(url) {
+      if (document.getElementById('link-' + url)) return;
+      $(".refresh").show();
       var li = document.createElement("li");
       li.id = 'link-' + url;
       var urlspan = document.createElement("span");
@@ -58,20 +60,23 @@ define(
       });
       remove.classList.add("hook-delete");
       li.appendChild(remove);
-      document.querySelector(".devhook .hooks").appendChild(li);
+      document.querySelector(".devhook .hook_list").appendChild(li);
       addHookToApp(url);
     };
 
     function removeHook(url) {
-      for (var i = config.hooks.length; i >=0; i--) {
-        if (config.hooks[i] == url) {
-          delete config.hooks[i];
+      for (var i = config.hooks.length-1; i >=0; i--) {
+        if (config.hooks[i] === url) {
+          config.hooks.splice(i, i+1);
         }
       }
       var hookli = document.getElementById('link-' + url);
       hookli.parentNode.removeChild(hookli);
       var hooklink = document.getElementById(url);
       hooklink.parentNode.removeChild(hooklink);
+      if (config.hooks.length == 0) {
+        $(".refresh").hide();
+      }
       saveApp();
     };
 
@@ -85,40 +90,22 @@ define(
       document.getElementById('hooks').appendChild(link);
       var links = [link];
       Ceci.loadComponents(links, function() {
-        console.log("Loaded: " + url);
         app.sortComponents();
       });
       config.hooks.push(url);
-
-    };
-
-    function loadUserComponents(hooks) {
-      var componentFragments = [];
-      var links = [];
-      Array.prototype.forEach.call(hooks, function(hookUrl) {
-        var link = document.createElement('link');
-        link.setAttribute("rel", "component");
-        link.setAttribute("type", "text/ceci");
-        link.setAttribute("href", "/cors?url=" + hookUrl);
-        links.push(link);
-        document.getElementById('hooks').appendChild(link);
-      });
-      Ceci.loadComponents(links, function() {
-        app.sortComponents();
-      });
     };
 
     function setupHooks() {
-      if (document.getElementById('hooks')) return;
+      config.hooks = [];
+      var hooks = document.getElementById('hooks');
+      if (hooks && hooks.children.length) return;
       var hookurls = document.createElement('div');
       hookurls.id = 'hooks';
       var body = document.querySelector('body');
       body.insertBefore(hookurls, body.firstChild);
     };
 
-
     function init () {
-      config.hooks = [];
       app = new Ceci.App({
         defaultChannels: channels.map(function (c) { return c.name; }),
         container: $('#flathead-app')[0],
@@ -174,6 +161,12 @@ define(
             $(".devhook").toggleClass("collapsed");
             $(".hook-input").focus();
            });
+          $(".refresh").click(function() {
+            var ceciLinks = document.querySelectorAll('link[rel=component][type="text/ceci"]');
+            Ceci.loadComponents(ceciLinks, function() {
+              app.sortComponents();
+            });
+          });
           $(".devhook .cancel").click(function() {
             $(".hook-input").val("");
             $(".devhook").addClass("collapsed");
@@ -254,7 +247,6 @@ define(
           if (suggestion in alreadyMadeSuggestions) continue;
           suggestion = $.trim(suggestion);
           if (!suggestion) continue;
-          console.log("adding suggestion for ", suggestion, ":", components[suggestion]);
           addThumb(components[suggestion], suggestion, fullList);
           alreadyMadeSuggestions[suggestion] = true;
         }
@@ -271,8 +263,8 @@ define(
     });
     setupHooks();
     if (localStorage.config) {
-      config = JSON.parse(localStorage.config);
-      config.hooks.forEach(function (url) {
+      var data = JSON.parse(localStorage.config);
+      data.hooks.forEach(function (url) {
         addHook(url);
       });
     }
@@ -317,7 +309,9 @@ define(
         Array.prototype.forEach.call(ceciLinks, function(link) {
           var href = link.getAttribute('href');
           if (href.indexOf('/cors?url=') === 0) {
-            addHook(href.slice('/cors?url='.length));
+            var url = href.slice('/cors?url='.length);
+            addHook(url);
+            config.hooks.push(url);
           }
         });
         init();
@@ -1099,7 +1093,7 @@ define(
     $('.new').click(function(){
       $('.card').remove();
       clearSelection();
-      $(".hooks").innerHTML = '';
+      $(".hook_list").innerHTML = '';
       app.clear();
       clearLog();
     });
