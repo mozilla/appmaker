@@ -57,8 +57,7 @@ module.exports = function (store, viewsPath, urlManager, remixMailer, makeAPIPub
             function(err) { console.log('error doing cors request for ', url);})
           .pipe(res)
           .on('error',
-            function(err) { console.log('error doing cors request for ', url);})
-          );
+            function(err) { console.log('error doing cors request for ', url);});
         } catch (e) {
           console.log("got exception doing the pipe", e);
           res.json({message: 'No valid url.'}, 500);
