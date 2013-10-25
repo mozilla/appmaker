@@ -53,10 +53,12 @@ module.exports = function (store, viewsPath, urlManager, remixMailer, makeAPIPub
 
       if (url) {
         try {
-          // res.json({message: 'No valid url.'}, 500);
-          // res.setHeader('Content-Type', 'text/plain');
-          // res.send('');
-          request.get(url).pipe(res)
+          request.get(url).on('error',
+            function(err) { console.log('error doing cors request for ', url);})
+          .pipe(res)
+          .on('error',
+            function(err) { console.log('error doing cors request for ', url);})
+          );
         } catch (e) {
           console.log("got exception doing the pipe", e);
           res.json({message: 'No valid url.'}, 500);
