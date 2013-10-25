@@ -28,8 +28,82 @@ define(
     var selection = [];
 
     var app;
+    var config = {};
 
     var remixUrl = document.querySelector('#appmaker-remix-url').value;
+
+    function addInputAsHook() {
+      var url = $(".hook-input").val();
+      if (!url) {
+        $(".hook-input").focus();
+        return;
+      }
+      $(".hook-input").val("").focus();
+      addHook(url);
+      saveApp();
+    };
+
+    function addHook(url) {
+      if (document.getElementById('link-' + url)) return;
+      $(".refresh").show();
+      var li = document.createElement("li");
+      li.id = 'link-' + url;
+      var urlspan = document.createElement("span");
+      urlspan.innerHTML = url;
+      urlspan.classList.add("hook-url");
+      li.appendChild(urlspan);
+      var remove = document.createElement("a");
+      remove.innerHTML = "remove";
+      remove.setAttribute('url', url);
+      $(remove).click(function(e) {
+        removeHook(e.currentTarget.getAttribute('url'));
+      });
+      remove.classList.add("hook-delete");
+      li.appendChild(remove);
+      document.querySelector(".devhook .hook_list").appendChild(li);
+      addHookToApp(url);
+    };
+
+    function removeHook(url) {
+      for (var i = config.hooks.length-1; i >=0; i--) {
+        if (config.hooks[i] === url) {
+          config.hooks.splice(i, i+1);
+        }
+      }
+      var hookli = document.getElementById('link-' + url);
+      hookli.parentNode.removeChild(hookli);
+      var hooklink = document.getElementById(url);
+      hooklink.parentNode.removeChild(hooklink);
+      if (config.hooks.length == 0) {
+        $(".refresh").hide();
+      }
+      saveApp();
+    };
+
+    function addHookToApp(url) {
+      if (document.getElementById(url)) return;
+      var link = document.createElement('link');
+      link.id = url;
+      link.setAttribute("rel", "component");
+      link.setAttribute("type", "text/ceci");
+      link.setAttribute("href", "/cors?url=" + url);
+      document.getElementById('hooks').appendChild(link);
+      var links = [link];
+      Ceci.loadComponents(links, function() {
+        app.sortComponents();
+      });
+      config.hooks.push(url);
+    };
+
+    function setupHooks() {
+      config.hooks = [];
+      var hooks = document.getElementById('hooks');
+      if (hooks && hooks.children.length) return;
+      var hookurls = document.createElement('div');
+      hookurls.id = 'hooks';
+      var body = document.querySelector('body');
+      body.insertBefore(hookurls, body.firstChild);
+    };
 
     function init () {
       app = new Ceci.App({
@@ -82,6 +156,24 @@ define(
                 element.removeSafely();
               });
             }
+          });
+          $(".gear").click(function() {
+            $(".devhook").toggleClass("collapsed");
+            $(".hook-input").focus();
+           });
+          $(".refresh").click(function() {
+            var ceciLinks = document.querySelectorAll('link[rel=component][type="text/ceci"]');
+            Ceci.loadComponents(ceciLinks, function() {
+              app.sortComponents();
+            });
+          });
+          $(".devhook .cancel").click(function() {
+            $(".hook-input").val("");
+            $(".devhook").addClass("collapsed");
+          });
+          $(".devhook .hook-add").click(addInputAsHook);
+          $(".devhook .hook-input").on('keypress', function(e) {
+            if (e.keyCode == 13) addInputAsHook();
           });
         },
         onCardChange: function (card) {
@@ -153,6 +245,8 @@ define(
         for (i = 0; i < Math.min(10, suggestions.length); i++) {
           suggestion = suggestions[i];
           if (suggestion in alreadyMadeSuggestions) continue;
+          suggestion = $.trim(suggestion);
+          if (!suggestion) continue;
           addThumb(components[suggestion], suggestion, fullList);
           alreadyMadeSuggestions[suggestion] = true;
         }
@@ -167,6 +261,14 @@ define(
     Ceci.registerCeciPlugin('onElementRemoved', function(element){
       $(document).off("click", ".color-ui .color", element.onColorSelectFunction);
     });
+    setupHooks();
+    if (localStorage.config) {
+      var data = JSON.parse(localStorage.config);
+      data.hooks.forEach(function (url) {
+        addHook(url);
+      });
+    }
+
 
     // Make sure there wasn't something planeted in the app container already (e.g. remix)
     if ($('#flathead-app').find('.ceci-card > div').find('*').length === 0 ) {
@@ -201,8 +303,17 @@ define(
             init();
           }
       }
-      else if (localStorage.draft){
+      else if (localStorage.draft) {
         $('#flathead-app').html(localStorage.draft);
+        var ceciLinks = document.querySelectorAll('link[rel=component][type="text/ceci"]');
+        Array.prototype.forEach.call(ceciLinks, function(link) {
+          var href = link.getAttribute('href');
+          if (href.indexOf('/cors?url=') === 0) {
+            var url = href.slice('/cors?url='.length);
+            addHook(url);
+            config.hooks.push(url);
+          }
+        });
         init();
       }
       else {
@@ -422,6 +533,7 @@ define(
 
     var saveApp = function(){
       localStorage.draft = app.serialize();
+      localStorage.config = JSON.stringify(config);
       var now = new Date();
       var hours = now.getHours();
       var minutes = now.getMinutes();
@@ -988,6 +1100,7 @@ define(
     $('.new').click(function(){
       $('.card').remove();
       clearSelection();
+      $(".hook_list").innerHTML = '';
       app.clear();
       clearLog();
     });
@@ -1022,9 +1135,10 @@ define(
           document.addEventListener('keydown', escapeHandler, false);
         },
         error: function (data) {
-          $(".publishdialog").show();
-          $(".publishdialog .spinner").hide();
+          $(".publishdialog .failure").show();
           $(".publishdialog .success").hide();
+          $(".publishdialog").show();
+          $('.modal-wrapper').removeClass("hidden");
           if (data.responseJSON) {
             $(".failure .message").html(data.responseJSON.error.message);
           }

@@ -59,7 +59,13 @@ module.exports = function (store, viewsPath, urlManager, makeAPIPublisher) {
       var requestHTML = inputData.html;
 
       // Do some cleansing!
-      verify.filter(requestHTML, function (filteredHTML) {
+      verify.filter(requestHTML, function (filteredHTML, errors) {
+        if (!filteredHTML) {
+          console.log("RETURNING 500, filtering error", errors);
+          res.json({error: errors}, 500);
+          return;
+        }
+
         var appStr = templates.publish({
           appHTML: filteredHTML,
           appName: folderName

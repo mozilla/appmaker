@@ -6,6 +6,7 @@ var fs = require('fs');
 
 var verify = require('../lib/verify');
 var urls = require('../lib/urls');
+var request = require('request');
 
 module.exports = function (store, viewsPath, urlManager, remixMailer, makeAPIPublisher) {
 
@@ -44,6 +45,27 @@ module.exports = function (store, viewsPath, urlManager, remixMailer, makeAPIPub
       }
       else {
         res.json({error: 'No valid email.'}, 500);
+      }
+    },
+
+    cors: function (req, res) {
+      var url = req.query.url;
+
+      if (url) {
+        try {
+          request.get(url).on('error',
+            function(err) { console.log('error doing cors request for ', url);})
+          .pipe(res)
+          .on('error',
+            function(err) { console.log('error doing cors request for ', url);});
+        } catch (e) {
+          console.log("got exception doing the pipe", e);
+          res.json({message: 'No valid url.'}, 500);
+          return;
+        }
+      }
+      else {
+        res.json({error: 'No valid url.'}, 500);
       }
     },
 

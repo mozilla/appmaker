@@ -2999,6 +2999,146 @@ input#remix-panel-email {
   margin-bottom: 10px;
 }
 
+.controls {
+  position: absolute;
+  display: inline-block;
+  bottom: 0em;
+  right: 1em;
+  z-index: 9999999;
+}
+
+.gear {
+  position: relative;
+  float: right;
+  width: 16px;
+  height: 16px;
+  min-width: 16px;
+  min-height: 16px;
+  background-repeat: no-repeat;
+  margin-left: 1em;
+  margin-right: 1em;
+}
+
+.refresh {
+  color: white;
+  cursor: pointer;
+}
+
+.refresh:hover {
+  color: yellow;
+  text-decoration: underline;
+}
+
+.gear {
+  background-image: url('/images/customize.png');
+  min-width: 16px;
+}
+
+.gear:hover {
+  background-image: url('/images/customize-selected.png');
+}
+
+.devhook {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  background: rgba(30,30,30,.8);
+  z-index: 9999997;
+}
+
+.devhook h1 {
+  font-size: large;
+  color: white;
+  padding-bottom: 1em;
+}
+
+.devhook .hook-dialog {
+  padding-top: 1em;
+  padding-bottom: 1em;
+  padding-left: 2em;
+}
+
+.devhook.collapsed {
+  height: 30px;
+  background: transparent;
+}
+
+.devhook.collapsed .hook-dialog {
+  display: none;
+}
+
+.hooks li {
+  list-style: none;
+}
+
+.hook-url {
+  color: white;
+  display: inline-block;
+}
+
+.hooks {
+  padding: 0;
+}
+
+.hook-url {
+  background-color: rgba(200,200,200,.3);
+  width: 20em;
+  margin: 0;
+  margin-bottom: 0.5ex;
+  padding: 0.5ex;
+  vertical-align: top;
+}
+
+.hook-delete {
+  margin-top: .5ex;
+  margin-left: 1em;
+  color: red;
+  cursor: pointer;
+}
+
+.hook-delete:hover {
+  text-decoration: underline;
+}
+
+a.tag:link {
+  color: white;
+}
+
+.devhook .hook-input, .devhook button, li.hook-url{
+  font-family: 'Source Sans Pro', arial;
+  font-size: large;
+  margin-right: 2em;
+}
+
+.devhook button {
+  font-size: 12px;
+  cursor: pointer;
+  padding: .2em 1.5em;
+  border-radius: 3px;
+}
+
+.hook-add, .ok {
+  background-color: #ff7b00;
+}
+
+.devhook .bottom {
+  position: relative;
+  width: 100%;
+}
+
+.devhook .buttonbar {
+  display: inline-block;
+  /*position: absolute;*/
+  /*right: 3em;*/
+}
+
+.devhook .hook-input {
+  display: inline-block;
+  width: 20em;
+  /*left: 4em;*/
+  /*right: 20em;*/
+}
+
 .persona {
 }
 .persona .logout, .persona .account span, .persona .login {
