@@ -42,7 +42,12 @@
   <div class="tray app-column animate-me">
     <div class="expand-handle"></div>
     <div class="modal-header">
-      <input type="text" class="component-search" placeholder="Search components..." />
+      <input type="text" class="component-search" placeholder="Search by name or tag..." />
+    </div>
+    <div class="component-tags-wrapper">
+      <!-- <span class="tag-title">Popular tags:</span> -->
+      <span class="component-tags"></span>
+      <br/><a class="see-all" href="#">Show all tags</a>
     </div>
     <div id="components-wrapper">
       <div id="components"></div>
@@ -135,7 +140,7 @@
   <div class="modal-wrapper hidden flex">
     <div class="modal" id="component-discovery-modal">
       <div class="modal-header">
-        Search <input type="text" class="component-search" placehodler="Search for a component" />
+        Search <input type="search" class="component-search" placeholder="Search by name or tags" />
         <button class="done">Done</button>
       </div>
       <div id="components-wrapper">
