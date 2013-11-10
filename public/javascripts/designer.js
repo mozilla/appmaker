@@ -153,13 +153,14 @@ define(
           /* these are what we suggest with a blank app */
           // suggestions.push('app-fireworks');
           // suggestions.push('app-button');
-          var alreadyMadeSuggestions = {};
+          var alreadySuggested = {};
           var suggestion;
           for (i = 0; i < Math.min(10, suggestions.length); i++) {
             suggestion = suggestions[i];
-            if (suggestion in alreadyMadeSuggestions) continue;
-            addThumb(components[suggestion], suggestion, fullList);
-            alreadyMadeSuggestions[suggestion] = true;
+            if (suggestion in components && !(suggestion in alreadySuggested)) {
+              addThumb(components[suggestion], suggestion, fullList);
+              alreadySuggested[suggestion] = true;
+            }
           }
           fullList.append('<div class="lb"></div>');
           sortedComponentNames.forEach(function (name) {
@@ -403,11 +404,10 @@ define(
 
     function addThumb(component, name, list) {
       var previewContent;
-      var preview = component.thumbnail;
-      if(! preview){
+      if (!component.thumbnail) {
         previewContent = '<div class="missing-image">?</div>';
       } else {
-        previewContent = preview.innerHTML;
+        previewContent = component.thumbnail.innerHTML;
       }
       var thumb = $('<div class="preview"><div class="flipper"><div class="front"><div class="preview-icon">'+ previewContent +'</div><div class="thumb" value="' + name + '">' + name.replace('app-', '') + '</div></div><div class="back"><div class="draggable" name="' + name + '" value="' + name + '"><div class="preview-icon">'+ previewContent +'</div><div class="thumb" value="' + name + '">' + name.replace('app-', '') + '</div><div class="component-instruction">Drag Me</div></div></div></div></div>');
       list.append(thumb);
@@ -422,7 +422,7 @@ define(
         addClass: "clone"
       });
 
-      if (component && component.description) {
+      if (component.description) {
         var componentDescription = component.description.innerHTML;
         thumb.attr('description', componentDescription);
       } else {
