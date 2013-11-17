@@ -1,0 +1,80 @@
+<polymer-element name="ceci-button" attributes="textcolour buttoncolour buttonactivecolour label value" extends="ceci-element">
+  <template>
+    <style>
+      :host {
+        display: block;
+        width: 100%;
+        height: 50px;
+      }
+
+      :host button {
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+    <button id="button" on-click="{{buttonClick}}"></button>
+    <content select="ceci-broadcast"></content>
+    <content select="ceci-listen"></content>
+  </template>
+  <script>
+    Polymer('ceci-button', {
+      ready: function () {
+        this.initCeci();
+      },
+      buttonClick: function () {
+        this.broadcast('click', this.getAttribute('value'));
+      },
+      labelChanged: function (oldValue, newValue) {
+        this.$.button.innerHTML = newValue;
+      },
+      textcolourChanged: function (oldValue, newValue) {
+        this.$.button.style.color = newValue;
+      },
+      buttoncolourChanged: function (oldValue, newValue) {
+        this.$.button.style.backgroundColor = newValue;
+      },
+      setNonAttribute: function (v) {
+        console.log('test');
+      },
+      ceci: {
+        broadcasts: ['click'],
+        defaultBroadcasts: ['click'],
+        listeners: {
+          setLabel: 'Set Label',
+          setValue: 'Set Value',
+          setTextColour: 'Set Text Colour',
+          setButtonColour: 'Set Button Colour',
+          setButtonActiveColour: 'Set Active Button Colour',
+          setNonAttribute: 'Do something other than just set attributes'
+        },
+        editable: {
+          'Label': {
+            type: "text",
+            description: "A text for your label to show up in your app",
+            attribute: 'label'
+          },
+          'Text Colour': {
+            type: "text",
+            description: "The color of the button label",
+            attribute: 'textcolor'
+          },
+          'Button Colour': {
+            type: "text",
+            description: "The color of your button",
+            attribute: 'buttoncolor'
+          },
+          'Button Active Colour': {
+            type: "text",
+            description: "The color of your button",
+            attribute: 'buttonactivecolor'
+          },
+          'Value': {
+            type: "text",
+            description: "Value to be sent with a click.",
+            attribute: 'value'
+          },
+        }
+      }
+    });
+  </script>
+</polymer-element>
