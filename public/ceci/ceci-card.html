@@ -1,67 +1,8 @@
-<polymer-element name="ceci-card" extends="ceci-element" attributes="visible">
-  <template>
-    <style>
-      :host {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        display: none;
-      }
-
-      :host ceci-top, :host ceci-bottom {
-        position: absolute;
-        height: 50px;
-        width: 100%;
-      }
-
-      :host ceci-top {
-        top: 0;
-      }
-
-      :host ceci-bottom {
-        bottom: 0;
-      }
-
-      :host ceci-middle {
-        position: absolute;
-        top: 50px;
-        bottom: 50px;
-        left: 0;
-        right: 0;
-      }
-
-      :host([visible]) {
-        display: block;
-      }
-    </style>
-    <content select="ceci-top"></content>
-    <content select="ceci-middle"></content>
-    <content select="ceci-bottom"></content>
-  </template>
+<polymer-element name="ceci-card" extends="ceci-card-base">
   <script>
     Polymer('ceci-card', {
       ready: function () {
-        var that = this;
-        var observer = new MutationObserver(function (mutations) {
-          mutations.forEach(function (mutation) {
-            Array.prototype.forEach.call(mutation.addedNodes, function (addedNode) {
-              if (addedNode.localName.indexOf('ceci-') === 0) {
-                document.dispatchEvent(new CustomEvent('CeciElementAdded', {bubbles: true, detail: addedNode}));
-              }
-            });
-          });
-        });
-
-        observer.observe(this, { childList: true });
-      },
-      show: function () {
-        this.setAttribute('visible', true);
-        var that = this;
-        Array.prototype.forEach.call(document.querySelectorAll('ceci-card'), function (card) {
-          if (card !== that) {
-            card.removeAttribute('visible');
-          }
-        });
+        this.super();
       }
     });
   </script>

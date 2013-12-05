@@ -1,4 +1,5 @@
-<polymer-element name="ceci-button" attributes="textcolour buttoncolour buttonactivecolour label value" extends="ceci-element">
+<polymer-element name="ceci-button" attributes="textcolor buttoncolor buttonactivecolor label value" extends="ceci-element"
+  label="Click Me" textcolor="#ffffff" buttoncolor="#11bb11">
   <template>
     <style>
       :host {
@@ -8,70 +9,102 @@
       }
 
       :host button {
+        font-family: "FiraSans", sans-serif;
+        cursor: pointer;
+        position: relative;
+        text-decoration: none;
+        outline: none;
+        border-top: 1px solid rgba(255,255,255,.3);
+        border-bottom: 2px solid rgba(0,0,0,.2);
+        background-color: #4DB227;
+        text-align: center;
+        display: block;
+        padding-top: 5px;
+        padding-bottom: 3px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        border-radius: 0.2rem;
+        font-weight: 600;
+        font-size: 1.8rem;
+        line-height: 3.8rem;
+        color: #ffffff;
         width: 100%;
-        height: 100%;
+        margin: 0;
+      }
+
+      :host button {
+        border: none;
       }
     </style>
+    <shadow></shadow>
     <button id="button" on-click="{{buttonClick}}"></button>
+    <!-- why are these in here -->
     <content select="ceci-broadcast"></content>
     <content select="ceci-listen"></content>
   </template>
   <script>
     Polymer('ceci-button', {
       ready: function () {
+        this.super();
       },
       buttonClick: function () {
-        this.broadcast('click', this.getAttribute('value'));
+        var data = "Click";
+        this.broadcast('click', data);
       },
       labelChanged: function (oldValue, newValue) {
         this.$.button.innerHTML = newValue;
       },
-      textcolourChanged: function (oldValue, newValue) {
+      textcolorChanged: function (oldValue, newValue) {
         this.$.button.style.color = newValue;
       },
-      buttoncolourChanged: function (oldValue, newValue) {
+      buttoncolorChanged: function (oldValue, newValue) {
         this.$.button.style.backgroundColor = newValue;
+      },
+      buttonactivecolorChanged: function (oldValue, newValue) {
       },
       setNonAttribute: function (v) {
         console.log('test');
       },
       ceci: {
-        broadcasts: ['click'],
         defaultBroadcasts: ['click'],
+        defaultListeners: ['setLabel','setValue'],
+        broadcasts: {
+          click: 'Occurs when button is clicked.'
+        },
         listeners: {
           setLabel: 'Set Label',
           setValue: 'Set Value',
-          setTextColour: 'Set Text Colour',
-          setButtonColour: 'Set Button Colour',
-          setButtonActiveColour: 'Set Active Button Colour',
+          setTextColor: 'Set Text Color',
+          setButtonColor: 'Set Button Color',
+          setButtonActiveColor: 'Set Active Button Color',
           setNonAttribute: 'Do something other than just set attributes'
         },
         editable: {
-          'Label': {
+          'label': {
             type: "text",
             description: "A text for your label to show up in your app",
-            attribute: 'label'
+            name: 'Label',
           },
-          'Text Colour': {
+          'textcolor': {
             type: "text",
             description: "The color of the button label",
-            attribute: 'textcolor'
+            name: 'Text Color'
           },
-          'Button Colour': {
+          'buttoncolor': {
             type: "text",
             description: "The color of your button",
-            attribute: 'buttoncolor'
+            name: 'Button Color'
           },
-          'Button Active Colour': {
+          'buttonactivecolor': {
             type: "text",
             description: "The color of your button",
-            attribute: 'buttonactivecolor'
+            name: 'Button Active Color'
           },
-          'Value': {
+          'value': {
             type: "text",
             description: "Value to be sent with a click.",
-            attribute: 'value'
-          },
+            name: 'Value'
+          }
         }
       }
     });

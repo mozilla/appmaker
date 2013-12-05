@@ -1,10 +1,7 @@
 <div class="page-wrapper">
   <nav class="top-nav clearfix">
     <div class="logo"></div>
-    <div class="cards clearfix">
-      <div class="card-list clearfix"></div>
-      <div class="add-card"></div>
-    </div>
+    <ceci-card-nav></ceci-card-nav>
     <div class="nav-ui">
       <button class="btn-std btn-md publish btn-critical"><%- gettext("Publish") %></button>
       <button class="btn-std btn-md new"><%- gettext("New App") %></button>
@@ -21,11 +18,6 @@
               <%- htmlInjection %>
             <% } else { -%>
               <ceci-app>
-                <ceci-card>
-                  <ceci-top></ceci-top>
-                  <ceci-middle></ceci-middle>
-                  <ceci-bottom></ceci-bottom>
-                </ceci-card>
               </ceci-app>
             <% } -%>
           </div>
@@ -58,6 +50,7 @@
   </div>
 
   <div class="right-column app-column animate-me">
+    <design-log></design-log>
     <div class="expand-handle"></div>
     <div class="inner-wrapper">
       <div class="editable-section">
@@ -122,34 +115,12 @@
     </div>
   </div>
 
-  <div class="channel-menu channel-menu-template">
-    <div class="hover-helper"></div>
-    <div class="channel-option subscription-option channel-template">
-      <div class="color-ui">
-        <div name="blue"      color="blue"    class="color" data-channel="blue"></div>
-        <div name="green"     color="green"   class="color" data-channel="green"></div>
-        <div name="yellow"    color="yellow"  class="color" data-channel="yellow"></div>
-        <div name="orange"    color="orange"  class="color" data-channel="orange"></div>
-        <div name="red"       color="red"     class="color" data-channel="red"></div>
-        <div name="pink"      color="pink"    class="color" data-channel="pink"></div>
-        <div name="purple"    color="purple"  class="color" data-channel="purple"></div>
-        <div name="false"     color="false"   class="color" data-channel=""></div>
-      </div>
-      <label><span class="channel-name"></span><div color="blue" class="chosen-color"></div></label>
-    </div>
-    <div class="arrow"></div>
-  </div>
 
   <div class="modal-wrapper hidden flex">
     <div class="modal" id="component-discovery-modal">
       <div class="modal-header">
-<<<<<<< HEAD
-        Search <input type="search" class="component-search" placeholder="Search by name or tags" />
-        <button class="done">Done</button>
-=======
         <%- gettext("Search") %> <input type="text" class="component-search" placehodler="<%- gettext("Search for a component") %>" />
         <button class="done"><%- gettext("Done") %></button>
->>>>>>> 60fdecdae6d079ef5e41ab206be45f6a77b1b7ec
       </div>
       <div id="components-wrapper">
         <div id="components"></div>

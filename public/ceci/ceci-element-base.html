@@ -10,6 +10,7 @@
       broadcast: function (name, data) {
         var broadcastElement = this.querySelector('ceci-broadcast[from="' + name + '"]');
         if (broadcastElement) {
+          var broadcastDetails = { channelName : broadcastElement.on, from : name};
           broadcastElement.fire(data);
         }
       },
@@ -60,7 +61,7 @@
         observer.observe(this, {childList: true});
 
         this.listeners = definition.listeners || {};
-        this.broadcasts = definition.broadcasts || [];
+        this.broadcasts = definition.broadcasts || {};
 
         var defaultChannel = definition.defaultChannel || 'blue';
 
