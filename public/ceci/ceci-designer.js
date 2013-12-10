@@ -10,6 +10,9 @@ define([], function() {
     "ceci-app",
     "ceci-broadcast",
     "ceci-card",
+    "ceci-card-base",
+    "ceci-card-nav",
+    "ceci-channel-menu",
     "ceci-element",
     "ceci-broadcast-vis",
     "ceci-element-base",
@@ -43,7 +46,8 @@ define([], function() {
       for (var tagName in window.CustomElements.registry){
         if (BUILT_IN_COMPONENTS.indexOf(tagName) === -1){
           var component = window.CustomElements.registry[tagName];
-          if (component.prototype.ceci){
+          var template = component.ctor.prototype.element.querySelector('template');
+          if (template && template.innerHTML.indexOf('ceci-definition') > -1) {
             components.push(component);
           }
         }

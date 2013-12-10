@@ -116,10 +116,10 @@ define(['inflector'], function (Inflector) {
 
       attributeList.html("");
 
-      var attributes = Object.keys(element.ceci.editable);
+      var attributes = Object.keys(element.ceci.editables);
 
       attributes.forEach(function (attribute) {
-        var definition = element.ceci.editable[attribute];
+        var definition = element.ceci.editables[attribute];
         var uiElement = editable.getAttributeUIElement(element, attribute, definition);
         attributeList.append(uiElement);
       });
