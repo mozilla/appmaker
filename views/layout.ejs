@@ -3,9 +3,46 @@
   <head>
     <title><%= (typeof title === "undefined") ? gettext("Welcome to Appmaker") : title %></title>
     <link rel="stylesheet" href="/stylesheets/style.css" />
+    <link rel="stylesheet" href="/stylesheets/cards.css" />
+    <link rel="stylesheet" href="/stylesheets/channel-vis.css" />
+    <link rel="stylesheet" href="/stylesheets/user-state.css" />
+    <link rel="stylesheet" href="/stylesheets/broadcast-menu.css" />
     <link rel="stylesheet" href="/stylesheets/animations.css" />
-    <link rel="stylesheet" href="/stylesheets/persona-buttons.css" />
     <link rel="stylesheet" href="/sourcesanspro-extralight,sourcesanspro-light,sourcesanspro-regular,sourcesanspro-semibold/fonts.css" />
+
+    <link rel="stylesheet" href="/vendor/colorpicker/jquery.colorpicker.css" />
+
+    <script src="/vendor/requirejs/require.js"></script>
+    <script src="/javascripts/requireConfig.js"></script>
+    <script src="/vendor/polymer/polymer.min.js"></script>
+
+    <script src="/vendor/angular/angular.min.js"></script>
+    <script src="/vendor/angular-resource/angular-resource.min.js"></script>
+    <script src="/vendor/jquery/jquery.min.js"></script>
+    <script src="/app/scripts/services/services.js"></script>
+    <script src="/app/scripts/controllers/controllers.js"></script>
+
+    <link rel="import" href="/ceci/ceci-element-base.html">
+    <link rel="import" href="/ceci/ceci-listen.html">
+    <link rel="import" href="/ceci/ceci-card-base.html">
+    <link rel="import" href="/ceci/ceci-app.html">
+    <link rel="import" href="/ceci/ceci-card-nav.html">
+    <link rel="import" href="/ceci/ceci-broadcast.html">
+
+    <link rel="import" href="/ceci/ceci-channel-menu.html">
+
+    <link rel="import" href="/component/mozilla-appmaker/component-button/component.html">
+    <link rel="import" href="/component/mozilla-appmaker/component-counter/component.html">
+
+    <link rel="import" href="/designer/components/ceci-element-designer.html">
+    <link rel="import" href="/designer/components/ceci-card-designer.html">
+    <link rel="import" href="/designer/components/ceci-broadcast-vis.html">
+    <link rel="import" href="/designer/components/ceci-channel-vis.html">
+    <link rel="import" href="/designer/components/ceci-listen-vis.html">
+
+    <link rel="import" href="/designer/components/design-log.html">
+    <link rel="import" href="/designer/components/user-state.html">
+    <link rel="import" href="/designer/components/component-tray.html">
 
     <script type="text/javascript">
       var _gaq = _gaq || [];
@@ -21,26 +58,8 @@
       })();
     </script>
 
-    <script src="/vendor/polymer/polymer.min.js"></script>
-    <link rel="import" href="/ceci/ceci-element-base.html">
-    <link rel="import" href="/ceci/ceci-element-designer.html">
-    <link rel="import" href="/ceci/ceci-broadcast.html">
-    <link rel="import" href="/ceci/ceci-listen.html">
-    <link rel="import" href="/ceci/ceci-app.html">
-    <link rel="import" href="/ceci/ceci-card.html">
-
-    <link rel="import" href="/ceci/test/fixtures/ceci-button.html">
-
-    <script src="<%= process.env.ASSET_HOST%>/vendor/requirejs/require.js"></script>
-    <script src="<%= process.env.ASSET_HOST%>/javascripts/requireConfig.js"></script>
-
   </head>
   <body>
-    <div class="persona">
-      <a href="#" class="login persona-button"><span><%- gettext("Sign in with your Email") %></span></a>
-      <a href="#" class="logout persona-button"><span><%- gettext("Sign out") %></span></a>
-      <a href="#" class="account"><span></span></a>
-    </div>
     <%- body %>
   </body>
 </html>

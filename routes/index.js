@@ -3,11 +3,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 var fs = require('fs');
-
-var verify = require('../lib/verify');
 var urls = require('../lib/urls');
 
 module.exports = function (store, viewsPath, urlManager, remixMailer, makeAPIPublisher) {
+  var mongoose = require('mongoose');
+  var dbconn = mongoose.connect(process.env.MONGOLAB_URI || 'mongodb://localhost/appmakerdev');
 
   return {
     index: function(req, res) {
@@ -16,20 +16,23 @@ module.exports = function (store, viewsPath, urlManager, remixMailer, makeAPIPub
 
     designer: function (req, res) {
       var publishUrl = urlManager.createURLPrefix('{remixName}');
-      if (req.method === 'POST' && req.body && req.body.data) {
-        verify.filter(req.body.data, function (htmlInjection) {
-          res.render('designer', {
-            htmlInjection: htmlInjection,
-            publishUrl: publishUrl
-          });
-        });
-      }
-      else {
+
+      // htmlInjection is disabled for now because the old verify process isn't dependable
+
+      // if (req.method === 'POST' && req.body && req.body.data) {
+      //   verify.filter(req.body.data, function (htmlInjection) {
+      //     res.render('designer', {
+      //       htmlInjection: htmlInjection,
+      //       publishUrl: publishUrl
+      //     });
+      //   });
+      // }
+      // else {
         res.render('designer', {
           htmlInjection: '',
           publishUrl: publishUrl
         });
-      }
+      // }
     },
 
     remix: function (req, res) {
@@ -57,6 +60,11 @@ module.exports = function (store, viewsPath, urlManager, remixMailer, makeAPIPub
 
     publish: require('./publish')(store, viewsPath, urlManager, makeAPIPublisher),
 
-    componentProxy: require('./component-proxy').proxy
+    componentRegistry: require('./component-registry')(mongoose, dbconn),
+
+    proxy: require('./proxy'),
+
+    my: require('./my')(mongoose, dbconn)
+
   }
 };
