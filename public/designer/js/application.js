@@ -86,78 +86,92 @@ define(["jquery", "l10n"], function($, l10n) {
           });
         });
       },
-      saveApp: function(name, html,next){
+      saveApp: function(name, appid, html,next){
         $.ajax('/api/save_app', {
           data: {
             html: html,
-            name: name
-          },
-          type: 'post',
-          success: function (data) {
-            console.log("App saved successfully");
-            if(next) { next(false, data); }
-          },
-          error: function (data) {
-            console.error("App was not saved successfully!"), data;
-            if(next) { next(data); }
-          }
-        });
-
-      },
-      updateApp: function(name,html,next){
-        $.ajax('/api/update_app', {
-          data: {
             name: name,
-            html: html,
+            appid: appid
           },
           type: 'post',
-          success: function (data) {
-            console.log("App updated successfully!");
-            if(next) { next(false, data); }
-          },
+            success: function (data) {
+              console.log("App saved successfully");
+              if(next) { next(false, data); }
+            },
           error: function (data) {
-            console.log("App was not updated successfully!", data);
-            if(next) { next(data); }
+            console.error("App was not saved successfully!", data);
+              if(next) { next(data); }
           }
-        });
+      });
 
-      },
-      loadAppByUrl: function(url) {
-        var userState = document.querySelector('user-state');
-        $.ajax(url, {
-          type: 'get',
-          success: function (data) {
-            var openingTag = '<ceci-app';
-            var closingTag = '</ceci-app>';
-            var indexOfOpeningTag = data.indexOf(openingTag);
-            var indexOfClosingTag = data.indexOf(closingTag);
+    },
+    updateApp: function(name,appid,html,next){
+      $.ajax('/api/update_app', {
+        data: {
+          name: name,
+          appid: appid,
+          html: html
+        },
+        type: 'post',
+        success: function (data) {
+          console.log("App updated successfully!");
+          if(next) { next(false, data); }
+        },
+        error: function (data) {
+          console.log("App was not updated successfully!", data);
+          if(next) { next(data); }
+        }
+      });
+    },
+    loadAppByUrl: function(url) {
+      var userState = document.querySelector('user-state');
+      $.ajax(url, {
+        type: 'get',
+        success: function (data) {
+          var openingTag = '<ceci-app';
+          var closingTag = '</ceci-app>';
+          var indexOfOpeningTag = data.indexOf(openingTag);
+          var indexOfClosingTag = data.indexOf(closingTag);
 
-
-            if (indexOfOpeningTag > -1 && indexOfClosingTag > -1) {
-              var range = document.createRange();
-              var container = document.body;
-              range.selectNode(document.body);
-              var fragment = range.createContextualFragment(data.substring(indexOfOpeningTag, indexOfClosingTag + closingTag.length));
-              var newApp = fragment.querySelector('ceci-app');
-              var currentApp = document.querySelector('ceci-app');
-              currentApp.parentNode.replaceChild(newApp, currentApp);
-            }
-            else {
-              console.error('Error while parsing loaded app.');
-            }
-
-            // Call this regardless of whether or not successfully loaded. Just need UI to be in the right state.
-            userState.failedAppLoad();
-            document.querySelector('ceci-card-nav').buildTabs();
-          },
-          error: function (data) {
-            console.error('Error while loading app:');
-            console.error(data);
-            userState.failedAppLoad();
+          if (indexOfOpeningTag > -1 && indexOfClosingTag > -1) {
+            var range = document.createRange();
+            var container = document.body;
+            range.selectNode(document.body);
+            var fragment = range.createContextualFragment(data.substring(indexOfOpeningTag, indexOfClosingTag + closingTag.length));
+            var newApp = fragment.querySelector('ceci-app');
+            var currentApp = document.querySelector('ceci-app');
+            currentApp.parentNode.replaceChild(newApp, currentApp);
           }
-        });
-      },
+          else {
+            console.error('Error while parsing loaded app.');
+          }
+
+          // Call this regardless of whether or not successfully loaded. Just need UI to be in the right state.
+          userState.failedAppLoad();
+          document.querySelector('ceci-card-nav').buildTabs();
+        },
+        error: function (data) {
+          console.error('Error while loading app:');
+          console.error(data);
+          userState.failedAppLoad();
+        }
+      });
+    },
+    _insertCeciAppElement: function(){
+      var app = document.querySelector('ceci-app');
+      if(!app){
+        //ceci-app element doesn't exist
+        console.log("insert ceci app element - didn't exist")
+        var phoneBorderElement = document.querySelector(".phone-border");
+        phoneBorderElement.appendChild(document.createElement("ceci-app"));
+        return document.querySelector("ceci-app") //TODO just return reference above?
+      } else {
+        console.log("insert ceci app element - existed!!!!!!!")
+        return app;
+      }
+    },
       loadAppByName: function(name) {
+        var self = this;
         var userState = document.querySelector('user-state');
         $.ajax('/api/app', {
           data: {
@@ -165,8 +179,16 @@ define(["jquery", "l10n"], function($, l10n) {
           },
           type: 'get',
           success: function (data) {
-            var app = document.querySelector('ceci-app');
+            console.log("loadAppByName - success callback")
+            //we already have a temporary ceci-app element in place, so we need to replace it with
+              //the one we're fetching from the database
+            var app = self._insertCeciAppElement();
             app.innerHTML = data.html;
+            app.appid = data.appid;
+
+//            app.setAttribute("name",name);
+//            app.setAttribute("appid",app.appid);
+
             localStorage.currentApp = name;
             userState.okAppLoad(name, data);
             // Update the page/card tabs
@@ -177,6 +199,8 @@ define(["jquery", "l10n"], function($, l10n) {
             console.error('Error while loading app:');
             console.error(data);
             userState.failedAppLoad();
+            //appload failed (app was deleted?) so remove from localStorage
+            localStorage.currentApp = "";
           }
         });
       },

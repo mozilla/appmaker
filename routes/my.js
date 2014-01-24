@@ -4,6 +4,29 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+//TODO add uuid node module to packages and use instead
+function hex(length){
+    if (length > 8) return hex(8) + hex(length-8); // routine is good for up to 8 digits
+    var myHex = Math.random().toString(16).slice(2,2+length);
+    return pad(myHex, length); // just in case we don't get 8 digits for some reason
+}
+
+function pad(str, length){
+    while(str.length < length){
+        str += '0';
+    }
+    return str;
+}
+
+function variant(){
+    return '89ab'[Math.floor(Math.random() * 4)];
+}
+
+// Public interface
+function uuid(){
+    return hex(8) + '-' + hex(4) + '-4' + hex(3) + '-' + variant() + hex(3) + '-' + hex(12);
+}
+
 var request = require('request');
 
 module.exports = function (mongoose, dbconn) {
@@ -11,11 +34,13 @@ module.exports = function (mongoose, dbconn) {
   var Component = mongoose.model('LearnedComponent', componentSchema, 'components');
 
   var appSchema = mongoose.Schema({
+    'appid': 'string',
     'author': 'string',
     'name': 'string',
     'html': 'string',
     'last-published-url': 'string'
   });
+
   var App = mongoose.model('App', appSchema, 'apps');
 
   var checkAuthorised = function(request, response, next) {
@@ -55,11 +80,13 @@ module.exports = function (mongoose, dbconn) {
       if (!checkAuthorised(request, response)) return;
 
       var name = request.body.name;
+      //TODO update appid? this probably shouldn't change, but then again, we're updating name here which probably
+        //shouldn't change outside of renameApp
       var html = request.body.html || false;
       var url = request.body.url || false;
 
       if(html === false && url === false) {
-        return response.json(409, {error: 'App was not updated as no data was sent with the request'});
+          return response.json(409, {error: 'App was not updated as no data was sent with the request'});
       }
 
       var setObj = {};
@@ -67,17 +94,18 @@ module.exports = function (mongoose, dbconn) {
       if(url) setObj['last-published-url'] = url;
 
       App.update(
-        {author:request.session.email, name: name},
-        { $set: setObj },
-        {},
-        function(err,obj){
-          if(err){
-            return response.json(500, {error: 'App was not pudated due to ' + err});
-          } else {
-            return response.json(200, {message: 'App was updated successfully'});
-          }
-        });
+          {author:request.session.email, name: name},
+          { $set: setObj },
+          {},
+          function(err,obj){
+              if(err){
+                  return response.json(500, {error: 'App was not updated due to ' + err});
+              } else {
+                  return response.json(200, {message: 'App was updated successfully'});
+              }
+          });
     },
+
     renameApp: function(request, response) {
       if (!checkAuthorised(request, response)) return;
 
@@ -85,27 +113,27 @@ module.exports = function (mongoose, dbconn) {
       var newName = request.body.newName;
 
       App.update(
-        {author:request.session.email, name: oldName},
-        {
-          $set: {name: newName}
-        },
-        {},
-        function(err,obj){
-          if(err){
-            return response.json(500, {error: 'App was not renamed due to ' + err});
-          } else {
-            return response.json(200, {message: 'App was renamed successfully'});
-          }
-      });
+          {author:request.session.email, name: oldName},
+          {
+              $set: {name: newName}
+          },
+          {},
+          function(err,obj){
+              if(err){
+                  return response.json(500, {error: 'App was not renamed due to ' + err});
+              } else {
+                  return response.json(200, {message: 'App was renamed successfully'});
+              }
+          });
     },
     deleteApp: function(request,response){
       if (!checkAuthorised(request, response)) return;
 
       App.remove({author:request.session.email, name: request.body.name},function(err){
-        if(err){
-           console.error("Error deleting this app!");
-           return response.json(500, {error: 'App was not deleted due to ' + err});
-        }
+          if(err){
+              console.error("Error deleting this app!");
+              return response.json(500, {error: 'App was not deleted due to ' + err});
+          }
       });
       response.json(200);
     },
@@ -113,23 +141,23 @@ module.exports = function (mongoose, dbconn) {
       if (!checkAuthorised(request, response)) return;
 
       //Check if app with same name already exists
-
       App.findOne({author:request.session.email, name: request.body.name}, function(err, obj) {
-        if (obj) {
-          return response.json(500, {error: 'App name must be unique.'});
-        }
-        else {
-          var appObj = JSON.parse(JSON.stringify(request.body)) // make a copy
-          appObj.author = request.session.email;
-          var newApp = new App(appObj);
-          newApp.save(function(err, app){
-          if (err){
-            return response.json(500, {error: 'App was not saved due to ' + err});
+          if (obj) {
+              return response.json(500, {error: 'App name must be unique.'});
           }
-          return response.json(app);
-         });
-         response.json(200);
-        }
+          else {
+              var appObj = JSON.parse(JSON.stringify(request.body)) // make a copy
+              appObj.author = request.session.email;
+              appObj.appid = request.body.appid;
+              var newApp = new App(appObj);
+              newApp.save(function(err, app){
+                  if (err){
+                      return response.json(500, {error: 'App was not saved due to ' + err});
+                  }
+                  return response.json(app);
+              });
+              response.json(200);
+          }
       });
     },
     components: function(request, response) {
