@@ -188,7 +188,7 @@ define(["jquery", "l10n"], function($, l10n) {
           type: 'get',
           success: function (data) {
             var app = self.getOrInsertCeciApp();
-            app.innerHTML = data.html;
+            app.outerHTML = data.html;
             localStorage.currentApp = name;
             userState.okAppLoad(name, data);
             // Update the page/card tabs
