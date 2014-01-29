@@ -163,6 +163,7 @@ define(["jquery", "l10n"], function($, l10n) {
               var newApp = fragment.querySelector('ceci-app');
               var currentApp = self.getOrInsertCeciApp();
               currentApp.parentNode.replaceChild(newApp, currentApp);
+              newApp.setAttribute("appid", "ceci-app-"+uuid());
             }
             else {
               console.error('Error while parsing loaded app.');
