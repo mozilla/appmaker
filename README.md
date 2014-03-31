@@ -84,6 +84,7 @@ PORT: The port that the web process listens on for incomming connections
 GITHUB_TOKEN: A personal Github token used for loading lists of components from the mozilla-appmaker org during development (https://github.com/blog/1509-personal-api-tokens)
 EXCLUDED_COMPONENTS: A comma-delimited list of component repositories to exclude from the mozilla-appmaker org. The name is the repo name rather than the component name, though this is usually the same.
 BUNDLE: Any non-null value will cause the application to bundle as many resources as possible
+LOAD_FROM_GITHUB: If no value, or `false`, appmaker will not load any components from the internet, allowing appmaker to run offline
 ```
 
 ### Install and run MongoDB
@@ -118,7 +119,7 @@ Foreman explanation: http://blog.daviddollar.org/2011/05/06/introducing-foreman.
 ## How you can help
 
 * Fix issues by [submitting Pull Requests](#submitting-a-pull-request)
-* Submit new components (See [Component Docs](./doc/en-US))
+* Submit new components
 * Add [issues](https://github.com/mozilla-appmaker/appmaker/issues)
 * Build apps
 * Run workshops
