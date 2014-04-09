@@ -418,7 +418,7 @@
         addComponent: function() {
           var self = this;
           // in a try/except block because called from an onclick handler,
-          // so want to atch exceptions.
+          // so want to catch exceptions.
           try {
             var url = window.prompt(l10n.get("component url?"));
             if (! url) return;
@@ -509,6 +509,7 @@
                 return self.signalComponentError(err);
               }
               window.alert(l10n.get("Successfully added component ") + name);
+              analytics.event("Added Component", { label : name });
             });
           });
         },

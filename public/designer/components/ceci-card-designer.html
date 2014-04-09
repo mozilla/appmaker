@@ -24,6 +24,7 @@
     <shadow></shadow>
   </template>
   <script>
+  require(['analytics'], function(analytics) {
     Polymer('ceci-card', {
       ready: function () {
         this.super();
@@ -45,6 +46,7 @@
               that.$.garbageLeft.hidden = true;
               if (draggedOff) {
                 ui.item[0].parentNode.removeChild(ui.item[0]);
+                analytics.event("Removed Component", { label : "Dragged to Garbage"});
               }
             },
             sort : function (ev, ui) {
@@ -68,5 +70,6 @@
         }, 100);
       }
     });
+  });
   </script>
 </polymer-element>
