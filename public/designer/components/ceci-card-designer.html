@@ -46,7 +46,7 @@
               that.$.garbageLeft.hidden = true;
               if (draggedOff) {
                 ui.item[0].parentNode.removeChild(ui.item[0]);
-                analytics.event("Removed Component", { label : "Dragged to Garbage"});
+                analytics.event("Removed Component", { label : ui.item[0].localName});
               }
             },
             sort : function (ev, ui) {
