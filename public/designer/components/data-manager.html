@@ -106,21 +106,7 @@
   </template>
   <script>
     window.CeciData = window.CeciData || {};
-    window.CeciData.collections = window.CeciData.collections || [
-      {
-        name: 'Food',
-        model: [
-          {name: 'Type', type: 'text'},
-          {name: 'Quantity', type: 'number'}
-        ],
-        data: [
-          {'Type': 'Cookies', 'Quantity': 4},
-          {'Type': 'Jelly Beans', 'Quantity': 280},
-          {'Type': 'Chocolate Bars', 'Quantity': 5},
-          {'Type': 'Ice Cream Cakes', 'Quantity': 9}
-        ]
-      }
-    ];
+    window.CeciData.collections = window.CeciData.collections || [];
 
     Polymer('data-manager', {
       currentCollection: undefined,
