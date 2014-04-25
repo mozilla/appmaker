@@ -105,107 +105,66 @@
     </div>
   </template>
   <script>
+    require(['data-manager'], function(dataManager) {
+      dataManager.on("dataCollectionAdded", function(e) {
+        var dataManager = document.querySelector("data-manager");
+        dataManager.currentCollectionIndex = dataManager.collections.length - 1;
+        dataManager.currentCollection = dataManager.collections[dataManager.currentCollectionIndex];
+      });
+      Polymer('data-manager', {
+        currentCollection: undefined,
+        currentCollectionIndex: 0,
+        ready: function () {
+          var self = this;
+          this.collections = window.CeciData.collections;
+          this.currentCollection = this.collections[this.currentCollectionIndex];
+        },
+        addCollection: function () {
+          this.collections.push({
+            name: 'Collection ' + (this.collections.length + 1),
+            model: [],
+            data: []
+          });
 
-    Polymer('data-manager', {
-      currentCollection: undefined,
-      currentCollectionIndex: 0,
-      ready: function () {
-        var self = this;
+          this.async(function () {
+            this.currentCollectionIndex = this.collections.length - 1;
+            this.currentCollection = this.collections[this.currentCollectionIndex];
+          });
+        },
+        removeCollection: function () {
+          this.collections.splice(this.currentCollectionIndex, 1);
 
-        window.CeciData = window.CeciData || {};
-        if (!window.CeciData.collections) {
-          function fieldObserver(added, removed, changed, getOldValueFn) {
-            // We need to find the label and input based on the old value,
-            // then update it to the new value.
-            var oldValue = getOldValueFn("name");
-            var detail = {"name": changed.name, oldName: oldValue};
-            self.dispatchEvent(new CustomEvent('dataFieldNameChanged', {"detail":detail}));
-          }
-          function modelObserver(original) {
-            return function(splices) {
-              splices.forEach(function(splice) {
-                if (splice.addedCount) {
-                  var added = original[splice.index];
-                  var detail = {"field": added};
-                  new ObjectObserver(added).open(fieldObserver);
-                  self.dispatchEvent(new CustomEvent('dataFieldAdded', {"detail":detail}));
-                } else {
-                  splice.removed.forEach(function(remove) {
-                    var detail = {"field": remove};
-                    var customEvent = new CustomEvent('dataFieldRemoved', {"detail":detail});
-                    self.dispatchEvent(customEvent);
-                  });
-                }
-              });
-            };
-          }
-          function collectionObserver(splices) {
-            splices.forEach(function(splice) {
-              if (splice.addedCount) {
-                var added = window.CeciData.collections[splice.index];
-                var detail = {"collection": added};
-                new ArrayObserver(added.model).open(modelObserver(added.model));
-                self.dispatchEvent(new CustomEvent('dataCollectionAdded', {"detail":detail}));
-              } else {
-                splice.removed.forEach(function(remove) {
-                  var detail = {"collection": remove};
-                  var customEvent = new CustomEvent('dataCollectionRemoved', {"detail":detail});
-                  self.dispatchEvent(customEvent);
-                });
-              }
-            });
-          }
-          window.CeciData.collections = [];
-          new ArrayObserver(window.CeciData.collections).open(collectionObserver);
+          this.async(function () {
+            // selectedIndex will automatically jump to something sane. Use it for index.
+            this.currentCollectionIndex = this.$.collectionSelect.selectedIndex;
+            this.currentCollection = this.collections[this.currentCollectionIndex];
+          });
+        },
+        addKey: function () {
+          this.currentCollection.model.push({name: 'Item ' + (this.currentCollection.model.length + 1), type: 'text'});
+        },
+        removeKey: function (event, detail, sender) {
+          this.currentCollection.model.splice(parseInt(sender.value), 1);
+        },
+        collectionSelectChanged: function (event, detail, sender) {
+          this.async(function () {
+            this.currentCollection = this.collections[this.currentCollectionIndex];
+          });
+        },
+        addDataRow: function (event, detail, sender) {
+          var newRow = {};
+          var dummyRow = sender.parentNode;
+          this.currentCollection.model.forEach(function (item) {
+            var inputElement = dummyRow.querySelector('*[data-key="'+ item.name + '"]');
+            newRow[item.name] = inputElement.value;
+            inputElement.value = '';
+          });
+          this.currentCollection.data.push(newRow);
+        },
+        removeDataRow: function (event, detail, sender) {
+          this.currentCollection.data.splice(parseInt(sender.getAttribute('data-index')), 1);
         }
-        this.collections = window.CeciData.collections;
-        this.currentCollection = this.collections[this.currentCollectionIndex];
-      },
-      addCollection: function () {
-        this.collections.push({
-          name: 'Collection ' + (this.collections.length + 1),
-          model: [],
-          data: []
-        });
-
-        this.async(function () {
-          this.currentCollectionIndex = this.collections.length - 1;
-          this.currentCollection = this.collections[this.currentCollectionIndex];
-        });
-      },
-      removeCollection: function () {
-        this.collections.splice(this.currentCollectionIndex, 1);
-
-        this.async(function () {
-          // selectedIndex will automatically jump to something sane. Use it for index.
-          this.currentCollectionIndex = this.$.collectionSelect.selectedIndex;
-          this.currentCollection = this.collections[this.currentCollectionIndex];
-        });
-      },
-      addKey: function () {
-        this.currentCollection.model.push({name: 'Item ' + (this.currentCollection.model.length + 1), type: 'text'});
-      },
-      removeKey: function (event, detail, sender) {
-        this.currentCollection.model.splice(parseInt(sender.value), 1);
-      },
-      collectionSelectChanged: function (event, detail, sender) {
-        this.async(function () {
-          this.currentCollection = this.collections[this.currentCollectionIndex];
-        });
-      },
-      addDataRow: function (event, detail, sender) {
-        var newRow = {};
-        var dummyRow = sender.parentNode;
-        this.currentCollection.model.forEach(function (item) {
-          var inputElement = dummyRow.querySelector('*[data-key="'+ item.name + '"]');
-          newRow[item.name] = inputElement.value;
-          inputElement.value = '';
-        });
-        this.currentCollection.data.push(newRow);
-      },
-      removeDataRow: function (event, detail, sender) {
-        this.currentCollection.data.splice(parseInt(sender.getAttribute('data-index')), 1);
-      }
+      });
     });
   </script>
 </polymer-element>
