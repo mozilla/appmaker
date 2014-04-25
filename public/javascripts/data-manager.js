@@ -16,10 +16,12 @@ define([], function() {
       return function(splices) {
         splices.forEach(function(splice) {
           if (splice.addedCount) {
-            var added = original[splice.index];
-            var detail = {"field": added};
-            new ObjectObserver(added).open(fieldObserver);
-            document.dispatchEvent(new CustomEvent('dataFieldAdded', {"detail":detail}));
+            for (var i = 0; i < splice.addedCount; i++) {
+              var added = original[splice.index+i];
+              var detail = {"field": added};
+              new ObjectObserver(added).open(fieldObserver);
+              document.dispatchEvent(new CustomEvent('dataFieldAdded', {"detail":detail}));
+            }
           } else {
             splice.removed.forEach(function(remove) {
               var detail = {"field": remove};
