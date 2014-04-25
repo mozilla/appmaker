@@ -35,10 +35,12 @@ define([], function() {
     function collectionObserver(splices) {
       splices.forEach(function(splice) {
         if (splice.addedCount) {
-          var added = window.CeciData.collections[splice.index];
-          var detail = {"collection": added};
-          new ArrayObserver(added.model).open(modelObserver(added.model));
-          document.dispatchEvent(new CustomEvent('dataCollectionAdded', {"detail":detail}));
+          for (var i = 0; i < splice.addedCount; i++) {
+            var added = window.CeciData.collections[splice.index+i];
+            var detail = {"collection": added};
+            new ArrayObserver(added.model).open(modelObserver(added.model));
+            document.dispatchEvent(new CustomEvent('dataCollectionAdded', {"detail":detail}));
+          }
         } else {
           splice.removed.forEach(function(remove) {
             var detail = {"collection": remove};
