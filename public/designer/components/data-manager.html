@@ -118,10 +118,8 @@
             // We need to find the label and input based on the old value,
             // then update it to the new value.
             var oldValue = getOldValueFn("name");
-            if (changed.name && oldValue) {
-              var detail = {"name": changed.name, oldName: oldValue};
-              self.dispatchEvent(new CustomEvent('dataFieldNameChanged', {"detail":detail}));
-            }
+            var detail = {"name": changed.name, oldName: oldValue};
+            self.dispatchEvent(new CustomEvent('dataFieldNameChanged', {"detail":detail}));
           }
           function modelObserver(original) {
             return function(splices) {
