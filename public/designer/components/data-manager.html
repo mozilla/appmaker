@@ -116,8 +116,11 @@
         currentCollectionIndex: 0,
         ready: function () {
           var self = this;
-          this.collections = window.CeciData.collections;
-          this.currentCollection = this.collections[this.currentCollectionIndex];
+
+          dataManager.on("dataCollectionReady", function(e) {
+            self.collections = window.CeciData.collections;
+            self.currentCollection = self.collections[self.currentCollectionIndex];
+          });
         },
         addCollection: function () {
           this.collections.push({
