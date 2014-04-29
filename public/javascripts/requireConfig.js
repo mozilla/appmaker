@@ -18,6 +18,7 @@ requirejs.config({
     "ceci": "../ceci",
 
     "designer": "../designer/js",
+    "data-manager": "../javascripts/data-manager",
 
     'analytics': '../vendor/webmaker-analytics/analytics',
 

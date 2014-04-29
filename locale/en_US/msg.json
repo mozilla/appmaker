@@ -118,6 +118,7 @@
 	"login": "login",
 	"logout": "logout",
 	"Malformed app HTML": "Malformed HTML detected for your app: missing <ceci-app> wrapper element!",
+	"Manage Data": "Manage Data",
 	"My apps": "My apps",
 	"Need gh-pages branch": "When using Github to host the component, you need to make a gh-page branch",
 	"Need qualified URL": "Components needs a fully qualified URL, including the http/https protocol prefix",

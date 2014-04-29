@@ -1,0 +1,59 @@
+<polymer-element name="ceci-data-displayer" extends="ceci-element" attributes="collection">
+  <ceci-definition>
+    {
+      "name": "Data Displayer",
+      "tags": "db",
+      "thumbnail": "./thumbnail.png",
+      "description": "A sample component for displaying db data",
+      "attributes": {
+        "collection": {
+          "label": "Collection",
+          "description": "Name of database collection to read",
+          "editable": "dbCollection"
+        }
+      }
+    }
+  </ceci-definition>
+  <template>
+    <style>
+      :host {
+        display: block;
+        min-height: 50px;
+      }
+    </style>
+    <template bind="{{currentCollection}}">
+      <table id="data-table">
+        <tr>
+          <template repeat="{{item in model}}">
+            <td>{{item.name}}</td>
+          </template>
+        </tr>
+        <template repeat="{{row, index in data}}">
+          <tr>
+            <template repeat="{{item in model}}">
+              <td><input type="text" value="{{row[item.name]}}" readonly></td>
+            </template>
+          </tr>
+        </template>
+      </table>
+    </template>
+    <shadow></shadow>
+  </template>
+  <script>
+    // no idea why this has to be wrapped in a timeout
+    // just... yeah.
+    setTimeout(function () {
+      Polymer("ceci-data-displayer", {
+        currentCollection: window.CeciData.collections[0] || {},
+        ready: function() {
+          this.super();
+        },
+        collectionChanged: function (oldValue, newValue) {
+          this.currentCollection = window.CeciData.collections.filter(function (c) {
+            return c.name === newValue;
+          })[0];
+        }
+      });
+    }, 1000);
+  </script>
+</polymer-element>

@@ -4,7 +4,41 @@
 
 define(['inflector', 'l10n', 'colorpicker.core'], function (Inflector, L10n) {
   var urlComponent = window.CustomElements;
+
   var editableTypeHandlers = {
+    'dbCollection': function (element, attributeName, title, value, definition) {
+      var e = $("<div><label>" +
+        title +
+        "</label><select type=\"text\" value=\"" +
+        value +
+        "\"> "+
+        "</select></div>"
+      );
+
+      function buildList() {
+        e.find("select").html('');
+        $(window.CeciData.collections).each(function(i,k){
+          var option = document.createElement("option");
+          $(option).attr("value", k.name);
+          $(option).text(k.name);
+          e.find("select").append(option);
+        });
+      }
+
+      buildList();
+
+      e.find("select").val(value);
+      e.on("change", function(evt) {
+        element.setAttribute(attributeName, evt.target.value);
+      });
+
+      var observer = new ObjectObserver(window.CeciData.collections);
+      observer.open(function(added, removed, changed, getOldValueFn) {
+        buildList();
+      });
+
+      return e[0];
+    },
     'multiple': function (element, attributeName, title, value, definition) {
       var options = JSON.parse(value);
       var e = $("<div>" +
