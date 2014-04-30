@@ -250,6 +250,8 @@
           //Update App
           this.$.saveApp.addEventListener("click", function() {
             var ceciApp = document.querySelector('ceci-app');
+            var ceciCollections = document.querySelector('ceci-collections');
+            ceciCollections.saveCollections();
             var html = ceciApp.outerHTML;
             var name = application.getCurrentApp();
             if(name){
