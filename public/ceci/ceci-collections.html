@@ -1,0 +1,141 @@
+<polymer-element name="ceci-collections" attributes="" name="">
+  <template>
+    <style>
+      :host {
+        display: none;
+      }
+    </style>
+    <content></content>
+  </template>
+  <script>
+    window.collections = {};
+    collections.kinds = [
+      "Number", "Toggle", "Text", "Name", "Address", "HttpUrl", "Color", "Image"
+    ];
+
+    Polymer('ceci-collections', {
+      ready: function() {},
+      attached: function() {
+        var collectionElement = this;
+        // This is meant to be the raw data that gets saved in the element.
+        var savedData = {};
+        // Listen for changes in the fields so we can fire external events.
+        function fieldObserver(added, removed, changed, getOldValueFn) {
+          for (var key in added) {
+            if (!added.hasOwnProperty(key)) {
+              continue;
+            }
+            var detail = {
+              key: key,
+              added: added[key],
+              collection: this.collection,
+              field: this.field
+            };
+            savedData[this.collection].fields[this.field][key] = added[key];
+            collectionElement.textContent = JSON.stringify(savedData);
+            var customEvent = new CustomEvent("ceci-data-change", {"detail":detail});
+            document.dispatchEvent(customEvent);
+          }
+          for (var key in removed) {
+            if (!removed.hasOwnProperty(key)) {
+              continue;
+            }
+            var detail = {
+              key: key,
+              removed: getOldValueFn(key),
+              collection: this.collection,
+              field: this.field
+            };
+            delete savedData[this.collection].fields[this.field][key];
+            collectionElement.textContent = JSON.stringify(savedData);
+            var customEvent = new CustomEvent("ceci-data-change", {"detail":detail});
+            document.dispatchEvent(customEvent);
+          }
+          for (var key in changed) {
+            if (!changed.hasOwnProperty(key)) {
+              continue;
+            }
+            var detail = {
+              key: key,
+              added: changed[key],
+              removed: getOldValueFn(key),
+              collection: this.collection,
+              field: this.field
+            };
+            savedData[this.collection].fields[this.field][key] = changed[key];
+            collectionElement.textContent = JSON.stringify(savedData);
+            var customEvent = new CustomEvent("ceci-data-change", {"detail":detail});
+            document.dispatchEvent(customEvent);
+          }
+        }
+
+        function fieldsObserver(added, removed, changed, getOldValueFn) {
+          for (var field in added) {
+            if (!added.hasOwnProperty(field)) {
+              continue;
+            }
+            savedData[this.collection].fields[field] = {};
+            collectionElement.textContent = JSON.stringify(savedData);
+            new ObjectObserver(added[field]).open(fieldObserver, {
+              collection: this.collection,
+              field: field
+            });
+          }
+        }
+
+        // Listen for new collections so we can internally setup our events.
+        function collectionsObserver(added, removed, changed, getOldValueFn) {
+          for (var collection in added) {
+            if (!added.hasOwnProperty(collection)) {
+              continue;
+            }
+            savedData[collection] = {
+              fields: {}
+            };
+            collectionElement.textContent = JSON.stringify(savedData);
+            collections[collection].fields = {
+              on: function(event, listener) {
+                document.addEventListener("ceci-data-" + event, listener);
+              },
+              off: function(event, listener) {
+                document.removeEventListener("ceci-data-" + event, listener);
+              }
+            }
+            new ObjectObserver(collections[collection].fields).open(fieldsObserver, {
+             collection: collection
+            });
+          }
+        }
+
+        if (this.textContent !== "") {
+          savedData = JSON.parse(this.textContent);
+        }
+        // Load in any previously saved schema info.
+        for (var collection in savedData) {
+          if (!savedData.hasOwnProperty(collection)) {
+            continue;
+          }
+          collections[collection] = savedData[collection];
+          for (var field in collections[collection].fields) {
+            if (!collections[collection].fields.hasOwnProperty(field)) {
+              continue;
+            }
+            for (var key in collections[collection].fields[field]) {
+              if (!collections[collection].fields[field].hasOwnProperty(key)) {
+                continue;
+              }
+              new ObjectObserver(collections[collection].fields[field]).open(fieldObserver, {
+                collection: collection,
+                field: field
+              });
+            }
+            new ObjectObserver(collections[collection].fields).open(fieldsObserver, {
+             collection: collection
+            });
+          }
+        }
+        new ObjectObserver(collections).open(collectionsObserver);
+      }
+    });
+  </script>
+</polymer-element>
