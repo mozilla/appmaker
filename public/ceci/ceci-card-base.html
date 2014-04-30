@@ -1,4 +1,4 @@
-<polymer-element name="ceci-card-base" attributes="visible">
+<polymer-element name="ceci-card-base" attributes="visible" extends="ceci-brick">
   <template>
     <style>
       :host {
@@ -42,7 +42,7 @@
         bottom: 15px;
       }
     </style>
-    <ceci-top id="top"></ceci-top>
+    <ceci-top    id="top"></ceci-top>
     <ceci-middle id="middle"><content></content></ceci-middle>
     <ceci-bottom id="bottom"></ceci-bottom>
   </template>

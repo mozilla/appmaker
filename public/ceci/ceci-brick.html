@@ -1,0 +1,99 @@
+<polymer-element name="ceci-brick" attributes="compound">
+  <script>
+    Polymer('ceci-brick', {
+      ready: function () {
+        this.super();
+      },
+
+      domReady: function() {
+        this.checkNesting();
+      },
+
+      // check whether we are inside a compound component
+      checkNesting: function () {
+        var owner = this;
+        var children = Array.prototype.slice.call(this.children);
+        var goPrivate = (this.compound !== null && this.compound !== undefined);
+
+        console.log(Array.prototype.slice.call(this.shadowRoots[this.localName]));
+
+return        console.log(this.localName, goPrivate, children);
+/*
+        var switchPrivate = function(child) {
+          if (child.goPrivate) {
+            child.goPrivate(owner);
+          }
+        };
+
+        var switchPublic = function(child) {
+          if (child.goPublic) {
+            child.goPublic(owner);
+          }
+        };
+
+        children.forEach( goPrivate ? switchPrivate : switchPublic);
+*/
+      },
+
+      goPrivate: function(who) {
+        console.log("going private, due to " + who);
+      },
+
+      goPublic: function(who) {
+        console.log("going public, due to " + who);
+      },
+
+/*
+          // change how listen and broadcast work, turning public
+          // broadcasting into private/internal communication
+          this.__broadcast = this.broadcast;
+          this.broadcast = this.privateBroadcast;
+
+          // also notify the parent that we exist and that we
+          // have listeners that need rerouting.
+          this.parentNode.listenFor(this);
+        }
+
+        else if (this.__broadcast && this.broadcast) {
+          // restore the public broadcast/listen functionality,
+          // if this was modified at some point due to nesting.
+          this.broadcast = this.__broadcast;
+          delete this.__broadcast;
+        }
+
+
+      // if we are a compound container, our children can inform us about changes,
+      // rather than using the public broadcasting mechanism.
+      changed: function(child, attribute, value) {
+        console.log("contained component changed value for "+attribute+" to "+value);
+      },
+
+      // if we are a compound container, we will need to register listener
+      // for the things that normally our children would be listening for
+      listenFor: function(child) {
+        var that = this,
+            listeners = child.ceci.listeners;
+
+        Object.keys(listeners).forEach(function(fn) {
+          that[fn] = function() {
+            // TODO: make sure that conflict resolution is sensible here,
+            //       in case multiple children have the same named listeners.
+            child[fn].apply(child, arguments);
+
+            // now we need to make ceci aware that we're going to be
+            // intercepting all this stuff instead of the nested element.
+            //that.setListener(fn, "blue");
+            console.log(fn, listeners[fn]);
+          }
+        });
+
+        // TODO: figure out what we want to broadcast. Does it make sense to send
+        //       each bit of data as an aggregate {obj}, or do we also (or only)
+        //       want to send out the individual bits of contained data?
+      }
+
+*/
+      noop: function() {}
+    });
+  </script>
+</polymer-element>
