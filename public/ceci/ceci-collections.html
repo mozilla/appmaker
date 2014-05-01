@@ -74,12 +74,9 @@
             if (!added.hasOwnProperty(field)) {
               continue;
             }
-            savedData[this.collection].fields[field] = {};
+            savedData[this.collection].fields[field] = added[field] || {};
             collectionElement.textContent = JSON.stringify(savedData);
-            new ObjectObserver(added[field]).open(fieldObserver, {
-              collection: this.collection,
-              field: field
-            });
+            setupFieldObserver(this.collection, field);
           }
         }
 
@@ -90,21 +87,42 @@
               continue;
             }
             savedData[collection] = {
-              fields: {}
+              fields: added[collection].fields || {}
             };
             collectionElement.textContent = JSON.stringify(savedData);
-            collections[collection].fields = {
-              on: function(event, listener) {
-                document.addEventListener("ceci-data-" + event, listener);
-              },
-              off: function(event, listener) {
-                document.removeEventListener("ceci-data-" + event, listener);
-              }
-            }
-            new ObjectObserver(collections[collection].fields).open(fieldsObserver, {
-             collection: collection
-            });
+            collections[collection].fields = added[collection].fields || {};
+            collections[collection].fields.on = function(event, listener) {
+              document.addEventListener("ceci-data-" + event, listener);
+            };
+            collections[collection].fields.off = function(event, listener) {
+              document.removeEventListener("ceci-data-" + event, listener);
+            };
+            setupFieldsObserver(collection);
           }
+        }
+
+        function setupFieldObserver(collection, field) {
+          for (var key in collections[collection].fields[field]) {
+            if (!collections[collection].fields[field].hasOwnProperty(key)) {
+              continue;
+            }
+          }
+          new ObjectObserver(collections[collection].fields[field]).open(fieldObserver, {
+            collection: collection,
+            field: field
+          });
+        }
+
+        function setupFieldsObserver(collection) {
+          for (var field in collections[collection].fields) {
+            if (!collections[collection].fields.hasOwnProperty(field)) {
+              continue;
+            }
+            setupFieldObserver(collection, field);
+          }
+          new ObjectObserver(collections[collection].fields).open(fieldsObserver, {
+           collection: collection
+          });
         }
 
         if (this.textContent !== "") {
@@ -116,23 +134,7 @@
             continue;
           }
           collections[collection] = savedData[collection];
-          for (var field in collections[collection].fields) {
-            if (!collections[collection].fields.hasOwnProperty(field)) {
-              continue;
-            }
-            for (var key in collections[collection].fields[field]) {
-              if (!collections[collection].fields[field].hasOwnProperty(key)) {
-                continue;
-              }
-              new ObjectObserver(collections[collection].fields[field]).open(fieldObserver, {
-                collection: collection,
-                field: field
-              });
-            }
-            new ObjectObserver(collections[collection].fields).open(fieldsObserver, {
-             collection: collection
-            });
-          }
+          setupFieldsObserver(collection);
         }
         new ObjectObserver(collections).open(collectionsObserver);
       }
