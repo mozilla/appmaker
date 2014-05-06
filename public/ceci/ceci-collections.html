@@ -8,8 +8,17 @@
     <content></content>
   </template>
   <script>
+    // The global collection data intended for component authors to publish to.
     window.collections = {};
+    // The main observer for collections.
     var collectionObserver;
+    // This is meant to be the raw data that gets saved in the element.
+    // We store this here for now so we can easily
+    // create the data in the html without the on/off functions.
+    var savedData = {};
+    // A list of object observers so we can close them when done.
+    var observers = {};
+    // List of pre defined kinds of fields.
     collections.kinds = [
       "Number", "Toggle", "Text", "Name", "Address", "HttpUrl", "Color", "Image"
     ];
@@ -17,14 +26,19 @@
     Polymer('ceci-collections', {
       ready: function() {},
       attached: function() {
+        // The element we want to publish the schema to.
         var collectionElement = this;
-        // This is meant to be the raw data that gets saved in the element.
-        var savedData = {};
-        // Listen for changes in the fields so we can fire external events.
+        // Listen for changes in the fields so we can fire events to components.
+        // This is changes to the contents of a field itself,
+        // like collections.contacts.fields.address.type = "Address";
         function fieldObserver(added, removed, changed, getOldValueFn) {
           var field = this.field;
           var collection = this.collection;
+          // This function updates the published shema data and fires the change event.
           function updateKey(key) {
+            // For a change events,
+            // if added exists, it is what was added, same with removed.
+            // If both added and removed exist, it's essentially a change.
             var detail = {
               key: key,
               added: added[key] || changed[key],
@@ -32,43 +46,66 @@
               collection: collection,
               field: field
             };
+            // Publish the schema.
             collectionElement.textContent = JSON.stringify(savedData);
+            // Create and publish a change event.
             var customEvent = new CustomEvent("ceci-data-change", {detail:detail});
             document.dispatchEvent(customEvent);
           }
+          // Update the published schema, savedData,
+          // and fire a change event for added fields.
           Object.keys(added).forEach(function(key) {
             savedData[collection].fields[field][key] = added[key];
             updateKey(key);
           });
+          // Update the published schema, savedData,
+          // and fire a change event for removed fields.
           Object.keys(removed).forEach(function(key) {
             delete savedData[collection].fields[field][key];
             updateKey(key);
           });
+          // Update the published schema, savedData,
+          // and fire a change event for changed fields.
           Object.keys(changed).forEach(function(key) {
             savedData[collection].fields[field][key] = changed[key];
             updateKey(key);
           });
         }
 
+        // This function ensures new or removed fields get observers added or removed.
+        // Like a new field is added, collections.contacts.fields.address = {};
         function fieldsObserver(added, removed, changed, getOldValueFn) {
           var collection = this.collection;
           Object.keys(added).forEach(function(field) {
+            // Add the added field to the saved data and update the published data.
             savedData[collection].fields[field] = added[field] || {};
             collectionElement.textContent = JSON.stringify(savedData);
+            // Setup observers on the new fields properties.
             setupFieldObserver(collection, field);
           });
           Object.keys(removed).forEach(function(field) {
+            // Remove the removed field from the saved data and update the published data.
             delete savedData[collection].fields[field];
+            // Remove any existing observers from the fields properties.
+            teardownFieldObserver(collection, field);
             collectionElement.textContent = JSON.stringify(savedData);
           });
+// changing collections.contacts.fields to a new object doesn't work quite right
+// I think we need another set of observers for collection.contacts.fields
           Object.keys(changed).forEach(function(field) {
+            // Add the added field to the saved data and update the published data.
             savedData[collection].fields[field] = changed[field] || {};
             collectionElement.textContent = JSON.stringify(savedData);
+            // Remove any existing observers from the fields properties.
+            teardownFieldObserver(collection, field);
+            // Setup observers on the new fields properties.
             setupFieldObserver(collection, field);
           });
         }
 
         // Listen for new collections so we can internally setup our events.
+        // This function ensures new or removed collections get observers added or removed.
+        // Example collections.contacts = {}; or collections.contacts = contacts;
         function collectionsObserver(added, removed, changed, getOldValueFn) {
           Object.keys(added).forEach(function(collection) {
             savedData[collection] = {
@@ -80,6 +117,7 @@
           });
           Object.keys(removed).forEach(function(collection) {
             delete savedData[collection];
+            teardownFieldsObserver(collection);
             collectionElement.textContent = JSON.stringify(savedData);
           });
           Object.keys(changed).forEach(function(collection) {
@@ -88,37 +126,81 @@
             };
             collectionElement.textContent = JSON.stringify(savedData);
             collections[collection].fields = changed[collection].fields || {};
+            teardownFieldsObserver(collection);
             setupFieldsObserver(collection);
           });
         }
 
         function setupFieldObserver(collection, field) {
-          new ObjectObserver(collections[collection].fields[field]).open(fieldObserver, {
+          observers[collection].fields[field] = {};
+          var observer = new ObjectObserver(collections[collection].fields[field]);
+          observers[collection].fields[field].observer = observer;
+          observer.open(fieldObserver, {
             collection: collection,
             field: field
           });
         }
 
+        function teardownFieldObserver(collection, field) {
+          var observer = observers[collection].fields[field].observer;
+          if (observer) {
+            observer.close();
+            delete observers[collection].fields[field];
+          }
+        }
+
         function setupFieldsObserver(collection) {
-          collections[collection].fields.on = function(event, listener) {
+          var observer;
+          collections[collection].on = function(event, listener) {
             document.addEventListener("ceci-data-" + event, listener);
           };
-          collections[collection].fields.off = function(event, listener) {
+          collections[collection].off = function(event, listener) {
             document.removeEventListener("ceci-data-" + event, listener);
+          };
+          observers[collection] = {
+            fields: {}
           };
           Object.keys(collections[collection].fields).forEach(function(field) {
             setupFieldObserver(collection, field);
           });
-          new ObjectObserver(collections[collection].fields).open(fieldsObserver, {
+          observer = new ObjectObserver(collections[collection].fields);
+          observers[collection].observer = observer;
+          observer.open(fieldsObserver, {
            collection: collection
           });
         }
 
+        function teardownFieldsObserver(collection) {
+          Object.keys(observers[collection].fields).forEach(function(field) {
+            teardownFieldObserver(collection, field);
+          });
+          var observer = observers[collection].observer;
+          if (observer) {
+            observer.close();
+            delete observers[collection];
+          }
+        }
+
+        function setupCollectionObserver(collection) {}
+
+        function teardownCollectionObserver(collection) {}
+
+        if (collectionObserver) {
+          Object.keys(savedData).forEach(function(collection) {
+            teardownFieldsObserver(collection);
+          });
+          collectionObserver.close();
+
+          // Reset the data now that we cleared the observers on it.
+          savedData = {};
+          collections = {};
+        }
         if (this.textContent !== "") {
           try {
+            // Parse the schema saved data and store it.
             savedData = JSON.parse(this.textContent);
           } catch (e) {
-            console.error("Parsing error:", e);
+            console.error("Error parsing saved schema data:", e);
           }
         }
         // Load in any previously saved schema info.
@@ -126,9 +208,6 @@
           collections[collection] = savedData[collection];
           setupFieldsObserver(collection);
         });
-        if (collectionObserver) {
-          collectionObserver.close();
-        }
         collectionObserver = new ObjectObserver(collections);
         collectionObserver.open(collectionsObserver);
       }
