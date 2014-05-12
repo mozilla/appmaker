@@ -94,7 +94,7 @@ if you have a problem, when run "npm install" in windows 7 64-bit, the solution 
 * In Command Prompt run: SET VisualStudioVersion=11.0
 * npm install
 
-You can find extra information in [stackoverflow](http://stackoverflow.com/questions/9970329/npm-install-jsdom-error-on-windows)
+You can find extra information in [https://github.com/TooTallNate/node-gyp](https://github.com/TooTallNate/node-gyp)
 
 ### Install and run MongoDB
 
