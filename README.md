@@ -88,6 +88,13 @@ EXCLUDED_COMPONENTS: A comma-delimited list of component repositories to exclude
 BUNDLE: Any non-null value will cause the application to bundle as many resources as possible
 LOAD_FROM_GITHUB: if omitted, or "false", instructs appmaker to load components from repositories hosted on github.com
 ```
+if you have a problem, when run "npm install" in windows 7 64-bit, the solution is:
+
+* Install [Visual Studio 2012](http://www.microsoft.com/en-us/download/confirmation.aspx?id=34673)
+* In Command Prompt run: SET VisualStudioVersion=11.0
+* npm install
+
+You can find extra information in [https://github.com/TooTallNate/node-gyp](https://github.com/TooTallNate/node-gyp)
 
 ### Install and run MongoDB
 
