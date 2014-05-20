@@ -47,13 +47,16 @@
   function initCeciApp() {
     Polymer('ceci-app', {
       ready: function() {
-        if (this.querySelectorAll('ceci-card').length > 0) {
+        if (this.querySelector('ceci-card')) {
           if (!this.querySelector('ceci-card[visible]')) {
             this.querySelector('ceci-card').setAttribute('visible', true);
           }
         }
         else {
           this.addCard();
+        }
+        if (!this.querySelector('ceci-collections')) {
+          this.appendChild(document.createElement('ceci-collections'));
         }
 
         this.dispatchEvent(new CustomEvent('ready', {bubbles: true, detail: this}));
