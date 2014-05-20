@@ -1,0 +1,57 @@
+<polymer-element name="ceci-collections">
+  <template>
+    <style>
+      :host {
+        display: none;
+      }
+    </style>
+    <content></content>
+  </template>
+  <script>
+    Polymer('ceci-collections', {
+      ready: function() {
+        var collections = [];
+        var data = {};
+        if (this.textContent !== "") {
+          try {
+            collections = JSON.parse(this.textContent);
+          } catch (e) {
+            console.error("Error parsing saved collections data:", e);
+          }
+        } else {
+          this.textContent = "[]";
+        }
+        var dataString = sessionStorage.getItem("ceci-collections");
+        if (dataString) {
+          try {
+            data = JSON.parse(dataString);
+          } catch (e) {
+            console.error("Error parsing saved data:", e);
+          }
+        }
+        this.collections = collections;
+        this.collections.forEach(function(collection) {
+          collection.data = data[collection.name] || [];
+        });
+        this.fire("dataloaded");
+      },
+      saveCollections: function() {
+        var collections = [];
+        this.collections.forEach(function(collection) {
+          collections.push({
+            name: collection.name,
+            model: collection.model
+          });
+        });
+        this.textContent = JSON.stringify(collections);
+      },
+      saveData: function() {
+        var data = {};
+        this.collections.forEach(function(collection) {
+          data[collection.name] = collection.data;
+        });
+        sessionStorage.setItem("ceci-collections", JSON.stringify(data));
+      }
+    });
+  </script>
+</polymer-element>
