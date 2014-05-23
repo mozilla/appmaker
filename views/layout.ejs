@@ -4,21 +4,40 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1">
     <title><%= (typeof title === "undefined") ? gettext("Welcome to Appmaker") : title %></title>
+
+    <script id="polymer-bypass">
+    (function() {
+
+      // primary shim for newer browsers
+      window.ElementRegistry = {
+        registry: (typeof CustomElements !== "undefined") && CustomElements.registry ? CustomElements.registry : {}
+      };
+
+      var oldRE = document.registerElement;
+      console.log("rebinding registerElement");
+      document.registerElement = function() {
+        var tagName = arguments[0],
+            element = arguments[1];
+        console.log("tag: "+tagName+", element:",element);
+        window.ElementRegistry.registry[tagName] = element;
+        oldRE.apply(document, arguments);
+      };
+
+      var n = document.getElementById("polymer-bypass");
+      if(n) { n.parentNode.removeChild(n); }
+    }());
+    </script>
+
     <link rel="stylesheet" href="/stylesheets/style.css" />
     <link rel="stylesheet" href="/stylesheets/publishpane.css" />
     <link rel="stylesheet" href="/stylesheets/cards.css" />
-    <link rel="stylesheet" href="/stylesheets/channel-vis.css" />
-    <link rel="stylesheet" href="/stylesheets/user-state.css" />
-    <link rel="stylesheet" href="/stylesheets/broadcast-menu.css" />
-    <link rel="stylesheet" href="/stylesheets/animations.css" />
-
     <link rel="stylesheet" href="/vendor/colorpicker/jquery.colorpicker.css" />
-
     <link rel="stylesheet" href="/sourcesanspro-extralight,sourcesanspro-light,sourcesanspro-regular,sourcesanspro-semibold/fonts.css" />
 
     <link rel="stylesheet" href="/vendor/webmaker-auth-client/create-user/create-user-form.css" />
 
     <script src="/vendor/platform/platform.js"></script>
+
     <link rel="import" href="/vendor/polymer/polymer.html">
 
     <script src="/vendor/requirejs/require.js"></script>
