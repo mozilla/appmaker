@@ -4,10 +4,17 @@
 
 define(
   ["designer/utils", "ceci/ceci-designer", "l10n", "analytics"],
-  function(Util, Ceci, L10n, analytics) {
+  function(Util, CeciDesigner, L10n, analytics) {
     "use strict";
 
     var knownComponents = [];
+
+
+    // turn things like "./thumbnail.jpg" into a correctly pathed url
+    var resolvePath = function(elementName, url) {
+      return window.ElementRegistry.registry[elementName].prototype.resolvePath(url);
+    };
+
 
     var DesignerTray = {
       addComponentWithName: function(name, component) {
@@ -17,13 +24,11 @@ define(
         if(knownComponents.indexOf(name) > -1) return;
 
         var item = document.createElement('designer-component-tray-item');
-        var ceciDefinition = Ceci.getCeciDefinitionScript(name);
+        var ceciDefinition = CeciDesigner.getCeciDefinitionScript(name);
 
         item.setAttribute('name', name);
-        item.setAttribute('thumbnail', window.CustomElements.registry[name].prototype.resolvePath(ceciDefinition.thumbnail));
-
+        item.setAttribute('thumbnail', resolvePath(name, ceciDefinition.thumbnail));
         item.setAttribute('label', ceciDefinition.name || Util.prettyName(name));
-
         item.setAttribute('description', L10n.get(name + "/description") || ceciDefinition.description);
         item.setAttribute('author', ceciDefinition.author);
         item.setAttribute('updatedat', ceciDefinition.updatedAt);
@@ -46,7 +51,7 @@ define(
         item.label = L10n.get(name) || item.label;
       },
       addComponentsFromRegistry: function() {
-        Ceci.forEachComponent(function (name, component) {
+        CeciDesigner.forEachComponent(function (name, component) {
           DesignerTray.addComponentWithName(name, component);
         });
       },
@@ -64,18 +69,9 @@ define(
       }
     };
 
-    // Load elements that might exist already, but also wait for polymer to be ready in case
-    // we load this module early.
-    var observer = new ObjectObserver(window.CustomElements.registry);
-    observer.open(function () {
-      DesignerTray.addComponentsFromRegistry();
-    });
-
     window.addEventListener("polymer-ready", function () {
       DesignerTray.addComponentsFromRegistry();
     });
-
-    DesignerTray.addComponentsFromRegistry();
 
     return DesignerTray;
   }

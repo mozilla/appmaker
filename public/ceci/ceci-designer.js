@@ -15,8 +15,8 @@ define([], function() {
     "ceci-channel-menu",
     "ceci-channel-vis",
     "ceci-element",
-    "ceci-broadcast-vis",
     "ceci-element-base",
+    "ceci-broadcast-vis",
     "ceci-listen",
     "ceci-listen-vis"
   ];
@@ -47,21 +47,25 @@ define([], function() {
       return window.CeciDefinitions[elementName];
     },
     getRegisteredComponents: function(){
-      var components = [];
-      for (var tagName in window.CeciDefinitions) {
-        if (BUILT_IN_COMPONENTS.indexOf(tagName) === -1) {
-          if (CeciDesigner.getCeciDefinitionScript(tagName) && window.CustomElements.registry[tagName]) {
-            components.push(window.CustomElements.registry[tagName]);
-          }
+      var components = {};
+      if (!window.CeciDefinitions) return {};
+      var keys = Object.keys(window.CeciDefinitions);
+      var fn = function addComponent(tagName) {
+        if (BUILT_IN_COMPONENTS.indexOf(tagName) > -1) return;
+        var dscript = CeciDesigner.getCeciDefinitionScript(tagName);
+        var element = window.ElementRegistry.registry[tagName];
+        if (dscript && element) {
+          components[tagName] = element;
         }
-      }
+      };
+      keys.forEach(fn);
       return components;
     },
     forEachComponent: function(fn){
       var components = this.getRegisteredComponents();
-      for (var x in components){
-        fn(components[x].tag, components[x]);
-      }
+      Object.keys(components).forEach(function(name) {
+        fn(name, components[name]);
+      });
       return this;
     }
   };

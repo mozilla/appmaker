@@ -5,7 +5,7 @@
     var signalSpeed = 1;
     var bubbleDuration = 1;
     Polymer('ceci-channel-vis', {
-      enteredView: function () {
+      domReady: function () {
         var that = this;
         this.component = this.parentNode.host;
         // TODO: This shouldn't be done on the window

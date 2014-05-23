@@ -19,5 +19,13 @@ define(
   ],
   function(l10n, Inflector, Utils, Ceci) {
     "use strict";
+
+    // secondary shim for older browsers
+    if (window.CustomElements.registry) {
+      window.ElementRegistry = {
+        registry: window.CustomElements.registry
+      };
+    }
+
   }
 );
