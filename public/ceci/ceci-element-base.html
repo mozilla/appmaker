@@ -1,4 +1,4 @@
-<polymer-element name="ceci-element-base">
+<polymer-element name="ceci-element-base" attributes="compound" extends="ceci-brick">
   <template>
     <content></content>
   </template>
@@ -173,6 +173,9 @@
             broadcastElement.fire(data);
           }
         },
+        privateBroadcast: function (name, data) {
+          this.parentNode.changed(this, name, data);
+        },
         showContainingCard: function () {
           var potentialCard = this.parentNode;
 
@@ -231,6 +234,7 @@
           }
         },
         domReady: function () {
+          this.super();
           document.dispatchEvent(new CustomEvent('CeciElementAdded', {bubbles: true, detail: this}));
         },
         gettext: function (keyname) {
