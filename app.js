@@ -13,7 +13,6 @@ uuid = require('node-uuid'),
 cors = require('cors'),
 connectFonts = require('connect-fonts'),
 postmark = require("postmark")(process.env.POSTMARK_API_KEY),
-helmet = require('helmet'),
 lessMiddleware = require('less-middleware'),
 enableRedirects = require('./routes/redirects'),
 i18n = require('webmaker-i18n'),
@@ -59,6 +58,7 @@ var webmakerAuth = new WebmakerAuth({
 // .env files aren't great at empty values.
 process.env.ASSET_HOST = typeof process.env.ASSET_HOST === 'undefined' ? '' : process.env.ASSET_HOST;
 
+var helmet = require('helmet');
 var app = express();
 
 app.engine('ejs', engine);
@@ -100,6 +100,12 @@ app.configure(function(){
   });
 
   app.use(express.methodOverride());
+
+  app.use(helmet.hsts());
+  // No xframes allowed
+  app.use(helmet.xframe('deny'));
+  // Use XSS protection
+  app.use(helmet.iexss());
 
   app.use(app.router);
 
@@ -173,13 +179,6 @@ app.locals({
   locales: Object.keys(langmap),
   langmap: langmap
 });
-
-
-app.use(helmet.hsts());
-// No xframes allowed
-app.use(helmet.xframe('deny'));
-// Use XSS protection
-app.use(helmet.iexss());
 
 app.post('/verify', webmakerAuth.handlers.verify);
 app.post('/authenticate', webmakerAuth.handlers.authenticate);
