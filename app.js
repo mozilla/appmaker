@@ -61,13 +61,6 @@ process.env.ASSET_HOST = typeof process.env.ASSET_HOST === 'undefined' ? '' : pr
 
 var app = express();
 
-app.use(express.favicon());
-app.use(helmet.hsts());
-// No xframes allowed
-app.use(helmet.xframe('deny'));
-// Use XSS protection
-app.use(helmet.iexss());
-
 app.engine('ejs', engine);
 
 app.configure(function(){
@@ -75,6 +68,13 @@ app.configure(function(){
 
   app.set('views', __dirname + '/views');
   app.set('view engine', 'ejs');
+
+  app.use(express.favicon());
+  app.use(helmet.hsts());
+  // No xframes allowed
+  app.use(helmet.xframe('deny'));
+  // Use XSS protection
+  app.use(helmet.iexss());
 
   app.use(express.logger(function(tokens, req, res) {
     if (res.statusCode >= 400) // or whatever you want logged
