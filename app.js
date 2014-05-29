@@ -61,6 +61,13 @@ process.env.ASSET_HOST = typeof process.env.ASSET_HOST === 'undefined' ? '' : pr
 
 var app = express();
 
+app.use(express.favicon());
+app.use(helmet.hsts());
+// No xframes allowed
+app.use(helmet.xframe('deny'));
+// Use XSS protection
+app.use(helmet.iexss());
+
 app.engine('ejs', engine);
 
 app.configure(function(){
@@ -94,14 +101,6 @@ app.configure(function(){
   i18n.addLocaleObject({
     "en-US": authLocaleJSON
   }, function (result) {});
-
-  app.use(express.favicon());
-  app.use(helmet.hsts());
-  // No xframes allowed
-  app.use(helmet.xframe('deny'));
-  // Use XSS protection
-  app.use(helmet.iexss());
-
 
   app.use(function(req, res, next) {
     res.removeHeader("x-powered-by");
