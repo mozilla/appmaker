@@ -61,16 +61,16 @@ process.env.ASSET_HOST = typeof process.env.ASSET_HOST === 'undefined' ? '' : pr
 var helmet = require('helmet');
 var app = express();
 
-app.use(helmet.hsts());
-// No xframes allowed
-app.use(helmet.xframe('deny'));
-// Use XSS protection
-app.use(helmet.iexss());
-
 app.engine('ejs', engine);
 
 app.configure(function(){
   app.set('port', process.env.PORT || 3000);
+
+  app.use(helmet.hsts());
+  // No xframes allowed
+  app.use(helmet.xframe('deny'));
+  // Use XSS protection
+  app.use(helmet.iexss());
 
   app.use(express.logger(function(tokens, req, res) {
     if (res.statusCode >= 400) // or whatever you want logged
