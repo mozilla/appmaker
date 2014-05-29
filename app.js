@@ -61,6 +61,12 @@ process.env.ASSET_HOST = typeof process.env.ASSET_HOST === 'undefined' ? '' : pr
 var helmet = require('helmet');
 var app = express();
 
+app.use(helmet.hsts());
+// No xframes allowed
+app.use(helmet.xframe('deny'));
+// Use XSS protection
+app.use(helmet.iexss());
+
 app.engine('ejs', engine);
 
 app.configure(function(){
@@ -100,12 +106,6 @@ app.configure(function(){
   });
 
   app.use(express.methodOverride());
-
-  app.use(helmet.hsts());
-  // No xframes allowed
-  app.use(helmet.xframe('deny'));
-  // Use XSS protection
-  app.use(helmet.iexss());
 
   app.use(app.router);
 
