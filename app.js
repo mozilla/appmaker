@@ -96,21 +96,12 @@ app.configure(function(){
   }, function (result) {});
 
   app.use(express.favicon());
-
-  if (process.env.HSTS_ENABLED === 'true') {
-    // Use HSTS
-    app.use(helmet.hsts());
-  }
-
-  if (process.env.XFO_HEADERS_DENY === 'true') {
-    // No xframes allowed
-    app.use(helmet.xframe('deny'));
-  }
-
-  if (process.env.IEXSS_PROTECTION_ENABLED === 'true') {
+  app.use(helmet.hsts());
+  // No xframes allowed
+  app.use(helmet.xframe('deny'));
   // Use XSS protection
-    app.use(helmet.iexss());
-  }
+  app.use(helmet.iexss());
+
 
   app.use(function(req, res, next) {
     res.removeHeader("x-powered-by");
