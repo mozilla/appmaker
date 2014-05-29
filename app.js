@@ -66,16 +66,6 @@ app.engine('ejs', engine);
 app.configure(function(){
   app.set('port', process.env.PORT || 3000);
 
-  app.set('views', __dirname + '/views');
-  app.set('view engine', 'ejs');
-
-  app.use(express.favicon());
-  app.use(helmet.hsts());
-  // No xframes allowed
-  app.use(helmet.xframe('deny'));
-  // Use XSS protection
-  app.use(helmet.iexss());
-
   app.use(express.logger(function(tokens, req, res) {
     if (res.statusCode >= 400) // or whatever you want logged
       return express.logger.dev(tokens, req, res);
@@ -181,6 +171,14 @@ app.locals({
   locales: Object.keys(langmap),
   langmap: langmap
 });
+
+
+app.use(express.favicon());
+app.use(helmet.hsts());
+// No xframes allowed
+app.use(helmet.xframe('deny'));
+// Use XSS protection
+app.use(helmet.iexss());
 
 app.post('/verify', webmakerAuth.handlers.verify);
 app.post('/authenticate', webmakerAuth.handlers.authenticate);
