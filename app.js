@@ -92,6 +92,8 @@ app.configure(function(){
     "en-US": authLocaleJSON
   }, function (result) {});
 
+  app.use(express.favicon());
+
   app.use(function(req, res, next) {
     res.removeHeader("x-powered-by");
     next();
@@ -173,7 +175,6 @@ app.locals({
 });
 
 
-app.use(express.favicon());
 app.use(helmet.hsts());
 // No xframes allowed
 app.use(helmet.xframe('deny'));
