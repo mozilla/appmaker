@@ -97,20 +97,20 @@ app.configure(function(){
 
   app.use(express.favicon());
 
-  if (process.env.HSTS_ENABLED === 'true') {
+  //if (process.env.HSTS_ENABLED === 'true') {
     // Use HSTS
-    app.use(helmet.hsts());
-  }
+  app.use(helmet.hsts());
+ // }
 
-  if (process.env.XFO_HEADERS_DENY === 'true') {
+  // if (process.env.XFO_HEADERS_DENY === 'true') {
     // No xframes allowed
     app.use(helmet.xframe('deny'));
-  }
+  // }
 
-  if (process.env.IEXSS_PROTECTION_ENABLED === 'true') {
+  // if (process.env.IEXSS_PROTECTION_ENABLED === 'true') {
   // Use XSS protection
     app.use(helmet.iexss());
-  }
+ // }
 
   app.use(function(req, res, next) {
     res.removeHeader("x-powered-by");
