@@ -57,16 +57,16 @@ module.exports = function (store, viewsPath, urlManager, makeAPIPublisher, dbcon
 
         var folderName = moniker.choose() + '-' + Math.round(Math.random() * 1000);
         var userName = req.session.user.username;
-        var installHTMLFilename =  'install.html';
-        var appHTMLFilename = 'index.html';
+        var installHTMLFilename =  'install';
+        var appHTMLFilename = 'app';
         var manifestFilename = 'manifest.webapp';
 
         var remoteURLPrefix = urlManager.createURLPrefix(folderName);
 
         var remoteURLs = {
-          install: remoteURLPrefix + installHTMLFilename,
-          app: remoteURLPrefix + appHTMLFilename,
-          manifest: remoteURLPrefix + manifestFilename
+          install: urlManager.publishHostPrefix + '/' + folderName + '/' + installHTMLFilename,
+          app: urlManager.publishHostPrefix + '/' + folderName + '/' + appHTMLFilename,
+          manifest: urlManager.publishHostPrefix + '/' + folderName + '/' + manifestFilename
         };
 
         var inputData = req.body;
@@ -125,13 +125,13 @@ module.exports = function (store, viewsPath, urlManager, makeAPIPublisher, dbcon
           };
 
           var outputFiles = [
-            {filename: urlManager.objectPrefix + '/' + folderName + '/' + manifestFilename,
+            {filename: '/' + folderName + '/' + manifestFilename,
               data: JSON.stringify(manifestJSON),
               // According to https://developer.mozilla.org/en-US/docs/Web/Apps/Manifest#Serving_manifests
               contentType: 'application/x-web-app-manifest+json'},
-            {filename: urlManager.objectPrefix + '/' + folderName + '/' + appHTMLFilename,
+            {filename: '/' + folderName + '/' + appHTMLFilename,
               data: appStr},
-            {filename: urlManager.objectPrefix + '/' + folderName + '/' + installHTMLFilename,
+            {filename: '/' + folderName + '/' + installHTMLFilename,
               data: installStr}
           ];
 
