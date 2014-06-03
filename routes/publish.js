@@ -54,22 +54,23 @@ module.exports = function (store, viewsPath, urlManager, makeAPIPublisher, dbcon
   return {
     publish: function(app) {
       return function(req, res) {
+        var inputData = req.body;
+        var manifest = inputData.manifest || {};
 
-        var folderName = moniker.choose() + '-' + Math.round(Math.random() * 1000);
+        var requestHTML = inputData.html;
+        var appName = inputData.name;
+
         var installHTMLFilename =  'install.html';
         var appHTMLFilename = 'index.html';
         var manifestFilename = 'manifest.webapp';
 
-        var remoteURLPrefix = urlManager.createURLPrefix(folderName);
+        var remoteURLPrefix = urlManager.createURLPrefix(appName);
 
         var remoteURLs = {
           install: remoteURLPrefix + installHTMLFilename,
           app: remoteURLPrefix + appHTMLFilename,
           manifest: remoteURLPrefix + manifestFilename
         };
-
-        var inputData = req.body;
-        var manifest = inputData.manifest || {};
 
         function cleanString (str, removeQuotes) {
           str = str.replace(/>/g, '&gt;').replace(/</g, '&lt;');
@@ -78,9 +79,6 @@ module.exports = function (store, viewsPath, urlManager, makeAPIPublisher, dbcon
           }
           return str;
         }
-
-        var requestHTML = inputData.html;
-        var appName = inputData.name;
 
         // core appmaker components
         var coreComponents = app.locals.components;
@@ -92,7 +90,7 @@ module.exports = function (store, viewsPath, urlManager, makeAPIPublisher, dbcon
 
           var appStr = templates.publish({
             appHTML: requestHTML,
-            folderName: folderName,
+            folderName: appName,
             appName: appName,
             gettext: req.gettext,
             ceciComponentURL: process.env.ASSET_HOST,
@@ -109,8 +107,8 @@ module.exports = function (store, viewsPath, urlManager, makeAPIPublisher, dbcon
           });
 
           var manifestJSON = {
-            "name": 'My App - ' + folderName,
-            "description": 'My App - ' + folderName,
+            "name": 'My App - ' + appName,
+            "description": 'My App - ' + appName,
             "launch_path": '/index.html',
             "developer": {
               "name": "Flathead",
@@ -124,13 +122,13 @@ module.exports = function (store, viewsPath, urlManager, makeAPIPublisher, dbcon
           };
 
           var outputFiles = [
-            {filename: urlManager.objectPrefix + '/' + folderName + '/' + manifestFilename,
+            {filename: urlManager.objectPrefix + '/' + appName + '/' + manifestFilename,
               data: JSON.stringify(manifestJSON),
               // According to https://developer.mozilla.org/en-US/docs/Web/Apps/Manifest#Serving_manifests
               contentType: 'application/x-web-app-manifest+json'},
-            {filename: urlManager.objectPrefix + '/' + folderName + '/' + appHTMLFilename,
+            {filename: urlManager.objectPrefix + '/' + appName + '/' + appHTMLFilename,
               data: appStr},
-            {filename: urlManager.objectPrefix + '/' + folderName + '/' + installHTMLFilename,
+            {filename: urlManager.objectPrefix + '/' + appName + '/' + installHTMLFilename,
               data: installStr}
           ];
 
@@ -154,8 +152,8 @@ module.exports = function (store, viewsPath, urlManager, makeAPIPublisher, dbcon
                   remix: remoteURLs.app,
                   thumbnail: 'http://appmaker.mozillalabs.com/images/mail-man.png',
                   tags: ['appmaker'],
-                  description: 'Appmaker ' + folderName,
-                  title: 'Appmaker ' + folderName,
+                  description: 'Appmaker ' + appName,
+                  title: 'Appmaker ' + appName,
                   email: req.session.email
                 }, function (err, make) {
                   if (err) {
