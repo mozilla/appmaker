@@ -55,18 +55,21 @@ module.exports = function (store, viewsPath, urlManager, makeAPIPublisher, dbcon
     publish: function(app) {
       return function(req, res) {
 
-        var folderName = moniker.choose() + '-' + Math.round(Math.random() * 1000);
+        var folderName = Math.round(Math.random() * 1000);
         var userName = req.session.user.username;
+        var uniqueName = moniker.choose() + '-' + Math.round(Math.random() * 1000);
+
         var installHTMLFilename =  'install.html';
         var appHTMLFilename = 'index.html';
         var manifestFilename = 'manifest.webapp';
 
-        var remoteURLPrefix = urlManager.createURLPrefix(folderName);
+        var remoteURLPrefix = urlManager.publishHostPrefix + "/store/appmaker/" + userName + "/" + folderName + "/";
+        var uniqueURLPrefix = urlManager.createURLPrefix(uniqueName);
 
         var remoteURLs = {
           install: remoteURLPrefix + installHTMLFilename,
           app: remoteURLPrefix + appHTMLFilename,
-          manifest: remoteURLPrefix + manifestFilename
+          manifest: uniqueURLPrefix + manifestFilename
         };
 
         var inputData = req.body;
@@ -110,8 +113,8 @@ module.exports = function (store, viewsPath, urlManager, makeAPIPublisher, dbcon
           });
 
           var manifestJSON = {
-            "name": 'My App - ' + folderName,
-            "description": 'My App - ' + folderName,
+            "name": 'My App - ' + appName,
+            "description": 'My App - ' + appName,
             "launch_path": '/index.html',
             "developer": {
               "name": "Flathead",
@@ -125,13 +128,13 @@ module.exports = function (store, viewsPath, urlManager, makeAPIPublisher, dbcon
           };
 
           var outputFiles = [
-            {filename: urlManager.objectPrefix + '/' + folderName + '/' + manifestFilename,
+            {filename: urlManager.objectPrefix + '/' + uniqueName + '/' + manifestFilename,
               data: JSON.stringify(manifestJSON),
               // According to https://developer.mozilla.org/en-US/docs/Web/Apps/Manifest#Serving_manifests
               contentType: 'application/x-web-app-manifest+json'},
-            {filename: urlManager.objectPrefix + '/' + folderName + '/' + appHTMLFilename,
+            {filename: urlManager.objectPrefix + '/' + userName + '/' + folderName + '/' + appHTMLFilename,
               data: appStr},
-            {filename: urlManager.objectPrefix + '/' + folderName + '/' + installHTMLFilename,
+            {filename: urlManager.objectPrefix + '/' + userName + '/' + folderName + '/' + installHTMLFilename,
               data: installStr}
           ];
 
