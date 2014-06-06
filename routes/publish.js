@@ -55,15 +55,15 @@ module.exports = function (store, viewsPath, urlManager, makeAPIPublisher, dbcon
     publish: function(app) {
       return function(req, res) {
 
-        var folderName = Math.round(Math.random() * 1000);
+        var folderName = Math.round(Math.random() * 10000);
         var userName = req.session.user.username;
-        var uniqueName = moniker.choose() + '-' + Math.round(Math.random() * 1000);
+        var uniqueName = moniker.choose() + '-' + Math.round(Math.random() * 10000);
 
         var installHTMLFilename =  'install.html';
         var appHTMLFilename = 'index.html';
         var manifestFilename = 'manifest.webapp';
 
-        var remoteURLPrefix = urlManager.createURLPrefix(userName + "/" + folderName);
+        var remoteURLPrefix = urlManager.createURLPrefix(userName, folderName);
         var uniqueURLPrefix = urlManager.createUniqueURLPrefix(uniqueName);
 
         var remoteURLs = {
