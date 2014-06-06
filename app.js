@@ -20,6 +20,7 @@ components = require('./lib/components'),
 localeBuild = require('./lib/localeBuild'),
 bundles = require('./lib/bundles'),
 middleware = require('./lib/middleware'),
+emulate_s3 = process.env.S3_EMULATION || !process.env.S3_KEY,
 WebmakerAuth = require('webmaker-auth'),
 localComponents = [];
 
@@ -39,7 +40,6 @@ catch(e) {
 }
 
 var urls = require('./lib/urls');
-var localStore = require('./lib/local-store');
 var s3Store = require('./lib/s3-store');
 var makeAPIPublisher = require('./lib/makeapi-publisher').create(process.env.MAKEAPI_URL, process.env.MAKEAPI_ID, process.env.MAKEAPI_SECRET);
 
@@ -142,25 +142,9 @@ require("express-persona")(app, {
 });
 
 var store;
-var useSubdomains = false;
+store = s3Store.init(process.env.S3_KEY, process.env.S3_SECRET, process.env.S3_BUCKET, process.env.S3_DOMAIN, emulate_s3);
 
-if (process.env.STORE === 's3') {
-  if (!process.env.S3_KEY || process.env.S3_KEY === '') {
-    console.warn('No S3 credentials. Reverting to local store.');
-    store = localStore.init(LOCAL_STORE_BASE_PATH);
-    app.use('/store', express.static(path.join(__dirname, 'store')));
-  }
-  else {
-    store = s3Store.init(process.env.S3_KEY, process.env.S3_SECRET, process.env.S3_BUCKET);
-    useSubdomains = true;
-  }
-}
-else {
-  store = localStore.init(LOCAL_STORE_BASE_PATH);
-  app.use('/store', express.static(path.join(__dirname, 'store')));
-}
-
-var urlManager = new urls.URLManager(process.env.PUBLISH_HOST_PREFIX, process.env.PUBLISH_HOST, process.env.S3_OBJECT_PREFIX, useSubdomains);
+var urlManager = new urls.URLManager(process.env.PUBLISH_HOST_PREFIX, process.env.PUBLISH_HOST, process.env.S3_OBJECT_PREFIX, !emulate_s3);
 routes = require('./routes')(
   store,
   __dirname + '/views',
@@ -258,3 +242,8 @@ if (!module.parent) {
   });
 }
 
+// If we're in running in emulated S3 mode, run a mini
+// server for serving up the "s3" published content.
+if (emulate_s3) {
+  require( "mox-server" ).runServer( process.env.MOX_PORT || 12319 );
+}
