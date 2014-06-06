@@ -63,8 +63,8 @@ module.exports = function (store, viewsPath, urlManager, makeAPIPublisher, dbcon
         var appHTMLFilename = 'index.html';
         var manifestFilename = 'manifest.webapp';
 
-        var remoteURLPrefix = urlManager.publishHostPrefix + "/store/appmaker/" + userName + "/" + folderName + "/";
-        var uniqueURLPrefix = urlManager.createURLPrefix(uniqueName);
+        var remoteURLPrefix = urlManager.createURLPrefix(userName + "/" + folderName);
+        var uniqueURLPrefix = urlManager.createUniqueURLPrefix(uniqueName);
 
         var remoteURLs = {
           install: remoteURLPrefix + installHTMLFilename,
