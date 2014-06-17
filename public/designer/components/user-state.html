@@ -397,10 +397,10 @@
         signoutClick: function() {
           auth.logout();
         },
-        loadLink: function(name, url, callback) {
+        loadLink: function(name, url, callback, dataUri) {
           var link = document.createElement('link');
           link.rel = "import";
-          link.href = url;
+          link.href = dataUri || url;
 
           link.onload = function (e) {
             callback(null, link);
@@ -569,8 +569,8 @@
           var self = this;
           // Add to the menu
           var menuItem = this.addMenuItemForComponent(url, name);
-          // add to polymer, the tray, etc.
-          this.loadLink(name, url, function(err, linkElement) {
+
+          function linkLoaded (err, linkElement) {
             if (err) {
               if(cb) cb(err.error)
               else self.signalComponentError(err.error);
@@ -579,6 +579,43 @@
             menuItem.setBroken(false);
             tray.addComponentsFromRegistry();
             if(cb) cb(null, name);
+          }
+
+          $.ajax(url, {
+            data: {},
+            type: 'get',
+            success: function (data) {
+              // if <polymer-element> isn't at the beginning, try to lift it out
+              if (data.indexOf('<polymer-element ') > 0) {
+                while (true) {
+                  var start = data.indexOf('<polymer-element ');
+                  var end = data.indexOf('</polymer-element>') + '</polymer-element>'.length;
+
+                  if (start > -1 && end > -1) {
+                    var polymerString = data.substring(start, end);
+                    data = data.substr(end);
+
+                    var dataUri = 'data:text/html;base64,' + btoa(polymerString);
+                    // add to polymer, the tray, etc.
+                    self.loadLink(name, url, linkLoaded, dataUri);
+                  }
+                  else {
+                    break;
+                  }
+                }
+              }
+              else {
+                // add to polymer, the tray, etc.
+                self.loadLink(name, url, linkLoaded);
+              }
+            },
+            error: function (data, err) {
+              if (err) {
+                if(cb) cb(err.error)
+                else self.signalComponentError(err.error);
+                return;
+              }
+            }
           });
         },
         addMenuItemForComponent: function(url, name) {
