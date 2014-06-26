@@ -5,6 +5,33 @@ s<polymer-element name="ceci-channel-vis">
     var signalSpeed = 0.25;
     var bubbleDuration = 1;
     Polymer('ceci-channel-vis', {
+      channels : {
+      "a":"dd0010",
+      "b":"e31d0d",
+      "c":"ea3509",
+      "d":"ed4907",
+      "e":"f46106",
+      "f":"f87601",
+      "g":"fd8e00",
+      "h":"e99703",
+      "i":"cfa008",
+      "j":"b5a90a",
+      "k":"99b111",
+      "l":"7cbb13",
+      "m":"62c418",
+      "n":"52b836",
+      "o":"43ae53",
+      "p":"34a470",
+      "q":"239a8f",
+      "r":"1290ad",
+      "t":"0485ca",
+      "u":"0f75d2",
+      "v":"2c5cd2",
+      "w":"4745d2",
+      "x":"612ed2",
+      "y":"771bd2",
+      "z":"9502d2"
+      },
       attached: function () {
         var that = this;
         this.component = this.parentNode;
@@ -35,6 +62,21 @@ s<polymer-element name="ceci-channel-vis">
           var channel = document.createElement("div");
           channel.innerHTML = "<div class='dot color'></div><div class='chan-label'></label>";
           channel.setAttribute("color",el.getAttribute("on"));
+
+          var channelname = el.getAttribute("on");
+          var label = channel.querySelector(".chan-label");
+          label.innerHTML = channelname.toUpperCase() ;
+
+          function hexToRgb(hex) {
+              var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+              console.log(result);
+              return parseInt(result[1], 16) + "," + parseInt(result[2], 16) + "," + parseInt(result[3], 16);
+          }
+          var rgb = hexToRgb("#"+that.channels[channelname]);
+
+          label.style.background = "#" + that.channels[channelname];
+          channel.style.backgroundImage = "-webkit-linear-gradient(left,rgba("+rgb+",.5),rgba("+rgb+",0)";
+
           if(that.direction == "in") {
             channel.setAttribute("for",el.getAttribute("for"));
           } else {
