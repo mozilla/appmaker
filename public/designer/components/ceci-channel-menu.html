@@ -17,9 +17,7 @@
           <div class="channel-option subscription-option option-template">
 
             <div class="color-ui">
-
               <h3>Send <strong>Click</strong> on channel...</h3>
-
               <div class="color-options">
               </div>
                 <!--
@@ -52,10 +50,9 @@
                 <div data-color="purple" class="color" data-channel="purple">y</div>
                 <div data-color="purple" class="color" data-channel="purple-two">z</div>
 
-
-              <div class="color-row">
-                <div data-color="false" class="color" data-channel="false">OFF</div>
-              </div>
+                <div class="color-row">
+                  <div data-color="false" class="color" data-channel="false">OFF</div>
+                </div>
                   -->
 
             </div>
@@ -69,34 +66,34 @@
     require(['l10n'], function(L10n) {
       Polymer('ceci-channel-menu', {
         menubuilt : false,
-        chars : ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"],
-        colors : [
-        "dd0010",
-        "e31d0d",
-        "ea3509",
-        "ed4907",
-        "f46106",
-        "f87601",
-        "fd8e00",
-        "e99703",
-        "cfa008",
-        "b5a90a",
-        "99b111",
-        "7cbb13",
-        "62c418",
-        "52b836",
-        "43ae53",
-        "34a470",
-        "239a8f",
-        "1290ad",
-        "0485ca",
-        "0f75d2",
-        "2c5cd2",
-        "4745d2",
-        "612ed2",
-        "771bd2",
-        "9502d2"
-        ],
+        // chars : ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"],
+        channels : {
+        "a":"dd0010",
+        "b":"e31d0d",
+        "c":"ea3509",
+        "d":"ed4907",
+        "e":"f46106",
+        "f":"f87601",
+        "g":"fd8e00",
+        "h":"e99703",
+        "i":"cfa008",
+        "j":"b5a90a",
+        "k":"99b111",
+        "l":"7cbb13",
+        "m":"62c418",
+        "n":"52b836",
+        "o":"43ae53",
+        "p":"34a470",
+        "q":"239a8f",
+        "r":"1290ad",
+        "t":"0485ca",
+        "u":"0f75d2",
+        "v":"2c5cd2",
+        "w":"4745d2",
+        "x":"612ed2",
+        "y":"771bd2",
+        "z":"9502d2"
+        },
         ready: function() {
           this.super();
           this.menuStructure = this.shadowRoot.querySelector("content");
@@ -112,17 +109,19 @@
           this.menu = this.menuWrapper.querySelector(".channel-menu");
           this.hideMenu();
           var optionsWrapper = this.menuWrapper.querySelector(".color-options");
-          console.log(optionsWrapper);
 
-          for(var i=0; i < this.colors.length; i++){
-            var color = this.colors[i];
+          var channelNames = Object.keys(this.channels);
+
+          for(var i=0; i < channelNames.length; i++){
+            var channelName = channelNames[i];
+            var color = this.channels[channelName];
             var option = document.createElement("div");
             option.classList.add("color");
-            option.innerHTML = this.chars[i];
+            option.innerHTML = channelName;
             option.style.background = "#" + color;
+            option.setAttribute("data-channel",channelName);
             optionsWrapper.appendChild(option);
           }
-
 
           window.addEventListener("menuOpen",function(){
             that.hideMenu();
