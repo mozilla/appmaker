@@ -20,51 +20,43 @@
 
               <h3>Send <strong>Click</strong> on channel...</h3>
 
-              <div class="color-row">
-                <div data-color="blue" class="color" data-channel="blue">1</div>
-                <div data-color="blue" class="color" data-channel="blue-two">2</div>
-                <div data-color="blue" class="color" data-channel="blue-three">3</div>
+              <div class="color-options">
               </div>
+                <!--
+                <div data-color="blue" class="color" data-channel="blue">a</div>
+                <div data-color="blue" class="color" data-channel="blue-two">b</div>
+                <div data-color="blue" class="color" data-channel="blue-three">c</div>
+                <div data-color="green" class="color" data-channel="blue">d</div>
 
-              <div class="color-row">
-                <div data-color="green" class="color" data-channel="green">1</div>
-                <div data-color="green" class="color" data-channel="green-two">2</div>
-                <div data-color="green" class="color" data-channel="green-three">3</div>
-              </div>
+                <div data-color="green" class="color" data-channel="green-two">e</div>
+                <div data-color="green" class="color" data-channel="green-three">f</div>
+                <div data-color="yellow" class="color" data-channel="yellow">g</div>
+                <div data-color="yellow" class="color" data-channel="yellow-two">h</div>
 
-              <div class="color-row">
-                <div data-color="yellow" class="color" data-channel="yellow">1</div>
-                <div data-color="yellow" class="color" data-channel="yellow-two">2</div>
-                <div data-color="yellow" class="color" data-channel="yellow-three">3</div>
-              </div>
+                <div data-color="yellow" class="color" data-channel="yellow-three">i</div>
+                <div data-color="orange" class="color" data-channel="orange">j</div>
+                <div data-color="orange" class="color" data-channel="orange-two">k</div>
+                <div data-color="orange" class="color" data-channel="orange-three">l</div>
+                <div data-color="red" class="color" data-channel="red">m</div>
+                <div data-color="red" class="color" data-channel="red-two">n</div>
+                <div data-color="red" class="color" data-channel="red-three">o</div>
+                <div data-color="pink" class="color" data-channel="pink">p</div>
+                <div data-color="pink" class="color" data-channel="pink-two">q</div>
+                <div data-color="pink" class="color" data-channel="pink-three">r</div>
+                <div data-color="purple" class="color" data-channel="purple">s</div>
+                <div data-color="purple" class="color" data-channel="purple-two">t</div>
+                <div data-color="purple" class="color" data-channel="purple-three">u</div>
+                <div data-color="purple" class="color" data-channel="purple">v</div>
+                <div data-color="purple" class="color" data-channel="purple-two">w</div>
+                <div data-color="purple" class="color" data-channel="purple-three">x</div>
+                <div data-color="purple" class="color" data-channel="purple">y</div>
+                <div data-color="purple" class="color" data-channel="purple-two">z</div>
 
-              <div class="color-row">
-                <div data-color="orange" class="color" data-channel="orange">1</div>
-                <div data-color="orange" class="color" data-channel="orange-two">2</div>
-                <div data-color="orange" class="color" data-channel="orange-three">3</div>
-              </div>
-
-              <div class="color-row">
-                <div data-color="red" class="color" data-channel="red">1</div>
-                <div data-color="red" class="color" data-channel="red-two">2</div>
-                <div data-color="red" class="color" data-channel="red-three">3</div>
-              </div>
-
-              <div class="color-row">
-                <div data-color="pink" class="color" data-channel="pink">1</div>
-                <div data-color="pink" class="color" data-channel="pink-two">2</div>
-                <div data-color="pink" class="color" data-channel="pink-three">3</div>
-              </div>
-
-              <div class="color-row">
-                <div data-color="purple" class="color" data-channel="purple">1</div>
-                <div data-color="purple" class="color" data-channel="purple-two">2</div>
-                <div data-color="purple" class="color" data-channel="purple-three">3</div>
-              </div>
 
               <div class="color-row">
                 <div data-color="false" class="color" data-channel="false">OFF</div>
               </div>
+                  -->
 
             </div>
             <label><span class="channel-name"></span><div data-color="false" class="chosen-color"></div></label>
@@ -77,6 +69,34 @@
     require(['l10n'], function(L10n) {
       Polymer('ceci-channel-menu', {
         menubuilt : false,
+        chars : ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"],
+        colors : [
+        "dd0010",
+        "e31d0d",
+        "ea3509",
+        "ed4907",
+        "f46106",
+        "f87601",
+        "fd8e00",
+        "e99703",
+        "cfa008",
+        "b5a90a",
+        "99b111",
+        "7cbb13",
+        "62c418",
+        "52b836",
+        "43ae53",
+        "34a470",
+        "239a8f",
+        "1290ad",
+        "0485ca",
+        "0f75d2",
+        "2c5cd2",
+        "4745d2",
+        "612ed2",
+        "771bd2",
+        "9502d2"
+        ],
         ready: function() {
           this.super();
           this.menuStructure = this.shadowRoot.querySelector("content");
@@ -91,6 +111,18 @@
           this.menuWrapper = this.menuStructure.querySelector(".channel-menu-wrapper");
           this.menu = this.menuWrapper.querySelector(".channel-menu");
           this.hideMenu();
+          var optionsWrapper = this.menuWrapper.querySelector(".color-options");
+          console.log(optionsWrapper);
+
+          for(var i=0; i < this.colors.length; i++){
+            var color = this.colors[i];
+            var option = document.createElement("div");
+            option.classList.add("color");
+            option.innerHTML = this.chars[i];
+            option.style.background = "#" + color;
+            optionsWrapper.appendChild(option);
+          }
+
 
           window.addEventListener("menuOpen",function(){
             that.hideMenu();
