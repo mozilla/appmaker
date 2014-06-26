@@ -14,11 +14,13 @@
           </div>
           <div class="channel-option subscription-option option-template">
             <div class="color-ui">
+
               <h3></h3>
               <div class="color-options"></div>
               <div>
                 <div data-color="off" class="color" data-channel="off">Disable</div>
               </div>
+
             </div>
             <label><span class="channel-name"></span><div data-color="off" class="chosen-color"></div></label>
           </div>
@@ -48,6 +50,7 @@
         "o":"5f30d2",
         "p":"8a0bd2"
       },
+
         ready: function() {
           this.super();
           this.menuStructure = this.shadowRoot.querySelector("content");
@@ -63,8 +66,6 @@
           this.menu = this.menuWrapper.querySelector(".channel-menu");
           this.hideMenu();
           var optionsWrapper = this.menuWrapper.querySelector(".color-options");
-
-
           var channelNames = Object.keys(this.channels);
 
           for(var i=0; i < channelNames.length; i++){

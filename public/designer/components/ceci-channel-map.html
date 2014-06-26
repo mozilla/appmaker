@@ -26,6 +26,9 @@
           var type = el.hasAttribute("for") ? "listener" : "broadcast";
           var method = el.getAttribute("for") || el.getAttribute("from");
 
+
+
+
           if(!this.map[channel]) {
             this.map[channel] = {};
           }
@@ -37,6 +40,8 @@
           this.map[channel][type].push(method);
         }
 
+
+        console.log(this.map);
         this.showChannels();
       },
       showChannels : function(){

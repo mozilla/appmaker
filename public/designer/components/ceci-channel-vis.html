@@ -23,6 +23,7 @@ s<polymer-element name="ceci-channel-vis">
       "o":"5f30d2",
       "p":"8a0bd2"
     },
+
       attached: function () {
         var that = this;
         this.component = this.parentNode;
@@ -57,6 +58,7 @@ s<polymer-element name="ceci-channel-vis">
           label.innerHTML = channelname.toUpperCase() ;
 
           function hexToRgb(hex) {
+
             if(hex){
               var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
               return parseInt(result[1], 16) + "," + parseInt(result[2], 16) + "," + parseInt(result[3], 16);
