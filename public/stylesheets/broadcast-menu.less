@@ -191,7 +191,10 @@
 
   .color-row {
     float: left;
+
   }
+
+
 
   .color-ui {
     .border-radius(3px);
@@ -200,6 +203,7 @@
     padding: 3px 5px 2px 5px;
     cursor: default;
     overflow: auto;
+    width: 200px;
 
     h3 {
       font-size: 13px;
@@ -219,16 +223,34 @@
       }
     }
 
+    .color-ui {
+      width: 160px;
+    }
+
     .color {
       margin: 0 2px 2px 0px;
       color: rgba(255,255,255,.75);
       cursor: pointer;
       position: relative;
       overflow:hidden;
-      padding: 0px 6px 1px 6px;
+
+      padding: 4px 0 4px 0;
+      text-transform: uppercase;
       opacity: .4;
       font-size: 1.3rem;
-      .border-radius(20px);
+      display: block;
+      text-align: center;
+      float: left;
+      width: 20px;
+
+      &:nth-child(6),
+      &:nth-child(12) ,
+      &:nth-child(1)
+      {
+        opacity: 1;
+      }
+
+      .border-radius(2px);
 
       &:hover {
         opacity: 1;
