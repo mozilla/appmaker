@@ -193,10 +193,15 @@ define(
         });
       },
       addComponentsFromRegistry: function() {
+        DesignerTray.cleanUp();
         DesignerTray.buildCategory("all");
         CeciDesigner.forEachComponent(this.addComponentWithName);
         DesignerTray.filterCategory("basic");
         DesignerTray.sortComponents();
+      },
+      cleanUp : function(){
+        document.querySelector("#components").innerHTML = "";
+        document.querySelector(".brick-category").innerHTML = "";
       },
       filterCategory : function(category){
         var categoryLinks = document.querySelectorAll(".brick-category a");
