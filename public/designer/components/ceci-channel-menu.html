@@ -9,54 +9,18 @@
         </div>
 
         <div id="{{channeltype}}Menu" class="{{channeltype}}-menu channel-menu">
-
           <div class="arrow-container">
             <div class="arrow"></div>
           </div>
-
           <div class="channel-option subscription-option option-template">
-
             <div class="color-ui">
-              <h3>Send <strong>Click</strong> on channel...</h3>
-              <div class="color-options">
+              <h3></h3>
+              <div class="color-options"></div>
+              <div>
+                <div data-color="off" class="color" data-channel="off">Disable</div>
               </div>
-                <!--
-                <div data-color="blue" class="color" data-channel="blue">a</div>
-                <div data-color="blue" class="color" data-channel="blue-two">b</div>
-                <div data-color="blue" class="color" data-channel="blue-three">c</div>
-                <div data-color="green" class="color" data-channel="blue">d</div>
-
-                <div data-color="green" class="color" data-channel="green-two">e</div>
-                <div data-color="green" class="color" data-channel="green-three">f</div>
-                <div data-color="yellow" class="color" data-channel="yellow">g</div>
-                <div data-color="yellow" class="color" data-channel="yellow-two">h</div>
-
-                <div data-color="yellow" class="color" data-channel="yellow-three">i</div>
-                <div data-color="orange" class="color" data-channel="orange">j</div>
-                <div data-color="orange" class="color" data-channel="orange-two">k</div>
-                <div data-color="orange" class="color" data-channel="orange-three">l</div>
-                <div data-color="red" class="color" data-channel="red">m</div>
-                <div data-color="red" class="color" data-channel="red-two">n</div>
-                <div data-color="red" class="color" data-channel="red-three">o</div>
-                <div data-color="pink" class="color" data-channel="pink">p</div>
-                <div data-color="pink" class="color" data-channel="pink-two">q</div>
-                <div data-color="pink" class="color" data-channel="pink-three">r</div>
-                <div data-color="purple" class="color" data-channel="purple">s</div>
-                <div data-color="purple" class="color" data-channel="purple-two">t</div>
-                <div data-color="purple" class="color" data-channel="purple-three">u</div>
-                <div data-color="purple" class="color" data-channel="purple">v</div>
-                <div data-color="purple" class="color" data-channel="purple-two">w</div>
-                <div data-color="purple" class="color" data-channel="purple-three">x</div>
-                <div data-color="purple" class="color" data-channel="purple">y</div>
-                <div data-color="purple" class="color" data-channel="purple-two">z</div>
-
-                <div class="color-row">
-                  <div data-color="false" class="color" data-channel="false">OFF</div>
-                </div>
-                  -->
-
             </div>
-            <label><span class="channel-name"></span><div data-color="false" class="chosen-color"></div></label>
+            <label><span class="channel-name"></span><div data-color="off" class="chosen-color"></div></label>
           </div>
         </div>
       </div>
@@ -66,34 +30,24 @@
     require(['l10n'], function(L10n) {
       Polymer('ceci-channel-menu', {
         menubuilt : false,
-        // chars : ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"],
         channels : {
-        "a":"dd0010",
-        "b":"e31d0d",
-        "c":"ea3509",
-        "d":"ed4907",
-        "e":"f46106",
-        "f":"f87601",
-        "g":"fd8e00",
-        "h":"e99703",
-        "i":"cfa008",
-        "j":"b5a90a",
-        "k":"99b111",
-        "l":"7cbb13",
-        "m":"62c418",
-        "n":"52b836",
-        "o":"43ae53",
-        "p":"34a470",
-        "q":"239a8f",
-        "r":"1290ad",
-        "t":"0485ca",
-        "u":"0f75d2",
-        "v":"2c5cd2",
-        "w":"4745d2",
-        "x":"612ed2",
-        "y":"771bd2",
-        "z":"9502d2"
-        },
+        "a":"de0310",
+        "b":"e82f0a",
+        "c":"ef5106",
+        "d":"f87303",
+        "e":"f89200",
+        "f":"cca108",
+        "g":"a0af0e",
+        "h":"78bc13",
+        "i":"56bb2d",
+        "j":"3dac5d",
+        "k":"259c8b",
+        "l":"0d8bb8",
+        "m":"1373d2",
+        "n":"3951d2",
+        "o":"5f30d2",
+        "p":"8a0bd2"
+      },
         ready: function() {
           this.super();
           this.menuStructure = this.shadowRoot.querySelector("content");
@@ -222,7 +176,7 @@
         changeChannel : function(handlerType, handler ,color){
           var visEl = this.component.querySelector("ceci-"+this.channeltype+"["+handlerType+"=\""+handler+"\"]");
 
-          if (color == "false"){
+          if (color == "off"){
             if (visEl){
               visEl.parentNode.removeChild(visEl);
             }
@@ -257,11 +211,15 @@
           function colorListClickHandler(handlerType){
             return function(event) {
               if(event.target.classList.contains("color")){
+
                 that.menu.classList.remove("picking-colors");
                 var channelOption = event.target.parentNode.parentNode.parentNode;
-                var color = event.target.getAttribute("data-channel");
+
+
+                var channel = event.target.getAttribute("data-channel");
                 var handler = this.parentNode.getAttribute(handlerType);
-                that.changeChannel(handlerType, handler, color);
+
+                that.changeChannel(handlerType, handler, channel);
 
                 //Show all the options again
                 var options = that.menu.querySelectorAll(".channel-option:not(.option-template)");
@@ -270,7 +228,17 @@
                 }
 
                 channelOption.querySelector("label").style.display = "block";
-                channelOption.querySelector("label .chosen-color").setAttribute("data-color", color);
+                channelOption.querySelector("label .chosen-color").setAttribute("data-color", channel);
+
+                var color = that.channels[channel] || "DDD";
+
+                channelOption.querySelector("label .chosen-color").style.background =  "#" + color;
+                if(channel == "off"){
+                  channelOption.querySelector("label .chosen-color").innerHTML = "";
+                } else {
+                  channelOption.querySelector("label .chosen-color").innerHTML = channel;
+                }
+
                 channelOption.querySelector(".color-ui").style.display = "none";
                 that.adjustMenuPosition();
                 that.hideMenu();
@@ -336,6 +304,8 @@
               if(existingEl){
                 var color = existingEl.getAttribute("on");
                 channelOption.querySelector(".chosen-color").setAttribute("data-color",color);
+                channelOption.querySelector(".chosen-color").style.background = "#" + this.channels[color];
+                channelOption.querySelector(".chosen-color").innerHTML = color;
               }
 
               //Set up all of the click stuff for color options
