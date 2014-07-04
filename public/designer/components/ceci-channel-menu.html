@@ -74,6 +74,9 @@
     </content>
   </template>
   <script>
+
+    var elementsBySort = []; // sort elements
+
     require(['l10n'], function(L10n) {
       Polymer('ceci-channel-menu', {
         menubuilt : false,
@@ -190,8 +193,7 @@
         },
         changeChannel : function(handlerType, handler ,color){
           var visEl = this.component.querySelector("ceci-"+this.channeltype+"["+handlerType+"=\""+handler+"\"]");
-          console.log(visEl); // return null =?
-
+          
           if (color == "false"){
             if (visEl){
               visEl.parentNode.removeChild(visEl);
@@ -205,9 +207,18 @@
               newEl.setAttribute("on",color);
               newEl.setAttribute(handlerType,handler);
 
-              console.log("get handler: "+handler);              
+              elementsBySort.push(newEl);
+              elementsBySort.sort();
 
-              this.component.appendChild(newEl);
+              console.log("listers are added " + elementsBySort.length) // always is 1 
+              console.log("List of Elements: "+elementsBySort);              
+
+              for (var i = 0; i < elementsBySort.length; i++) {
+                console.log(elementsBySort[i]);
+                this.component.appendChild(elementsBySort[i]);              
+              }        
+
+              //this.component.appendChild(newEl);
 
             }
           }
