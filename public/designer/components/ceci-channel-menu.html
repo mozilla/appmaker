@@ -3,11 +3,9 @@
     <link rel="stylesheet" href="/stylesheets/broadcast-menu.css" >
     <content>
       <div class="channel-menu-wrapper {{channeltype}}"  id="channelMenuWrapper">
-
         <div class="hover-helper" on-click="{{toggleMenu}}">
           <div class="arrow"></div>
         </div>
-
         <div id="{{channeltype}}Menu" class="{{channeltype}}-menu channel-menu">
           <div class="arrow-container">
             <div class="arrow"></div>
@@ -30,27 +28,7 @@
     require(['l10n'], function(L10n) {
       Polymer('ceci-channel-menu', {
         menubuilt : false,
-        channels : {
-        "a":"de0310",
-        "b":"e82f0a",
-        "c":"ef5106",
-        "d":"f87303",
-        "e":"f89200",
-        "f":"cca108",
-        "g":"a0af0e",
-        "h":"78bc13",
-        "i":"56bb2d",
-        "j":"3dac5d",
-        "k":"259c8b",
-        "l":"0d8bb8",
-        "m":"1373d2",
-        "n":"3951d2",
-        "o":"5f30d2",
-        "p":"8a0bd2"
-      },
         ready: function() {
-          this.super();
-          this.menuStructure = this.shadowRoot.querySelector("content");
           this.addEventListener("click", function(e) {
             window.dispatchEvent(new CustomEvent("SelectElement", { detail :  this.component }));
             e.stopPropagation();
@@ -58,8 +36,8 @@
         },
         attached: function () {
           var that = this;
-
-          this.menuWrapper = this.menuStructure.querySelector(".channel-menu-wrapper");
+          this.channels = this.parentNode.channels;
+          this.menuWrapper = this.shadowRoot.querySelector(".channel-menu-wrapper");
           this.menu = this.menuWrapper.querySelector(".channel-menu");
           this.hideMenu();
           var optionsWrapper = this.menuWrapper.querySelector(".color-options");
