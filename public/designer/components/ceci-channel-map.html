@@ -1,15 +1,15 @@
-<polymer-element name="ceci-channel-map" attributes="broadcastchannels listenerchannels">
+<polymer-element name="ceci-channel-map" attributes="broadcastchannels listenerchannels channels">
   <template>
     <content></content>
   </template>
   <script>
     Polymer('ceci-channel-map', {
+      channelNames: ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p"],
       ready : function(){
         this.app = document.querySelector("ceci-app");
-        var that = this;
-
         this.broadcastchannels = this.broadcastchannels || [];
         this.listenerchannels = this.listenerchannels || [];
+        var that = this;
         this.onChannelUpdate = function() {
           that.getChannels();
         };
@@ -17,6 +17,48 @@
       },
       detached: function() {
         window.removeEventListener('channelUpdate', this.onChannelUpdate);
+      },
+
+      getFreeChannel : function(type){
+        this.getChannels();
+        console.log(this.map);
+        var useChannel, matches, doesntmatch;
+
+        if(type == "listener") {
+          matches = this.broadcastchannels;
+          doesntmatch = this.listenerchannels;
+        } else {
+          matches = this.listenerchannels;
+          doesntmatch = this.broadcastchannels;
+        }
+
+        //Return first unused broadcast channel...
+        for(var i = 0; i < this.channelNames.length; i++){
+          var channelName = this.channelNames[i];
+          if(matches.indexOf(channelName) > -1) {
+            if(doesntmatch.indexOf(channelName) < 0) {
+              return channelName;
+            }
+          }
+        }
+
+        // ...or fist unused listener channel
+        for(var i = 0; i < this.channelNames.length; i++){
+          var channelName = this.channelNames[i];
+          if(doesntmatch.indexOf(channelName) < 0) {
+            useChannel = channelName;
+            break;
+          }
+        }
+
+        return useChannel || "a";
+
+      },
+      get freeListenerChannel() {
+        return this.getFreeChannel("listener");
+      },
+      get freeBroadcastChannel() {
+        return this.getFreeChannel("broadcast");
       },
       getChannels : function(){
         this.map = {};
