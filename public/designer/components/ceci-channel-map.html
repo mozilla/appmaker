@@ -4,11 +4,12 @@
   </template>
   <script>
     Polymer('ceci-channel-map', {
-      channelNames: ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p"],
       ready : function(){
         this.app = document.querySelector("ceci-app");
         this.broadcastchannels = this.broadcastchannels || [];
         this.listenerchannels = this.listenerchannels || [];
+        var channelsEl = document.querySelector("ceci-channels");
+        this.channelNames = Object.keys(channelsEl.channels);
         var that = this;
         this.onChannelUpdate = function() {
           that.getChannels();
@@ -18,10 +19,13 @@
       detached: function() {
         window.removeEventListener('channelUpdate', this.onChannelUpdate);
       },
-
+      defaultIndex : 0,
       getFreeChannel : function(type){
+        // Order of returned channel:
+        // 1 - First unmatched listner / broadcast channel
+        // 2 - Next unused channel (cycling from a to z)
+
         this.getChannels();
-        console.log(this.map);
         var useChannel, matches, doesntmatch;
 
         if(type == "listener") {
@@ -51,7 +55,16 @@
           }
         }
 
-        return useChannel || "a";
+        // If no free channels left
+        if(!useChannel) {
+          useChannel = this.channelNames[this.defaultIndex];
+          this.defaultIndex++;
+          if(this.defaultIndex >= this.channelNames.length ){
+            this.defaultIndex = 0;
+          }
+        }
+        this.lastDefault = useChannel;
+        return useChannel;
 
       },
       get freeListenerChannel() {

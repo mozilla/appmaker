@@ -86,10 +86,7 @@
           if (listenerDefinition['default'] !== true) {
             channel = listenerDefinition['default'];
           }
-          var map = document.querySelector("ceci-channel-map");
-          var useChannel = map.freeListenerChannel;
-
-          defaultListeners.push({name: listenerName, channel: useChannel });
+        defaultListeners.push({name: listenerName, channel: "a" });
         }
       });
 
@@ -109,9 +106,7 @@
           if (broadcastDefinition['default'] !== true) {
             channel = broadcastDefinition['default'];
           }
-          var map = document.querySelector("ceci-channel-map");
-          var useChannel = map.freeBroadcastChannel;
-          defaultBroadcasts.push({name: broadcastName, channel: useChannel });
+        defaultBroadcasts.push({name: broadcastName, channel: "a" });
         }
       });
 
@@ -224,7 +219,6 @@
           var broadcast = this.querySelector('ceci-broadcast[from="' + name + '"]');
           if (!broadcast) {
             broadcast = document.createElement('ceci-broadcast');
-            console.log("appending broadcast");
             this.appendChild(broadcast);
           }
           broadcast.setAttribute('on', channel);
