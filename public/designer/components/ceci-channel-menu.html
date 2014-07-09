@@ -35,7 +35,9 @@
           });
         },
         attached: function () {
-          var that = this;
+          var channelsEl = document.querySelector("ceci-channels");
+          this.channels = channelsEl.channels;
+
           this.menuWrapper = this.shadowRoot.querySelector(".channel-menu-wrapper");
           this.menu = this.menuWrapper.querySelector(".channel-menu");
           this.hideMenu();
@@ -53,6 +55,7 @@
             optionsWrapper.appendChild(option);
           }
 
+          var that = this;
           this.onHideMenu = function(){
             that.hideMenu();
           };
