@@ -10,25 +10,29 @@
           that.hidePopup();
         });
       },
+      attached : function(){
+        this.body = document.querySelector("body")
+      },
       hidePopup :function(){
         this.shadowRoot.querySelector(".more-info").style.display = "none";
-        document.querySelector("body").removeChild(document.querySelector(".more-info"));
+        this.body.removeChild(document.querySelector(".more-info"));
       },
       adjustPopup : function(popup){
         var height = popup.offsetHeight;
         var left = document.querySelector(".tray").offsetWidth;
         var offset = document.querySelector("#components-wrapper").scrollTop;
         var pos = this.offsetTop;
-        popup.style.top = pos + 54 - (height/2) + "px";
+        popup.style.top = pos + 54 - (height/2) - offset + "px";
         popup.style.left = left + 16 + "px";
       },
       showPopup :function(){
         var popup = this.shadowRoot.querySelector(".more-info").cloneNode(true);
-        document.querySelector("body").appendChild(popup);
+        this.body.appendChild(popup);
         popup.style.display = "block";
         var img = popup.querySelector("img");
         var that = this;
         img.addEventListener('load', function() {
+          popup.querySelector(".image-wrapper").style.display = "block";
           that.adjustPopup(popup);
         }, false);
         this.adjustPopup(popup);
