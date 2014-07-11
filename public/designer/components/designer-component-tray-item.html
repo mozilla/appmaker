@@ -10,10 +10,6 @@
           that.hidePopup();
         });
       },
-      attached : function() {
-        var img = new Image();
-        img.src = this.thumbnail;
-      },
       hidePopup :function(){
         this.shadowRoot.querySelector(".more-info").style.display = "none";
         document.querySelector("body").removeChild(document.querySelector(".more-info"));
