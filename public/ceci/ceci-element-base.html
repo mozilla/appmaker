@@ -11,8 +11,8 @@
 
     var DEFAULT_CHANNEL = 'blue';
 
-    var elementsBySort = []; // sort elements
-    var elementsBySortBroadcasts = []; // sort elements broadcasts
+    var elementsBySort = [];
+    var elementsBySortBroadcasts = [];
 
     function processDefinition (element) {
       var definitionJSON = window.CeciDefinitions[element.localName];
@@ -193,7 +193,7 @@
         }
       },
       setListener: function (name, channel) {
-        var entry = this.ceci.listeners[name];       
+        var entry = this.ceci.listeners[name];
 
         if (entry) {
           var listener = this.querySelector('ceci-listen[for="' + name + '"]');
@@ -202,16 +202,13 @@
             elementsBySort.push(listener);
             elementsBySort.sort();
             for (var i = 0; i < elementsBySort.length; i++) {
-              this.appendChild(elementsBySort[i]);              
+              this.appendChild(elementsBySort[i]);
             }
             //this.appendChild(listener);
           }
 
           listener.setAttribute('on', channel);
           listener.setAttribute('for', name);
-          //elementsBySort.push(listener);          
-          //console.log("listers are added")
-          //console.log("List of Elements: "+elementsBySort);
         }
         else {
           console.error('No listener definition found for "' + name + '".');
