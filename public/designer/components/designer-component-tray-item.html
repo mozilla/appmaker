@@ -3,35 +3,55 @@
   attributes="name description label author updatedat thumbnail">
   <script>
     Polymer('designer-component-tray-item', {
-      imageError : function(){
-        this.thumbnail = "/images/component-thumbnail-fallback.gif";
+      popup : "hidden",
+      ready: function(){
+        var that = this;
+        window.addEventListener("designerClick", function(){
+          that.hidePopup();
+        });
+      },
+      attached : function(){
+        this.body = document.querySelector("body")
+      },
+      hidePopup :function(){
+        this.shadowRoot.querySelector(".more-info").style.display = "none";
+        this.body.removeChild(document.querySelector(".more-info"));
+      },
+      adjustPopup : function(popup){
+        var height = popup.offsetHeight;
+        var left = document.querySelector(".tray").offsetWidth;
+        var offset = document.querySelector("#components-wrapper").scrollTop;
+        var pos = this.offsetTop;
+        popup.style.top = pos + 54 - (height/2) - offset + "px";
+        popup.style.left = left + 16 + "px";
+      },
+      showPopup :function(){
+        var popup = this.shadowRoot.querySelector(".more-info").cloneNode(true);
+        this.body.appendChild(popup);
+        popup.style.display = "block";
+        var img = popup.querySelector("img");
+        var that = this;
+        img.addEventListener('load', function() {
+          popup.querySelector(".image-wrapper").style.display = "block";
+          that.adjustPopup(popup);
+        }, false);
+        this.adjustPopup(popup);
       }
     });
   </script>
   <template>
     <link rel="stylesheet" href="/stylesheets/designer-component-tray-item.css">
-    <div class="add-component component-card" name="{{name}}" show="true">
-      <div class="add-tooltip">+</div>
-      <div class="component-preview">
+    <div class="add-component component-card" name="{{name}}" show="true" >
+      <div class="more-info">
         <div class="image-wrapper"><img on-error="{{imageError}}" src="{{thumbnail}}"></div>
-        <div class="add-component-overlay"></div>
+        <p class="description">{{description}}</p>
+        <div class="arrow-wrapper"></div>
       </div>
       <div class="component-description">
-        <h1>{{label}}</h1>
-        <h6>{{description}}</h6>
-        <div class="more-info">
-          <div class="friends">
-            <h3>Friends</h3>
-            <div>No Friends</div>
-          </div>
-          <div class="tags clearfix">
-            <div class="tag"></div>
-            <content type="designer-component-tag"></content>
-          </div>
-          <div class="author">
-            <h5>By: {{author}} | Last edited {{updatedat}}</h5>
-          </div>
-        </div>
+        <h1>
+          {{label}}
+          <div id="show-info" on-mouseenter="{{showPopup}}" on-mouseout="{{hidePopup}}">?</div>
+        </h1>
       </div>
       <a class="show-more" href="#">More Info</a>
     </div>
