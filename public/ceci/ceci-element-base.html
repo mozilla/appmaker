@@ -258,7 +258,7 @@
         document.dispatchEvent(new CustomEvent('CeciElementAdded', {bubbles: true, detail: this}));
       },
       addCustomListener : function(el,listener){
-        var event,listener;
+        var event;
 
         // Mouse or Finger Up
         if(listener == "on-ceci-pressdown" ) {
@@ -285,7 +285,7 @@
         }
 
         el.addEventListener(listener,function(e){
-          el.dispatchEvent(new CustomEvent(event, {bubbles: true, detail: this}))
+          el.dispatchEvent(new CustomEvent(event, {bubbles: true, detail: this}));
         });
       },
       domReady: function () {
