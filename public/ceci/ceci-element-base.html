@@ -259,31 +259,26 @@
       },
       addCustomListener : function(el,listener){
         var event;
-
         // Mouse or Finger Up
-        if(listener == "on-ceci-pressdown" ) {
+        if(listener === "on-ceci-pressdown" ) {
           this.touchEnabled = "ontouchstart" in document.createElement("div");
           event = "ceci-pressdown";
-
           if(this.touchEnabled){
             listener = "touchstart";
           } else {
             listener = "mousedown";
           }
         }
-
         // Mouse or Finger Up
-        if(listener == "on-ceci-pressup" ) {
+        if(listener === "on-ceci-pressup" ) {
           this.touchEnabled = "ontouchstart" in document.createElement("div");
           event = "ceci-pressup";
-
           if(this.touchEnabled){
             listener = "touchend";
           } else {
             listener = "mouseup";
           }
         }
-
         el.addEventListener(listener,function(e){
           el.dispatchEvent(new CustomEvent(event, {bubbles: true, detail: this}));
         });
