@@ -245,7 +245,48 @@
         }
       },
       attached: function () {
+        var els = this.shadowRoot.querySelectorAll("*");
+        for(var i = 0; i < els.length; i++) {
+          var el = els[i];
+          for(var j = 0; j < el.attributes.length; j++) {
+            var attrName = el.attributes[j].name;
+            if(attrName.indexOf("on-ceci") > -1){
+              this.addCustomListener(el,attrName);
+            }
+          }
+        }
         document.dispatchEvent(new CustomEvent('CeciElementAdded', {bubbles: true, detail: this}));
+      },
+      addCustomListener : function(el,listener){
+        var event,listener;
+
+        // Mouse or Finger Up
+        if(listener == "on-ceci-pressdown" ) {
+          this.touchEnabled = "ontouchstart" in document.createElement("div");
+          event = "ceci-pressdown";
+
+          if(this.touchEnabled){
+            listener = "touchstart";
+          } else {
+            listener = "mousedown";
+          }
+        }
+
+        // Mouse or Finger Up
+        if(listener == "on-ceci-pressup" ) {
+          this.touchEnabled = "ontouchstart" in document.createElement("div");
+          event = "ceci-pressup";
+
+          if(this.touchEnabled){
+            listener = "touchend";
+          } else {
+            listener = "mouseup";
+          }
+        }
+
+        el.addEventListener(listener,function(e){
+          el.dispatchEvent(new CustomEvent(event, {bubbles: true, detail: this}))
+        });
       },
       domReady: function () {
         document.dispatchEvent(new CustomEvent('CeciElementAdded', {bubbles: true, detail: this}));
