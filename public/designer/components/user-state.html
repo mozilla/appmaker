@@ -190,6 +190,18 @@
 
           auth.verify();
         },
+        renamePrompt: function(callback) {
+          var newName = window.prompt(l10n.get("What do you want to call this app?"));
+          if (newName === null) {
+            return this.appRenameCancelled();
+          } else if (!newName || !newName.trim()) {
+            return this.appRenameEmpty();
+          }
+          this.updateAppName(newName);
+          if (callback) {
+            callback();
+          }
+        },
         enteredView : function() {
           var self = this;
 
@@ -224,29 +236,26 @@
             analytics.event("New App Started");
           });
 
+          function renameAppHandler() {
+            self.renamePrompt();
+          }
+
           //Rename App
-          this.$.renameApp.addEventListener("click", function() {
-            var oldName = application.getCurrentApp();
-            var newName = window.prompt(l10n.get("What do you want to call this app?"));
-            self.renameApp(oldName, newName);
-          });
+          this.$.renameApp.addEventListener("click", renameAppHandler);
 
           //Save App As
-          var saveAsHandler = function() {
-            var name = window.prompt(l10n.get("What do you want to call this app?"));
+          function saveAsHandler() {
+            function nameChanged() {
+              var ceciApp = document.querySelector('ceci-app');
+              var html = ceciApp.outerHTML;
 
-            var ceciApp = document.querySelector('ceci-app');
-            ceciApp.setAttribute("name", name);
-            ceciApp.setAttribute("appid", "ceci-app-"+uuid());
-
-            var html = ceciApp.outerHTML;
-
-            if(name){
+              //ceciApp.setAttribute("name", name);
+              ceciApp.setAttribute("appid", "ceci-app-"+uuid());
               application.saveApp(name,ceciApp.appid,html, function(err,data){
                 if(!err){
                   application.setCurrentApp(name);
                   self.refreshUserState();
-                  self.updateAppName(name);
+                  //self.updateAppName(name);
                   self.editingmode = "saved";
                   window.dispatchEvent(new CustomEvent("CeciAppSaveAs"));
                   analytics.event("Saved App As");
@@ -258,13 +267,12 @@
                   analytics.event("Error Saving App As", { nonInteraction: true });
                 }
               });
-            } else {
-              reporter.consoleReport("Please name your app.");
             }
-          };
+            self.renamePrompt(nameChanged);
+          }
 
           this.$.saveAppAs.addEventListener("click", saveAsHandler);
-          document.querySelector(".app-name").addEventListener("click", saveAsHandler);
+          document.querySelector(".app-name").addEventListener("click", renameAppHandler);
 
           //Update App
           this.$.saveApp.addEventListener("click", function() {
@@ -297,56 +305,46 @@
             app.querySelector("ceci-card").setAttribute("visible","true");
 
             var name = app.name;
-            // This might need to be made its own thing so it can be called
-            // in various places:
-            while (!name || name === l10n.get("Unsaved App")) {
-              name = prompt("Please name your app first:");
-              if(name === null) break;
-              app.setAttribute("name", name);
-              app.setAttribute("appid", "ceci-app-"+uuid());
-            }
-            if(!name) {
-              return reporter.errorReport("Save was cancelled.");
-            }
-            // we have a name: publish!
-            var alreadySaved = self.editingmode === "saved";
-            function afterPublish(err,data) {
-              if(err) {
-                if (data) {
-                  // FIXME: will this route ever fire? The combination of an error + data seems unlikely
-                  reporter.errorReport("app was published, but updating failed");
-                  analytics.event("Error Updating Published App", { nonInteraction: true });
-                } else {
-                  reporter.errorReport((alreadySaved? "updated " : '') + "app was not successfully published");
-                  analytics.event("Error Publishing App", { nonInteraction: true });
+
+            function afterRename() {
+              // we have a name: publish!
+              var alreadySaved = self.editingmode === "saved";
+              function afterPublish(err,data) {
+                if(err) {
+                  if (data) {
+                    // FIXME: will this route ever fire? The combination of an error + data seems unlikely
+                    reporter.errorReport("app was published, but updating failed");
+                    analytics.event("Error Updating Published App", { nonInteraction: true });
+                  } else {
+                    reporter.errorReport((alreadySaved? "updated " : '') + "app was not successfully published");
+                    analytics.event("Error Publishing App", { nonInteraction: true });
+                  }
+                  return;
                 }
-                return;
+                application.setCurrentApp(name);
+                self.refreshUserState();
+                self.editingmode = "saved";
+                analytics.event("Published App");
               }
-              application.setCurrentApp(name);
-              self.refreshUserState();
-              self.editingmode = "saved";
-              analytics.event("Published App");
+              var options = {
+                name: name,
+                appDescription: app.appdescription,
+                appTags: app.apptags,
+                appid: app.appid,
+                html: app.outerHTML,
+                alreadySaved: alreadySaved,
+                afterPublish: afterPublish
+              };
+              application.publishApp(options);
             }
-            var options = {
-              name: name,
-              appDescription: app.appdescription,
-              appTags: app.apptags,
-              appid: app.appid,
-              html: app.outerHTML,
-              alreadySaved: alreadySaved,
-              afterPublish: afterPublish
-            };
-            application.publishApp(options);
+
+            if (!name || name === l10n.get("Unsaved App")) {
+              app.setAttribute("appid", "ceci-app-"+uuid());
+              self.renamePrompt(afterRename);
+            } else {
+              afterRename();
+            }
           });
-        },
-        renameApp: function(oldName, newName) {
-          if(typeof newName !== "string") return;
-          if(newName.trim()){
-            application.renameApp(oldName, newName);
-            analytics.event("Renamed App");
-          } else {
-            reporter.errorReport(l10n.get("App names can't be blank."));
-          }
         },
         signInStarted: function(){
           this.$.signInProgress.classList.remove("hidden");
@@ -387,14 +385,19 @@
           this.getOrWaitForCeciApp(function(ceciApp){
             if (ceciApp && name) {
               ceciApp.name = name;
-              document.querySelector(".phone-top .app-name").textContent = ceciApp.name;
             }
           });
         },
         appRenameOk: function(name){
+          analytics.event("Renamed App");
           application.setCurrentApp(name);
-          this.updateAppName(name);
           this.refreshUserState();
+        },
+        appRenameEmpty: function() {
+          reporter.errorReport(l10n.get("App names can't be blank."));
+        },
+        appRenameCancelled: function() {
+          reporter.errorReport(l10n.get("Rename was cancelled."));
         },
         appRenameFailed: function(){
           reporter.errorReport(l10n.get("app rename failed"));

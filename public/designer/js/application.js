@@ -27,23 +27,6 @@ define(["jquery", "l10n", "reporter","designer/editable", "designer/publishPane"
 //      // we have to decouple appidChanged and initFirebase
         app.setAttribute("appid", "ceci-app-"+uuid());
       },
-      renameApp: function(oldName,newName){
-        var userState = document.querySelector('user-state');
-        $.ajax('/api/rename_app', {
-          data: {
-            oldName: oldName,
-            newName: newName
-          },
-          type: 'post',
-          dataType : "json",
-          success: function (data) {
-            userState.appRenameOk(newName);
-          },
-          error: function (data) {
-            userState.appRenameFailed();
-          }
-        });
-      },
       publishApp: function(options) {
         var name = options.name,
             appDescription = options.appDescription,
