@@ -74,9 +74,6 @@
     </content>
   </template>
   <script>
-
-    var elementsBySort = [];
-
     require(['l10n'], function(L10n) {
       Polymer('ceci-channel-menu', {
         menubuilt : false,
@@ -193,7 +190,7 @@
         },
         changeChannel : function(handlerType, handler ,color){
           var visEl = this.component.querySelector("ceci-"+this.channeltype+"["+handlerType+"=\""+handler+"\"]");
-          
+
           if (color == "false"){
             if (visEl){
               visEl.parentNode.removeChild(visEl);
@@ -206,14 +203,7 @@
               var newEl = document.createElement("ceci-" + this.channeltype);
               newEl.setAttribute("on",color);
               newEl.setAttribute(handlerType,handler);
-
-              elementsBySort.push(newEl);
-              elementsBySort.sort();
-
-              for (var i = 0; i < elementsBySort.length; i++) {
-                this.component.appendChild(elementsBySort[i]);
-              }
-
+              this.component.appendChild(newEl);
             }
           }
           this.dispatchEvent(new CustomEvent('channelUpdated', {name: name, bubbles: true, detail: this}));
