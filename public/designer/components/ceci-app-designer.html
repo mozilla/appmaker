@@ -1,0 +1,37 @@
+<polymer-element name="ceci-app" extends="ceci-app-base">
+  <script>
+    function initCeciApp(application) {
+      Polymer('ceci-app', {
+        ready: function () {
+          this.super();
+        },
+        nameChanged: function(oldName, newName) {
+          var that = this;
+          var userState = document.querySelector('user-state');
+          if (!newName || !newName.trim()) {
+            this.name = oldName;
+            return userState.appRenameEmpty();
+          }
+          $.ajax('/api/rename_app', {
+            data: {
+              oldName: oldName,
+              newName: newName
+            },
+            type: 'post',
+            dataType : "json",
+            success: function (data) {
+              document.querySelector(".phone-top .app-name").textContent = newName;
+              userState.appRenameOk(newName);
+            },
+            error: function (data) {
+              that.name = oldName;
+              userState.appRenameFailed();
+            }
+          });
+        }
+      });
+    }
+
+    require(['designer/application'], initCeciApp, initCeciApp);
+  </script>
+</polymer-element>
