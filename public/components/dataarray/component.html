@@ -1,0 +1,153 @@
+<polymer-element name="ceci-dataarray" attributes="url" extends="ceci-element">
+  <ceci-definition>
+    {
+      "tags": ["data", "array"],
+      "name": "Data Array",
+      "description": "Pulls data from collections and provides an indexable list.",
+      "broadcasts": {
+        "currentValue": {
+          "label": "Value",
+          "description": "Current value changed."
+        }
+      },
+      "listeners": {
+        "next": {
+          "label": "Next Item",
+          "description": "Moves to the next item in the data."
+        },
+        "previous": {
+          "label": "Previous Item",
+          "description": "Moves to the previous item in the data."
+        }
+      },
+      "attributes": {
+        "index": {
+          "label": "Index",
+          "description": "Index of the array.",
+          "editable": "number",
+          "listener": true
+        },
+        "collection": {
+          "label": "Collection",
+          "description": "Collection to use.",
+          "editable": "select",
+          "options": [],
+          "listener": true
+        },
+        "field": {
+          "label": "Field",
+          "description": "Field of the collection to use.",
+          "editable": "select",
+          "options": [],
+          "listener": true
+        }
+      }
+    }
+  </ceci-definition>
+  <template>
+    <style>
+      :host {
+        display: block;
+        min-height: 50px;
+      }
+    </style>
+    <div id="container">{{_value}}</div>
+    <shadow></shadow>
+    <content></content>
+  </template>
+  <script>
+    function waitForCeciCollections (callback) {
+      var ceciCollections = document.querySelector('ceci-collections');
+      if (ceciCollections.getCollections) {
+        callback(ceciCollections);
+      }
+      else {
+        if (ceciCollections.async) {
+          ceciCollections.async(function (){
+            callback(ceciCollections);
+          });
+        }
+        else {
+          setTimeout(function () {
+            waitForCeciCollections(callback);
+          }, 10);
+        }
+      }
+    }
+
+    Polymer('ceci-dataarray', {
+      index: 0,
+      _value: '',
+      _data: [],
+      ready: function () {
+        this.super();
+        var ceciCollections = document.querySelector('ceci-collections');
+        ceciCollections.addEventListener('collectionchange', this.updateCollections.bind(this));
+        this.updateCollections(function () {
+          if (ceciCollections.getCollections().length) {
+            this.collection = this.collection || ceciCollections.getCollections()[0].name;
+            this.collectionChanged();
+            if (ceciCollections.getCollection(this.collection).getFields().length) {
+              this.field = this.field || ceciCollections.getCollection(this.collection).getFields()[0].name;
+            }
+          }
+        }.bind(this));
+      },
+      indexChanged: function () {
+        this._updateValue();
+      },
+      _updateValue: function () {
+        this._value = this._data[+this.index][this.field];
+        this.broadcast('currentValue', this._value);
+      },
+      fieldChanged: function () {
+        var that = this;
+        waitForCeciCollections(function (ceciCollections) {
+          if (that.collection &&
+              that.field &&
+              ceciCollections.getCollection(that.collection) &&
+              ceciCollections.getCollection(that.collection).getField(that.field)) {
+
+            var collection = ceciCollections.getCollection(that.collection);
+            that._data = collection.data;
+            that._updateValue();
+          }
+        });
+      },
+      collectionChanged: function () {
+        var that = this;
+        waitForCeciCollections(function (ceciCollections) {
+          var collection = ceciCollections.getCollection(that.collection);
+          var fields = collection.getFields();
+
+          that.ceci.attributes.field.options = [];
+          fields.forEach(function (field) {
+            that.ceci.attributes.field.options.push(field.name);
+          });
+        });
+      },
+      updateCollections: function (callback) {
+        var that = this;
+        waitForCeciCollections(function (ceciCollections) {
+          var collections = ceciCollections.getCollections();
+
+          that.ceci.attributes.collection.options = [];
+          collections.forEach(function (collection) {
+            that.ceci.attributes.collection.options.push(collection.name);
+          });
+          callback();
+        });
+      },
+      next: function () {
+        this.index = (+this.index + 1) % this._data.length;
+      },
+      previous: function () {
+        var i = (+this.index - 1) % this._data.length;
+        if (i < 0) {
+          i = this._data.length - 1;
+        }
+        this.index = i;
+      }
+    });
+  </script>
+</polymer-element>
