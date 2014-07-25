@@ -41,4 +41,7 @@ public/stylesheets/user-state.css
 public/stylesheets/style.css
 public/stylesheets/app.css
 public/stylesheets/publishpane.css
+
 public/stylesheets/install.css
+public/bundles/mozilla-appmaker.html
+public/bundles/mozilla-appmaker-min.html
