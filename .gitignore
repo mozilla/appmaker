@@ -43,3 +43,4 @@ public/stylesheets/app.css
 public/stylesheets/publishpane.css
 
 public/bundles/mozilla-appmaker.html
+public/bundles/mozilla-appmaker-min.html
