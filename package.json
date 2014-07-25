@@ -46,7 +46,8 @@
     "webmaker-i18n": "0.3.18",
     "webmaker-locale-mapping": "latest",
     "grunt-gettext-finder": "0.0.5",
-    "vulcanize": "git://github.com/Polymer/vulcanize"
+    "vulcanize": "git://github.com/Polymer/vulcanize",
+    "html-minifier": "~0.6.5"
   },
   "engines": {
     "node": "~0.10.21",
@@ -67,7 +68,6 @@
   },
   "scripts": {
     "test": "grunt",
-    "postinstall": "webmaker-download-locales appmaker && bower install",
-    "bundle": "node bundle"
+    "postinstall": "webmaker-download-locales appmaker && bower install"
   }
 }

@@ -54,7 +54,7 @@
     <% }); %>
 
     <% if (!!process.env.BUNDLE){ %>
-      <link rel="import" href="/bundles/components/mozilla-appmaker.html">
+      <link rel="import" href="/bundles/mozilla-appmaker.html">
     <% } else { %>
       <% components.forEach(function(href) { %>
       <link rel="import" href="<%= href %>">
