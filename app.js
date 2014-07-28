@@ -272,6 +272,11 @@ module.exports = app;
 if (!module.parent) {
   // Load components from various sources
   components.load(function(components) {
+    if(process.platform.indexOf("win") === 0) {
+      components = components.map(function(name) {
+        return name.replace(/\\/g,'/');
+      });
+    }
     app.locals.components = components;
     localeBuild(components, ["en-US"], function(map) {
       i18n.addLocaleObject(map, function(err) {
