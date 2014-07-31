@@ -78,7 +78,8 @@ cp sample.env .env
 A short explanation of a complete `.env` file:
 
 ```
-BUNDLE: OPTIONAL - if this has any value, components will be bundled into a single mozilla-appmaker.min.html file in ./BUNDLE_MINIFY: OPTIONAL - if this has any value, it will also minify the resulting bundle(s)
+BUNDLE: OPTIONAL - if this has any value, components will be bundled into a single mozilla-appmaker.min.html file in ./
+BUNDLE_MINIFY: OPTIONAL - if this has any value, it will also minify the resulting bundle(s)
 public/bundles/components (modifying individual components will then only take effect on app start)
 MONGO_URL: REQUIRED - the URI for your mongod instance and database, for example mongodb://localhost/appmakerdev (or whatever your database is named)
 LOGINAPI: REQUIRED - The URI of a Webmaker login server to use for user authentication. for exmaple http://localhost:3000
