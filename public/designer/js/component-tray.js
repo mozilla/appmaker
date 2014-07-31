@@ -119,7 +119,7 @@ define(
 
         var label = ceciDefinition.name || Util.prettyName(name);
         item.setAttribute('name', name);
-        item.setAttribute('thumbnail', resolvePath(name, ceciDefinition.thumbnail));
+        //item.setAttribute('thumbnail', resolvePath(name, ceciDefinition.thumbnail));
         item.setAttribute('label', label);
         item.setAttribute('description', L10n.get(name + "/description") || ceciDefinition.description || label);
         item.setAttribute('author', ceciDefinition.author);

@@ -144,7 +144,7 @@
         if(!window.RecordRTC) {
           var script = document.createElement("script");
           script.onload = loadupRecordingFunctionality;
-          script.src = this.resolvePath("resources/RecordRTC.js");
+          script.src = "/bundles/resources/RecordRTC.js";
           document.head.appendChild(script);
         } else { loadupRecordingFunctionality(); }
       }

@@ -52,7 +52,7 @@
     <link rel="import" href="/<%= href %>"><% }); %>
 
     <% if (!!process.env.BUNDLE){ %>
-      <link rel="import" href="/bundles/components/mozilla-appmaker-min.html">
+      <link rel="import" href="/bundles/components/mozilla-appmaker<% if (!!process.env.BUNDLE_MINIFY) {%>-min<%}%>.html">
     <% } else { %><% components.forEach(function(href) { %>
     <link rel="import" href="<%= href %>"><% }) %><% } %>
 
