@@ -1,4 +1,4 @@
-.handle, .garbage {
+.handle, .garbage, .clone-brick {
   position: absolute;
   top: 3px;
   opacity: .6;
@@ -8,7 +8,7 @@
   height: 16px;
   padding: 3px;
   background-repeat: no-repeat;
-  background-position: 3px 3px;
+  background-position: center;
   z-index: 9999;
   display: block;
   opacity: 0;
@@ -26,11 +26,20 @@
   cursor: pointer;
 }
 
+.clone-brick {
+  right: 57px;
+  background-image: url('/images/clone-icon.png');
+  background-size: 16px;
+  cursor: pointer;
+}
+
+.brick:hover .clone-brick.cecidesigner,
 .brick:hover .handle.cecidesigner,
 .brick:hover .garbage.cecidesigner {
   opacity: .5;
 }
 
+.brick:hover .clone-brick.cecidesigner:hover,
 .brick:hover .handle.cecidesigner:hover,
 .brick:hover .garbage.cecidesigner:hover {
   opacity: 1;
