@@ -1,46 +1,81 @@
-.handle, .garbage, .clone-brick {
+.brick-ui {
   position: absolute;
-  top: 3px;
-  opacity: .6;
-  border-radius: 2px;
-  background-color: white;
-  width: 16px;
-  height: 16px;
-  padding: 3px;
+  top: -41px;
+  right: 0px;
+  display: none;
+  border: solid 3px rgba(255,255,255,.15);
+  border-radius: 6px 6px 0 0;
+  border-width: 4px 4px 0 4px;
+  z-index: 99999;
+}
+
+.brick-ui-inner {
+  border-radius: 4px 4px 0 0;
+  overflow: auto;
+  display: block;
+  position: relative;
+  background: #328f70;
+  background-image: linear-gradient(#45ab89,#328f70);
+  background-image: -webkit-linear-gradient(#45ab89,#328f70);
+  background-image: -moz-linear-gradient(#45ab89,#328f70);
+}
+
+.brick.selected {
+  box-shadow: 0 0 0 5px #328f70;
+  border-radius: 1px;
+}
+
+.brick-ui a {
+  display: block;
+  float: right;
+}
+
+.brick-ui .icon {
+  width: 26px;
+  height: 26px;
+  padding: 4px 6px 2px 6px;
   background-repeat: no-repeat;
   background-position: center;
-  z-index: 9999;
   display: block;
-  opacity: 0;
+  cursor: pointer;
 }
 
-.handle {
+.brick-ui a:last-child {
+  border-radius: 2px 0 0 0;
+}
+
+.brick-ui .handle {
+  opacity: .4;
   cursor: move;
-  right: 3px;
-  background-image: url('/designer/images/move.png');
 }
 
-.garbage {
-  right: 30px;
-  background-image: url('/images/trash.png');
-  cursor: pointer;
+.handle .icon {
+  background-image: url('/images/brick-ui-move.png');
+  background-size: 20px;
 }
 
-.clone-brick {
-  right: 57px;
-  background-image: url('/images/clone-icon.png');
-  background-size: 16px;
-  cursor: pointer;
+.handle:hover {
+  opacity: .6;
 }
 
-.brick:hover .clone-brick.cecidesigner,
-.brick:hover .handle.cecidesigner,
-.brick:hover .garbage.cecidesigner {
-  opacity: .5;
+.garbage .icon {
+  background-image: url('/images/brick-ui-delete.png');
+  background-size: 22px;
 }
 
-.brick:hover .clone-brick.cecidesigner:hover,
-.brick:hover .handle.cecidesigner:hover,
-.brick:hover .garbage.cecidesigner:hover {
-  opacity: 1;
+.clone-brick .icon {
+  background-image: url('/images/brick-ui-clone.png');
+  background-size: 22px;
+}
+
+.garbage:hover, .clone-brick:hover {
+  background-image: -webkit-linear-gradient(rgba(255,255,255,.25),rgba(255,255,255,0));
+}
+
+.garbage:active, .clone-brick:active {
+  background-image: -webkit-linear-gradient(rgba(0,0,0,.2),rgba(0,0,0,0));
+}
+
+.brick.selected .brick-ui {
+  display: block;
 }
