@@ -1,103 +1,100 @@
 .brick-ui {
   position: absolute;
   top: -37px;
-  right: -5px;
+  top: -16px;
+  right: 5px;
   display: none;
-  // border: solid 3px rgba(255,255,255,.15);
-  border-radius: 6px 6px 0px 0px;
   border-width: 4px 4px 0px 0px;
   z-index: 99999;
-}
 
-.brick.selected {
-  // border: solid 5px #328f70;
-  // border: solid 5px #61ceaa;
-	-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
-	-moz-box-sizing: border-box;    /* Firefox, other Gecko */
-	box-sizing: border-box;         /* Opera/IE 8+ */
-  // width: ~"calc(100% + 10px)";
-  // position: relative;
-  // left: -5px;
-  // border-width: 0 5px 0 5px;
-  // -webkit-animation: selectedbrick .2s linear infinite;
-  box-shadow: 0 0 0 5px #328f70;
-  box-shadow: 0 0 0 5px #de981e;
-  // border-radius: 1px 0 1px 1px;
-}
+  .brick-ui-inner {
+    border-radius: 7px;
+    overflow: auto;
+    display: block;
+    position: relative;
+    background: #2384c2;
+    box-shadow: 0px 2px 0px rgba(0,0,0,.1);
+  }
 
-@-webkit-keyframes selectedbrick {
-  0% {    border-color: rgba(50,143,112,1);}
-  50% {    border-color: rgba(50,143,112,.3);}
-  100% {    border-color: rgba(50,143,112,1);}
-}
+  a {
+    display: block;
+    float: right;
+  }
 
-.brick-ui-inner {
-  border-radius: 3px 3px 0 0;
-  // border-radius: 4px;
-  overflow: auto;
-  display: block;
-  position: relative;
-  background: #328f70;
-  background-image: linear-gradient(#45ab89,#328f70);
-  background-image: -webkit-linear-gradient(#45ab89,#328f70);
-  background-image: -moz-linear-gradient(#45ab89,#328f70);
-  background: #de981e;
+  .icon {
+    width: 26px;
+    height: 26px;
+    padding: 4px 6px 2px 6px;
+    background-repeat: no-repeat;
+    background-position: center;
+    display: block;
+    cursor: pointer;
+  }
 
-}
+  .handle {
+    opacity: .4;
+    cursor: move;
+
+    .icon {
+      background-image: url('/images/brick-ui-move.png');
+      background-size: 20px;
+      cursor: move;
+    }
+
+    &:hover {
+      opacity: .6;
+    }
+  }
 
 
+  .garbage .icon {
+    background-image: url('/images/brick-ui-delete.png');
+    background-size: 22px;
+  }
 
-.brick-ui a {
-  display: block;
-  float: right;
-}
+  .clone-brick .icon {
+    background-image: url('/images/brick-ui-clone.png');
+    background-size: 22px;
+  }
 
-.brick-ui .icon {
-  width: 26px;
-  height: 26px;
-  padding: 4px 6px 2px 6px;
-  background-repeat: no-repeat;
-  background-position: center;
-  display: block;
-  cursor: pointer;
-}
+  .garbage:hover, .clone-brick:hover {
+    background-image: -webkit-linear-gradient(rgba(255,255,255,.15),rgba(255,255,255,0));
+    background-image: linear-gradient(rgba(255,255,255,.15),rgba(255,255,255,0));
+  }
 
-.brick-ui a:last-child {
-  border-radius: 2px 0 0 0;
-}
+  .garbage:active, .clone-brick:active {
+    background-image: -webkit-linear-gradient(rgba(0,0,0,.2),rgba(0,0,0,0));
+    background-image: linear-gradient(rgba(0,0,0,.2),rgba(0,0,0,0));
+  }
 
-.brick-ui .handle {
-  opacity: .4;
-  cursor: move;
-}
-
-.handle .icon {
-  background-image: url('/images/brick-ui-move.png');
-  background-size: 20px;
-}
-
-.handle:hover {
-  opacity: .6;
-}
-
-.garbage .icon {
-  background-image: url('/images/brick-ui-delete.png');
-  background-size: 22px;
-}
-
-.clone-brick .icon {
-  background-image: url('/images/brick-ui-clone.png');
-  background-size: 22px;
-}
-
-.garbage:hover, .clone-brick:hover {
-  background-image: -webkit-linear-gradient(rgba(255,255,255,.15),rgba(255,255,255,0));
-}
-
-.garbage:active, .clone-brick:active {
-  background-image: -webkit-linear-gradient(rgba(0,0,0,.2),rgba(0,0,0,0));
 }
 
 .brick.selected .brick-ui {
   display: block;
+}
+
+.brick.selected {
+  border-color: rgba(35,132,194,.3);
+  border-style: solid;
+  border-width: 0 7px 0 7px;
+  width: ~"calc(100% + 14px)";
+  left: -7px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-animation: selectedbrick linear infinite .8s;
+  animation: selectedbrick linear infinite .8s;
+  border-radius: 5px;
+}
+
+@-webkit-keyframes selectedbrick {
+  0% {border-color: rgba(35,132,194,.3);}
+  50% {border-color:  rgba(35,132,194,.5);}
+  100% {border-color:  rgba(35,132,194,.3);}
+}
+
+@keyframes selectedbrick {
+  0% {border-color: rgba(35,132,194,.3);}
+  50% {border-color:  rgba(35,132,194,.5);}
+  100% {border-color:  rgba(35,132,194,.3);}
 }
