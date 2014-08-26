@@ -106,7 +106,7 @@ background="#222">
         this.loadSound("ding","sounds/ding.mp3");
       },
       playDing : function(){
-        if(this.playsound === "true"){
+        if(this.playsound === "true" && this.running){
           this.playSound("ding",.4);
         }
       },
