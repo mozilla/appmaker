@@ -334,7 +334,7 @@
 
             // we have a name: publish!
             var alreadySaved = self.editingmode === "saved";
-            function afterPublish(err,data) {
+            function afterPublish(err, data) {
               if(err) {
                 if (data) {
                   // FIXME: will this route ever fire? The combination of an error + data seems unlikely
@@ -343,6 +343,7 @@
                 } else {
                   if (err.responseJSON.error === 'App name must be unique.') {
                     self.appRenameFailed(l10n.get('App name must be unique.'));
+                    app.setAttribute("name", l10n.get("Unsaved App"));
                   } else {
                     reporter.errorReport((alreadySaved? "updated " : '') + "app was not successfully published");
                   }
