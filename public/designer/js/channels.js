@@ -99,13 +99,6 @@ define(
       });
     });
 
-    // FIXME: this needs to become an l10n.get call.
-    function getWarningText(elementCount) {
-      return  "This connection will form a (" + elementCount + " element) loop, and may\n"+
-              "cause your app to go spinning off into an infinite data\n"+
-              "generation lock-up. Make this connection anyway?";
-    }
-
     /**
      * Chronicle an element/channel binding when a channel update occurs
      */
@@ -125,20 +118,8 @@ define(
       }
       if(channel) {
         var loop = findLoop(type, channel, element);
-        if (loop) {
-          var makeConnection = confirm(getWarningText(loop.length));
-          if (makeConnection) {
-            map[channel].push(element);
-          } else {
-            if(type === "listen") {
-              element.removeListener(name);
-            } else if(type === "broadcast") {
-              element.removeBroadcast(name);
-            }
-          }
-        } else {
-          map[channel].push(element);
-        }
+        if (loop) { console.warn("Warning: possible loop established. Element chain:", loop); }
+        map[channel].push(element);
       }
     });
 
