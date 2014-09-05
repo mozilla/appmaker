@@ -101,9 +101,9 @@ define(["jquery", "l10n", "reporter","designer/editable", "designer/publishPane"
                 }
               });
             },
-            error: function (data) {
-              reporter.errorReport(data);
-              if(afterPublish) { afterPublish(data); }
+            error: function (err) {
+              reporter.errorReport(err);
+              if(afterPublish) { afterPublish(err); }
             }
           });
         });
