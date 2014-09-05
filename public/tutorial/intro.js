@@ -116,7 +116,16 @@ define(
             setTimeout(function() {
               $('ceci-kickdrum ceci-channel-menu[channeltype="listen"]')[0].toggleMenu();
             }, 100);
+          }
+         },
+         {
+          name: "switch",
+          position: {
+            my: "right center",
+            at: "left-175 top+168",
+            of: $("ceci-app")
           },
+          dialogClass: "tutorial-dialog-arrow tutorial-dialog-arrow-right",
           destroy: function() {
             $(this.button).remove();
             $(this.hands).remove();
