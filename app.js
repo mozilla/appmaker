@@ -40,7 +40,7 @@ try {
 }
 catch(e) {
   if (e.name === "SyntaxError"){
-    throw("Invalid value for process.env.LAUNCH_STATSD_IN_PROCESS.");
+    throw("Invalid value for env LAUNCH_STATSD_IN_PROCESS.");
   }
   else{
     throw(e);
@@ -88,9 +88,6 @@ var webmakerAuth = new WebmakerAuth({
   domain: env.get("COOKIE_DOMAIN")
 });
 
-// .env files aren't great at empty values.
-//process.env.ASSET_HOST = typeof process.env.ASSET_HOST === 'undefined' ? '' : process.env.ASSET_HOST;
-
 var app = express();
 
 app.engine('ejs', engine);
@@ -112,7 +109,7 @@ app.configure(function(){
 
   app.use(webmakerAuth.cookieSession());
 
-  bundles.configure(app);
+  bundles.configure(app, env.get("BUNDLE"));
 
   // Setup locales with i18n
   app.use(i18n.middleware({
@@ -319,8 +316,7 @@ module.exports = app;
 if (!module.parent) {
   // Load components from various sources
 
-  components.load(env.get("BUNDLE"), env.get("COMPONENT_DIR"), function(components) {
-console.log("what");
+  components.load(env.get("BUNDLE"), env.get("COMPONENT_DIR"), env.get("BUNDLE_MINIFY"), env.get("EXCLUDED_COMPONENTS"), function(components) {
     if(process.platform.indexOf("win") === 0) {
       components = components.map(function(name) {
         return name.replace(/\\/g,'/');
