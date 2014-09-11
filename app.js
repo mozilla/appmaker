@@ -20,15 +20,21 @@ lessMiddleware = require('less-middleware'),
 localeBuild = require('./lib/localeBuild'),
 middleware = require('./lib/middleware'),
 path = require('path'),
-postmark = require("postmark")(process.env.POSTMARK_API_KEY),
+habitat = require('habitat');
+
+habitat.load();
+
+var
+env = new habitat(),
+postmark = require("postmark")(env.get("POSTMARK_API_KEY")),
 uuid = require('node-uuid'),
 version = require('./package').version,
-emulate_s3 = process.env.S3_EMULATION || !process.env.S3_KEY,
+emulate_s3 = env.get("S3_EMULATION") || !env.get("S3_KEY"),
 WebmakerAuth = require('webmaker-auth');
 
 try {
   // This does a pretty great job at figuring out booleans.
-  if (process.env.LAUNCH_STATSD_IN_PROCESS && !!JSON.parse(process.env.LAUNCH_STATSD_IN_PROCESS)){
+  if (env.get("LAUNCH_STATSD_IN_PROCESS") && !!JSON.parse(env.get("LAUNCH_STATSD_IN_PROCESS"))){
     require('./statsd');
   }
 }
@@ -47,8 +53,8 @@ var interfaces = os.networkInterfaces();
 var ipv4Address;
 
 ['PUBLISH_HOST','ASSET_HOST'].forEach(function (key) {
-  if (process.env[key]) {
-    if (process.env[key].indexOf('{{ip}}') > -1) {
+  if (env.get(key)) {
+    if (env.get(key).indexOf('{{ip}}') > -1) {
       if (!ipv4Address) {
         Object.keys(interfaces).forEach(function (device) {
           interfaces[device].forEach(function(details){
@@ -58,10 +64,9 @@ var ipv4Address;
           });
         });
       }
-
-      process.env[key] = process.env[key].replace('{{ip}}', ipv4Address);
+      env.set(key, env.get(key).replace('{{ip}}', ipv4Address));
     }
-    console.log(key + ' set to ' + process.env[key]);
+    console.log(key + ' set to ' + env.get(key));
   }
   else {
     console.warn('Warning: ' + key + ' is unset. See README.md for more info.');
@@ -70,28 +75,28 @@ var ipv4Address;
 
 var urls = require('./lib/urls');
 var s3Store = require('./lib/s3-store');
-var makeAPIPublisher = require('./lib/makeapi-publisher').create(process.env.MAKEAPI_URL, process.env.MAKEAPI_ID, process.env.MAKEAPI_SECRET);
+var makeAPIPublisher = require('./lib/makeapi-publisher').create(env.get("MAKEAPI_URL"), env.get("MAKEAPI_ID"), env.get("MAKEAPI_SECRET"));
 
 // Cache fonts for 180 days.
 var MAX_FONT_AGE_MS = 1000 * 60 * 60 * 24 * 180;
 
 var webmakerAuth = new WebmakerAuth({
-  loginURL: process.env.LOGINAPI,
-  authLoginURL: process.env.LOGINAPI_WITH_AUTH,
-  secretKey: process.env.COOKIE_SECRET,
-  forceSSL: process.env.FORCE_SSL,
-  domain: process.env.COOKIE_DOMAIN
+  loginURL: env.get("LOGINAPI"),
+  authLoginURL: env.get("LOGINAPI_WITH_AUTH"),
+  secretKey: env.get("COOKIE_SECRET"),
+  forceSSL: env.get("FORCE_SSL"),
+  domain: env.get("COOKIE_DOMAIN")
 });
 
 // .env files aren't great at empty values.
-process.env.ASSET_HOST = typeof process.env.ASSET_HOST === 'undefined' ? '' : process.env.ASSET_HOST;
+//process.env.ASSET_HOST = typeof process.env.ASSET_HOST === 'undefined' ? '' : process.env.ASSET_HOST;
 
 var app = express();
 
 app.engine('ejs', engine);
 
 app.configure(function(){
-  app.set('port', process.env.PORT || 3000);
+  app.set('port', env.get("PORT") || 3000);
 
   app.set('views', __dirname + '/views');
   app.set('view engine', 'ejs');
@@ -124,17 +129,17 @@ app.configure(function(){
 
   app.use(express.favicon());
 
-  if (process.env.HSTS_DISABLED != 'true') {
+  if (env.get("HSTS_DISABLED") != 'true') {
     // Use HSTS
     app.use(helmet.hsts());
   }
 
-  if (process.env.DISABLE_XFO_HEADERS_DENY != 'true') {
+  if (env.get("DISABLE_XFO_HEADERS_DENY") != 'true') {
     // No xframes allowed
     app.use(helmet.xframe('deny'));
   }
 
-  if (process.env.IEXSS_PROTECTION_DISABLED != 'true') {
+  if (env.get("IEXSS_PROTECTION_DISABLED") != 'true') {
   // Use XSS protection
     app.use(helmet.iexss());
   }
@@ -150,7 +155,7 @@ app.configure(function(){
 
   app.use(connectFonts.setup({
     fonts: [require('connect-fonts-sourcesanspro')],
-    allow_origin: process.env.ASSET_HOST,
+    allow_origin: env.get("ASSET_HOST"),
     ua: 'all',
     maxage: MAX_FONT_AGE_MS
   }));
@@ -173,9 +178,9 @@ app.configure(function(){
 });
 
 var store;
-store = s3Store.init(process.env.S3_KEY, process.env.S3_SECRET, process.env.S3_BUCKET, process.env.S3_DOMAIN, emulate_s3);
+store = s3Store.init(env.get("S3_KEY"), env.get("S3_SECRET"), env.get("S3_BUCKET"), env.get("S3_DOMAIN"), emulate_s3);
 
-var urlManager = new urls.URLManager(process.env.PUBLISH_HOST_PREFIX, process.env.PUBLISH_HOST, process.env.S3_OBJECT_PREFIX, !emulate_s3);
+var urlManager = new urls.URLManager(env.get("PUBLISH_HOST_PREFIX"), env.get("PUBLISH_HOST"), env.get("S3_OBJECT_PREFIX"), !emulate_s3);
 routes = require('./routes')(
   store,
   __dirname + '/views',
@@ -187,9 +192,9 @@ routes = require('./routes')(
 
 app.configure('development', function(){
   app.use(express.errorHandler());
-  if (!process.env['PERSONA_AUDIENCE']){
+  if (!env.get('PERSONA_AUDIENCE')){
     console.log("Setting PERSONA_AUDIENCE to be http://localhost:" + app.get('port'));
-    process.env['PERSONA_AUDIENCE'] = 'http://localhost:' + app.get('port');
+    env.set('PERSONA_AUDIENCE', 'http://localhost:' + app.get('port'));
   }
   // Test pages for publish and install
   app.get('/test/install', routes.testInstall);
@@ -198,7 +203,7 @@ app.configure('development', function(){
 
 
 require("express-persona")(app, {
-  audience: process.env.PERSONA_AUDIENCE
+  audience: env.get("PERSONA_AUDIENCE")
 });
 
 
@@ -231,9 +236,9 @@ app.get('/api/proxy-component-*', cors(), routes.proxy.gitHubComponent);
 app.get('/component-*', cors(), routes.proxy.gitHubComponent);
 app.get('/component/:org/:component/*', cors(), routes.proxy.component);
 
-process.env.ARTIFICIAL_CORS_DELAY = parseInt(process.env.ARTIFICIAL_CORS_DELAY, 10);
+env.set("ARTIFICIAL_CORS_DELAY", parseInt(env.get("ARTIFICIAL_CORS_DELAY"), 10));
 // if ARTIFICIAL_CORS_DELAY is set, we use a different proxy route
-if (("ARTIFICIAL_CORS_DELAY" in process.env) && (process.env.ARTIFICIAL_CORS_DELAY > 0)){
+if ((env.get("ARTIFICIAL_CORS_DELAY")) && (env.get("ARTIFICIAL_CORS_DELAY") > 0)){
   // This route is only to test race conditions/loading issues with external resources
   app.get('/cors/:host/*', cors(), routes.proxy.delayedCors);
 }
@@ -243,7 +248,7 @@ else{
 
 // This is a route that we use for client-side localization to return the JSON
 // when we do the XHR request to this route.
-if(process.env.PRODUCTION) {
+if(env.get("PRODUCTION")) {
   app.get( "/strings/:lang?", middleware.crossOrigin, i18n.stringsRoute( "en-US", { strict: true } ));
 } else {
   var basedir = "./public/bundles/components/";
@@ -287,9 +292,9 @@ app.get('/healthcheck', function( req, res ) {
 
 app.get('/api/remix-proxy', routes.proxy.remix);
 
-if (process.env.MAKEAPI_URL) {
+if (env.get("MAKEAPI_URL")) {
   var makeapiSearch = new require('makeapi-client')({
-    apiURL: process.env.MAKEAPI_URL
+    apiURL: env.get("MAKEAPI_URL")
   });
 
   app.get('/apps/:user', function (req, res) {
@@ -313,7 +318,9 @@ module.exports = app;
 
 if (!module.parent) {
   // Load components from various sources
-  components.load(function(components) {
+
+  components.load(env.get("BUNDLE"), env.get("COMPONENT_DIR"), function(components) {
+console.log("what");
     if(process.platform.indexOf("win") === 0) {
       components = components.map(function(name) {
         return name.replace(/\\/g,'/');
@@ -340,5 +347,5 @@ if (!module.parent) {
 // If we're in running in emulated S3 mode, run a mini
 // server for serving up the "s3" published content.
 if (emulate_s3) {
-  require( "mox-server" ).runServer( process.env.MOX_PORT || 12319 );
+  require( "mox-server" ).runServer( env.get("MOX_PORT") || 12319 );
 }
