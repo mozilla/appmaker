@@ -75,7 +75,7 @@ cp sample.env .env
 
 ```
 
-sample.env is the bare minimum needed to run appmaker. It contains:
+sample.env is the required values needed to run appmaker. It contains:
 
 ```
 MONGO_URL: The URI for your mongod instance and database, for example mongodb://localhost/appmakerdev (or whatever your database is named)
