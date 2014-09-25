@@ -19,5 +19,13 @@
 }
 
 :host .bad-image {
-  background: red;
+  background-image: url("images/bad-image.png");
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
 }
+
+:host .bad-image img {
+  display: none;
+}
+

@@ -61,11 +61,19 @@
         this.setImageSource(v);
       },
       sourceChanged : function(oldValue, newValue){
-        this.setImageSource(this.source);
+        var that = this;
+        var img = document.createElement("img");
+        img.onload = function(){
+          that.img.setAttribute("src",that.source);
+          that.imagecontainer.classList.remove("bad-image");
+        }
+        img.onerror = function(){
+          that.imagecontainer.classList.add("bad-image");
+        }
+        img.setAttribute("src",that.source);
       },
       setImageSource : function (val) {
         this.source = val;
-        this.img.setAttribute('src', val);
       },
       heightChanged: function( oldValue, newValue ) {
         this.imagecontainer.style.height = ( newValue || newValue === 0 ? newValue : "160" ) + "px";
