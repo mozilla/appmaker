@@ -8,10 +8,16 @@
   margin: 0;
   padding: 0;
   display: inline-block;
+  height: 100%;
+  max-width: 310px;
 }
 
 :host .image-container {
   overflow: hidden;
   width: 100%;
   line-height: 0px;
+}
+
+:host .bad-image {
+  background: red;
 }
