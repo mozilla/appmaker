@@ -75,7 +75,7 @@ cp sample.env .env
 
 ```
 
-sample.env is the required values needed to run appmaker. It contains:
+Required env values:
 
 ```
 MONGO_URL: The URI for your mongod instance and database, for example mongodb://localhost/appmakerdev (or whatever your database is named)
@@ -99,7 +99,7 @@ WEBMAKER_URL: [webmaker.org](https://github.com/mozilla/webmaker.org)
 HSTS_DISABLED: if set to "true", [HSTS](http://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security) is disabled.  **(If you are not forcing SSL, you should turn disable HSTS by setting HSTS_DISABLED='true' in the .env)**
 ```
 
-Other optional env values you can use:
+Optional env values:
 
 ```
 PRODUCTION: If this value is set, app.js will ignore "dev only" code paths
