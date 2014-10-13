@@ -75,41 +75,54 @@ cp sample.env .env
 
 ```
 
-A short explanation of a complete `.env` file:
+Required env values:
 
 ```
-PRODUCTION: OPTIONAL - if this value is set, app.js will ignore "dev only" code paths
-BUNDLE: OPTIONAL - if this has any value, components will be bundled into a single mozilla-appmaker.min.html file in ./public/bundles/components (modifying individual components will then only take effect on app start)
-BUNDLE_MINIFY: OPTIONAL - if this has any value, it will also minify the resulting bundle(s)
-MONGO_URL: REQUIRED - the URI for your mongod instance and database, for example mongodb://localhost/appmakerdev (or whatever your database is named)
-LOGINAPI: REQUIRED - The URI of a Webmaker login server to use for user authentication. for exmaple http://localhost:3000
-LOGINAPI_WITH_AUTH: - The URI of a Webmaker login server, including basic authentication credentials. for exmaple http://testuser:password@localhost:3000
+MONGO_URL: The URI for your mongod instance and database, for example mongodb://localhost/appmakerdev (or whatever your database is named)
+S3_BUCKET: S3 bucket name. e.g. "my.coolappmaker.com"
+S3_DOMAIN: The domain for S3
+S3_EMULATION: Local emulation of S3
+MOX_PORT: The port for S3 emulation
+PUBLISH_HOST_PREFIX: Prefix of URL which points to a published app. Usually `http://` or `https://`.
+PORT: The port that the web process listens on for incomming connections
+PUBLISH_HOST: Host of URL which points to a published app. Does not include a protocol prefix (e.g. `http://`). Use `{{ip}}` in this string to automatically insert your machine's IP address (useful for debugging apps on mobile devices in dev environment).
+ASSET_HOST: URL used to provide assets to published apps. Use `{{ip}}` in this string to automatically insert your machine's IP address (useful for debugging apps on mobile devices in dev environment).
+MAKEAPI_URL: [webmaker makeapi](https://github.com/mozilla/MakeAPI) An API for metadata about an app
+MAKEAPI_ID: An ID used by `MAKEAPI_URL`
+MAKEAPI_SECRET: A secret used by `MAKEAPI_URL`
+EXCLUDED_COMPONENTS: A comma-delimited list of component repositories to exclude from the mozilla-appmaker org. The name is the repo name rather than the component name, though this is usually the same.
+ALLOW_CUSTOM_COMPONENTS: Flag to turn on using custom component for testing purposes (any value that coerces to true is accepted)
+COMPONENT_DIR: Directory containing all the brick components
+LOGINAPI: The URI of a Webmaker login server to use for user authentication. for exmaple http://localhost:3000
 COOKIE_SECRET: A long, complex string for cookie encryption (NOTE: You define this for your local use, the string can be anything).
+WEBMAKER_URL: [webmaker.org](https://github.com/mozilla/webmaker.org)
+HSTS_DISABLED: if set to "true", [HSTS](http://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security) is disabled.  **(If you are not forcing SSL, you should turn disable HSTS by setting HSTS_DISABLED='true' in the .env)**
+```
+
+Optional env values:
+
+```
+PRODUCTION: If this value is set, app.js will ignore "dev only" code paths
+BUNDLE: If this has any value, components will be bundled into a single mozilla-appmaker.min.html file in ./public/bundles/components (modifying individual components will then only take effect on app start)
+BUNDLE_MINIFY: If this has any value, it will also minify the resulting bundle(s)
+LOGINAPI_WITH_AUTH: - The URI of a Webmaker login server, including basic authentication credentials. for exmaple http://testuser:password@localhost:3000
 FORCE_SSL: If using SSL, set this to true.
 STORE: Storage approach for publishing apps. `local` is the default, `s3` requires additional environment variables (prefixed by S3_)
-S3_BUCKET: S3 bucket name. e.g. "my.coolappmaker.com"
 S3_KEY: An access key for the S3 bucket listed above.
 S3_SECRET: The secret corresponding to the specified S3 access key.
 S3_OBJECT_PREFIX: String to prepend S3 objects. Useful for storing objects in folders. E.g. "level1/level2" => <bucket>/level1/level2/<filename>.
 PUBLISH_URL_PREFIX: String to prepend to filenames that are saved when publishing. Try use the URL that matches the protocol from which assets are hosted to avoid mixed content blockage.
 REDIRECT_URL: The hostname and port that we want to redirect to for Appmaker
-PORT: The port that the web process listens on for incomming connections
-EXCLUDED_COMPONENTS: A comma-delimited list of component repositories to exclude from the mozilla-appmaker org. The name is the repo name rather than the component name, though this is usually the same.
-ALLOW_CUSTOM_COMPONENTS: Optional flag to turn on using custom component for testing purposes (any value that coerces to true is accepted)
 BUNDLE: Any non-null value will cause the application to bundle as many resources as possible
-HSTS_DISABLED: if set to "true", [HSTS](http://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security) is disabled.  **(If you are not forcing SSL, you should turn disable HSTS by setting HSTS_DISABLED='true' in the .env)**
 DISABLE_XFO_HEADERS_DENY: If set to "true", [X-Frame-Options Headers](https://developer.mozilla.org/en-US/docs/Web/HTTP/X-Frame-Options) are not set.  If not set to "true" / left unset, XFO headers are set to DENY.
 IEXSS_PROTECTION_DISABLED: If set to "true", iexss vulnerability headers are not set.  If set to false or left unset, iexss protection for IE8 will be enabled.
-GA_ACCOUNT: Optional google analytics account setting. (https://developers.google.com/analytics/devguides/collection/gajs/methods/gaJSApiBasicConfiguration#_gat.GA_Tracker_._setAccount)
-GA_DESIGNER_DOMAIN: Optional google analytics domain setting for the designer. (https://developers.google.com/analytics/devguides/collection/gajs/methods/gaJSApiDomainDirectory#_gat.GA_Tracker_._setDomainName)
-GA_PUBLISH_DOMAIN: Optional google analytics domain setting for the published apps. (https://developers.google.com/analytics/devguides/collection/gajs/methods/gaJSApiDomainDirectory#_gat.GA_Tracker_._setDomainName)
-PUBLISH_HOST: Host of URL which points to a published app. Does not include a protocol prefix (e.g. `http://`). Use `{{ip}}` in this string to automatically insert your machine's IP address (useful for debugging apps on mobile devices in dev environment).
-ASSET_HOST: URL used to provide assets to published apps. Use `{{ip}}` in this string to automatically insert your machine's IP address (useful for debugging apps on mobile devices in dev environment).
-PUBLISH_HOST_PREFIX: Prefix of URL which points to a published app. Usually `http://` or `https://`.
+GA_ACCOUNT: Google analytics account setting. (https://developers.google.com/analytics/devguides/collection/gajs/methods/gaJSApiBasicConfiguration#_gat.GA_Tracker_._setAccount)
+GA_DESIGNER_DOMAIN: Google analytics domain setting for the designer. (https://developers.google.com/analytics/devguides/collection/gajs/methods/gaJSApiDomainDirectory#_gat.GA_Tracker_._setDomainName)
+GA_PUBLISH_DOMAIN: Google analytics domain setting for the published apps. (https://developers.google.com/analytics/devguides/collection/gajs/methods/gaJSApiDomainDirectory#_gat.GA_Tracker_._setDomainName)
 POSTMARK_API_KEY: An API key that needs to match a valid [Postmark](https://postmarkapp.com) API key.
 POSTMARK_FROM_ADDRESS: A valid email address that acts as the "from" address on emails sent out to users. This address must be added to the Sender Signature list associated with the Postmark API key provided in `POSTMARK_API_KEY`
 POSTMARK_INBOUND_ADDRESS: The "inbound email address" associated with the Postmark API key provided in `POSTMARK_API_KEY`
-POSTMARK_SMTP_SERVER: The SMTP server used by Postmark (default: `smtp.postmarkapp.com`)
+POSTMARK_SMTP_SERVER: The SMTP server used by Postmark (example: `smtp.postmarkapp.com`)
 ```
 
 ### Install and Run MongoDB
