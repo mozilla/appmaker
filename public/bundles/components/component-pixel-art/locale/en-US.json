@@ -1,0 +1,17 @@
+{
+	"ceci-pixel-art": "Pixel Art",
+	"ceci-pixel-art/description": "A pixel art making brick",
+
+	"ceci-pixel-art/broadcasts/send/label": "Send Pixel Data URI",
+	"ceci-pixel-art/broadcasts/send/description": "The data URI of the current pixel art",
+
+	"ceci-pixel-art/listeners/send/label": "Send Pixel Data URI",
+	"ceci-pixel-art/listeners/send/description": "Tells the pixel art to send the data URI",
+	"ceci-pixel-art/listeners/clear/label": "Clear",
+	"ceci-pixel-art/listeners/clear/description": "Clears the pixel art",
+	"ceci-pixel-art/listeners/setcolor/label": "Set Color",
+	"ceci-pixel-art/listeners/setcolor/description": "Sets the color to draw with",
+	"ceci-pixel-art/listeners/togglegrid/label": "Toggle Grid",
+	"ceci-pixel-art/listeners/togglegrid/description": "Toggles the grid to display or hide"
+}
+
