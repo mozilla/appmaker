@@ -51,13 +51,23 @@
     Polymer('ceci-combiner', {
       ready: function () {
         this.super();
-
-        var i = 0;
-        while (i++ < Object.keys(this.ceci.listeners).length) {
-          this['input' + i] = this.input;
-        }
       },
-      input: function(val) {
+      input1: function(val) {
+        this.broadcast('output', val);
+      },
+      input2: function(val) {
+        this.broadcast('output', val);
+      },
+      input3: function(val) {
+        this.broadcast('output', val);
+      },
+      input4: function(val) {
+        this.broadcast('output', val);
+      },
+      input5: function(val) {
+        this.broadcast('output', val);
+      },
+      input6: function(val) {
         this.broadcast('output', val);
       }
     });
