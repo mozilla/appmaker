@@ -5,7 +5,7 @@
   margin: auto;
 }
 
-:host(.selected) .tile-palette-container {
+:host(:hover) .tile-palette-container {
   display: block;
 }
 
