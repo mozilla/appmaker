@@ -397,6 +397,7 @@
             return;
           }
           player.style.backgroundImage = "url('" + this.playersprite + "')";
+          player.style.backgroundSize = "100% 100%";
         },
         wall1spriteChanged: function() {
           var color = "url('" + this.wall1sprite + "')";
@@ -512,7 +513,9 @@
           this.wallPalette = sender.getAttribute("data-palette");
         },
         setavatar: function(avatar) {
-          this.playersprite = avatar;
+          if (avatar) {
+            this.setAttribute("playersprite", avatar);
+          }
         },
         removeplayer: function() {
           var player = this.querySelector(".player");
@@ -842,6 +845,7 @@
               this.querySelector(".board").appendChild(player);
             }
             player.style.backgroundImage = "url('" + this.playersprite + "')";
+            player.style.backgroundSize = "100% 100%";
             player.style.top = (row * 32) + "px";
             player.style.left = (col * 32) + "px";
             this.navigateHere();
