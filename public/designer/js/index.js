@@ -24,7 +24,7 @@ var Designer = {
   UserState: require('./userstate'),
   Utils: require('./utils'),
   TogetherJS: require('./togetherjs'),
-  WebmakerAuthClient: require('webmaker-auth-client')
+  WebmakerLogin: require('webmaker-login-ux')
 };
 
 // making things easier for devs of all walks of life

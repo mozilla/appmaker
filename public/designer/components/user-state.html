@@ -62,7 +62,7 @@
 
   </template>
   <script>
-    (function init(togetherjs_extension, l10n, $, application, tray, utils, reporter, analytics, WebmakerAuthClient) {
+    (function init(togetherjs_extension, l10n, $, application, tray, utils, reporter, analytics) {
 
       var user = {
         email: '',
@@ -71,16 +71,15 @@
         collaborating: false
       };
 
-      var auth = new WebmakerAuthClient();
+      var auth = new WebmakerLogin({
+        showCTA: false
+      });
 
       auth.on('error', function(error) {
         console.error(error);
       })
 
-      auth.on('login', function(data, reason) {
-        if (reason === 'restored') {
-          return;
-        }
+      auth.on('login', function(data) {
         document.dispatchEvent(new CustomEvent("signInFinished"));
         document.querySelector("#publish-pane-panel-email").setAttribute('placeholder', data.email);
         reporter.consoleReport("You have been logged in as: " + data.email);
@@ -210,8 +209,6 @@
           window.addEventListener('CeciElementAdded', function (e) {
             user.preventLoadedAppInsertion = true;
           }, false);
-
-          auth.verify();
         },
         enteredView : function() {
           var self = this;

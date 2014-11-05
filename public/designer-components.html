@@ -2288,7 +2288,7 @@
   <script>
   (function() {
 
-    function init(togetherjs_extension, l10n, jquery, application, tray, utils, reporter, analytics, persona, WebmakerAuthClient) {
+    function init(togetherjs_extension, l10n, jquery, application, tray, utils, reporter, analytics, persona) {
 
       var user = {
         email: '',
@@ -2297,12 +2297,11 @@
         collaborating: false
       };
 
-      var auth = new WebmakerAuthClient();
+      var auth = new WebmakerLogin({
+        showCTA: false
+      });
 
-      auth.on('login', function(data, reason) {
-        if (reason === 'restored') {
-          return;
-        }
+      auth.on('login', function(data) {
         document.dispatchEvent(new CustomEvent("signInFinished"));
         document.querySelector("#publish-pane-panel-email").setAttribute('placeholder', data.email);
         reporter.consoleReport("You have been logged in as: " + data.email);
@@ -2432,8 +2431,6 @@
           window.addEventListener('CeciElementAdded', function (e) {
             user.preventLoadedAppInsertion = true;
           }, false);
-
-          auth.verify();
         },
         enteredView : function() {
           var self = this;
@@ -3108,12 +3105,12 @@
       togetherjs_extension.init(user);
     }
 
-   require(['designer/togetherjs', 'l10n', 'jquery', 'designer/application', 'designer/component-tray', 'designer/utils', 'reporter', 'analytics', 'persona', 'webmaker-auth-client'],
-      function(togetherjs_extension, l10n, jquery, application, tray, utils, reporter, analytics, persona, WebmakerAuthClient) {
-        init(togetherjs_extension, l10n, jquery, application, tray, utils, reporter, analytics, persona, WebmakerAuthClient);
+   require(['designer/togetherjs', 'l10n', 'jquery', 'designer/application', 'designer/component-tray', 'designer/utils', 'reporter', 'analytics', 'persona'],
+      function(togetherjs_extension, l10n, jquery, application, tray, utils, reporter, analytics, persona) {
+        init(togetherjs_extension, l10n, jquery, application, tray, utils, reporter, analytics, persona);
       },
       function(err) {
-        console.error('Failed to load a required module (analytics and/or persona and/or webmaker-auth-client)', err);
+        console.error('Failed to load a required module (analytics and/or persona)', err);
         require(['designer/togetherjs', 'l10n', 'jquery', 'designer/application', 'designer/component-tray', 'designer/utils', 'reporter'], init);
       }
     );
