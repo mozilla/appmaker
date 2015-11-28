@@ -117,6 +117,21 @@
         this.broadcastchannels = broadcastChannels;
         this.listenerchannels = listenerChannels;
       },
+      removeActiveListener: function(channel){
+        var index;
+        if(channel.channelType === "listener"){
+          index = this.listenerchannels.indexOf(channel.channelName);
+          if(index >= 0){
+            this.listenerchannels.splice(index, 1);
+          }
+        }
+        if(channel.channelType === "broadcast"){
+          index = this.broadcastchannels.indexOf(channel.channelName);
+          if(index >= 0){
+            this.broadcastchannels.splice(index, 1);
+          }
+        }
+      },
       attached : function(){
         this.app = document.querySelector("ceci-app");
       }

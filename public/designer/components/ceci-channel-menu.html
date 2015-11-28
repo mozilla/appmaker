@@ -190,6 +190,25 @@
 
           }
         },
+        updateColorUI: function(){
+            var channelMap = document.querySelector("ceci-channel-map");
+            var channelToRemove = {
+              channelName:"",
+              channelType:""
+            };
+            var channels = this.shadowRoot.querySelectorAll(".chosen-color");         
+            for(var i = 0; i < channels.length; i++){
+              var channelDot = channels[i];
+              var thisChannel = channelDot.getAttribute("data-color");             
+              if(!channelDot.parentNode.parentNode.classList.contains("hidden")){
+                if(thisChannel !== "off"){
+                  channelToRemove.channelName = thisChannel;
+                  channelToRemove.channelType = channelDot.parentNode.parentNode.parentNode.classList.contains("listen-menu")? "listener" : "broadcast";
+                }
+              }
+            }
+            channelMap.removeActiveListener(channelToRemove);
+        },
         changeChannel : function(handlerType, handler, color){
           var action = color === 'off' ? 'remove' : 'set';
           var messageType = this.channeltype === 'broadcast' ? 'Broadcast' : 'Listener';
@@ -238,6 +257,11 @@
 
                 var channel = event.target.getAttribute("data-channel");
                 var handler = this.parentNode.getAttribute(handlerType);
+
+                //if "Disable" button is clicked, remove current listener and update UI
+                if(event.target.hasAttribute("data-channel") && event.target.hasAttribute("data-color")){
+                  that.updateColorUI();
+                }
 
                 that.changeChannel(handlerType, handler, channel);
 
