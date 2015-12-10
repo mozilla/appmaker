@@ -128,7 +128,9 @@
       },
       initPopcorn: function () {
         this.destroyPopcorn();
-        this._popcornPlayer = Popcorn.smart(this.$.mediaContainer, this.url);
+        var container = document.createElement("div");
+        this.$.mediaContainer.appendChild(container);
+        this._popcornPlayer = Popcorn.smart(container, this.url);
         popcornEvents.forEach(function (popcornEvent) {
           this._popcornPlayer.on(popcornEvent, this['onPopcorn' + popcornEvent.substr(0, 1).toUpperCase() + popcornEvent.substr(1)]);
         }.bind(this));
@@ -143,7 +145,11 @@
             this._popcornPlayer.off(popcornEvent, this['onPopcorn' + popcornEvent.substr(0, 1).toUpperCase() + popcornEvent.substr(1)]);
           }.bind(this));
           Popcorn.destroy(this._popcornPlayer);
-          this.$.mediaContainer.innerHTML = '';
+          var container = this._popcornPlayer.media.parentNode;
+          if (container) {
+            container.innerHTML = '';
+            this.$.mediaContainer.removeChild(container);
+          }
         }
       }
     });
