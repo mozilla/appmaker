@@ -1,4 +1,4 @@
-<polymer-element name="ceci-alternating-gate" attributes="countbeforeswitch" extends="ceci-element">
+<polymer-element name="ceci-alternating-gate" attributes="countbeforeswitch" extends="ceci-element" countbeforeswitch="1">
   <template>
     <link rel="stylesheet" href="component.css"></link>
     <div id="channels"></div>
@@ -55,16 +55,16 @@
     Polymer('ceci-alternating-gate', {
       nextBroadcast : "",
       ready: function() {
+        this.super();
         this.countbeforeswitch = Number(this.countbeforeswitch) || 1;
         this.lastBroadcast = null;
         this.count = 0;
-        this.super();
       },
-      countbeforeswitch: 1,
       attached : function(){
         this.super();
       },
       domReady: function() {
+        this.super();
         var that = this;
         this.onChannelUpdate = function(){
           that.updateChannels();
