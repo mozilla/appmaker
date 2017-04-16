@@ -287,7 +287,7 @@
             // we're using get/setAttribute because at this point that[key] is not guaranteed to work yet.
             if (!that.getAttribute(key)) {
               var lkey = that.localName + "/attributes/" + key;
-              var lstring = that.gettext(lkey);
+              var lstring = that.getpropertytext(lkey);
               that.setAttribute(key, lstring);
             }
           });
@@ -449,6 +449,20 @@
         }
         document.dispatchEvent(new CustomEvent('CeciElementAdded', {bubbles: true, detail: this}));
       },
+      /**
+       * localise things based on their ontological path, like "ceci-element/attributes/description"
+       * This should never give back the original string as acceptable localised string, and will
+       * instead generate "" if there is no appropriate locale string found.
+       */
+      getpropertytext: function(keyname) {
+        var localized = this.gettext(keyname);
+        return (localized === keyname) ? "" : localized;
+      },
+      /**
+       * localise things based on human text. Both input and output to this function should be human-
+       * readable text, so that if no localised string exists, the original human-readable text is
+       * simply sent back.
+       */
       gettext: function (keyname) {
         return this.L10n.get(keyname);
       }
