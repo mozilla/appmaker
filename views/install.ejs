@@ -46,7 +46,7 @@
 
       <p class="app-description"><%- description %></p>
 
-      <div class="install-container mode-caninstall">
+      <div class="install-container mode-caninstall" style="display: none;">
         <div class="action-button-wrapper">
           <a class="action-button install-app-button" href="#" class="install">
             <span class="button-label"><%- gettext('Install App') %><span class="install-spinner"></span></span>
@@ -54,13 +54,13 @@
         </div>
       </div>
 
-      <div class="action-button-wrapper mode-canrun">
+      <div class="action-button-wrapper mode-canrun" style="display: none;">
         <a class="action-button run-app" href="#">
           <%- gettext('Run App in Browser') %>
         </a>
       </div>
 
-      <div class="cant-install mode-cantinstall">
+      <div class="cant-install mode-cantinstall" style="display: none;">
         <h1><%- gettext('Want to Install this App?') %></h1>
         <p><%- gettext('You can install Appmaker apps on...') %></p>
         <ul class="supported-platforms">
